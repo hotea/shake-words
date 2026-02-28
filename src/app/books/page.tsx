@@ -21,47 +21,50 @@ export default function BooksPage() {
 
   return (
     <main className="min-h-screen max-w-2xl mx-auto px-6 py-12">
-      <div className="mb-8">
+      <div className="mb-10 animate-fade-in">
         <Link
           href="/"
-          className="text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
         >
-          &larr; Back
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+          </svg>
+          Back
         </Link>
-        <h1 className="text-3xl font-bold mt-4">Word Books</h1>
-        <p className="text-[var(--color-muted)] mt-1">
+        <h1 className="text-3xl font-bold mt-5">Word Books</h1>
+        <p className="text-[var(--color-muted)] mt-1.5">
           Choose a vocabulary list to start learning
         </p>
       </div>
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <div className="w-8 h-8 border-2 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-2 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
         <div className="grid gap-4">
-          {books.map((book) => (
+          {books.map((book, i) => (
             <Link
               key={book.id}
               href={`/quiz?book=${book.id}`}
-              className="block p-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+              className={`card block p-6 hover:border-[var(--color-border-hover)] group animate-fade-in-up stagger-${Math.min(i + 1, 5)}`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold">{book.name}</h2>
-                  <p className="text-sm text-[var(--color-muted)] mt-0.5">
+                  <h2 className="text-lg font-semibold group-hover:text-[var(--color-primary-light)] transition-colors">{book.name}</h2>
+                  <p className="text-sm text-[var(--color-muted)] mt-1">
                     {book.description}
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl font-bold text-[var(--color-primary)]">
+                  <span className="text-3xl font-bold bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-primary)" }}>
                     {book.wordCount}
                   </span>
                   <p className="text-xs text-[var(--color-muted)]">words</p>
                 </div>
               </div>
               {book.isBuiltin && (
-                <span className="inline-block mt-2 text-xs px-2 py-0.5 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                <span className="inline-block mt-3 text-xs px-2.5 py-0.5 rounded-full bg-[var(--color-primary-dim)] text-[var(--color-primary-light)] font-medium">
                   Built-in
                 </span>
               )}

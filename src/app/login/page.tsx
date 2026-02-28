@@ -22,17 +22,19 @@ export default function LoginPage() {
 
   if (!supabaseEnabled) {
     return (
-      <main className="min-h-screen flex items-center justify-center px-6">
-        <div className="max-w-sm w-full text-center">
-          <h1 className="text-2xl font-bold mb-4">Login Not Available</h1>
-          <p className="text-[var(--color-muted)] mb-6">
-            Authentication is not configured. The app is running in local-only mode.
-            All learning data is stored in your browser.
+      <main className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
+        <div className="absolute top-[-20%] right-[-10%] w-[400px] h-[400px] rounded-full bg-[var(--color-primary)]/[0.03] blur-[100px] pointer-events-none" />
+        <div className="card max-w-sm w-full p-8 text-center animate-fade-in">
+          <div className="w-14 h-14 rounded-2xl bg-[var(--color-primary-dim)] flex items-center justify-center mx-auto mb-5">
+            <svg className="w-7 h-7 text-[var(--color-primary-light)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold mb-3">Sign In Unavailable</h1>
+          <p className="text-[var(--color-muted)] text-sm mb-6 leading-relaxed">
+            Authentication is not configured on this instance. Your learning data is stored locally in your browser.
           </p>
-          <Link
-            href="/"
-            className="inline-block px-6 py-2.5 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white font-semibold transition-colors"
-          >
+          <Link href="/" className="btn-primary">
             Back to Home
           </Link>
         </div>
@@ -54,29 +56,35 @@ export default function LoginPage() {
     } else if (mode === "signup") {
       setError(null);
       setMode("login");
-      // Show success message for signup
-      setError("Account created! Please check your email to verify, then log in.");
+      setError("Account created! Check your email to verify, then sign in.");
     } else {
       router.replace("/");
     }
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-6">
-      <div className="max-w-sm w-full">
+    <main className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-[-20%] right-[-10%] w-[400px] h-[400px] rounded-full bg-[var(--color-primary)]/[0.03] blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[300px] h-[300px] rounded-full bg-purple-500/[0.03] blur-[100px] pointer-events-none" />
+
+      <div className="card max-w-sm w-full p-8 animate-fade-in">
         <div className="mb-8">
           <Link
             href="/"
-            className="text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
           >
-            &larr; Back
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+            Back
           </Link>
-          <h1 className="text-3xl font-bold mt-4">
-            {mode === "login" ? "Sign In" : "Create Account"}
+          <h1 className="text-3xl font-bold mt-5">
+            {mode === "login" ? "Welcome back" : "Create account"}
           </h1>
-          <p className="text-[var(--color-muted)] mt-1">
+          <p className="text-[var(--color-muted)] mt-1.5 text-sm">
             {mode === "login"
-              ? "Sign in to sync your learning progress across devices"
+              ? "Sign in to sync learning progress across devices"
               : "Create an account to save your progress"}
           </p>
         </div>
@@ -85,7 +93,7 @@ export default function LoginPage() {
         <div className="space-y-3 mb-6">
           <button
             onClick={signInWithGitHub}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-primary)] hover:bg-[var(--color-surface-hover)] transition-colors font-medium text-sm"
+            className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl border border-[var(--glass-border)] bg-white/[0.03] hover:bg-white/[0.06] hover:border-[var(--color-border-hover)] transition-all text-sm font-medium"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -94,7 +102,7 @@ export default function LoginPage() {
           </button>
           <button
             onClick={signInWithGoogle}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-primary)] hover:bg-[var(--color-surface-hover)] transition-colors font-medium text-sm"
+            className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl border border-[var(--glass-border)] bg-white/[0.03] hover:bg-white/[0.06] hover:border-[var(--color-border-hover)] transition-all text-sm font-medium"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -108,39 +116,39 @@ export default function LoginPage() {
 
         {/* Divider */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="flex-1 h-px bg-[var(--color-border)]" />
-          <span className="text-xs text-[var(--color-muted)]">or</span>
-          <div className="flex-1 h-px bg-[var(--color-border)]" />
+          <div className="flex-1 h-px bg-[var(--glass-border)]" />
+          <span className="text-xs text-[var(--color-muted)]/60">or use email</span>
+          <div className="flex-1 h-px bg-[var(--glass-border)]" />
         </div>
 
         {/* Email form */}
         <form onSubmit={handleEmailSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1.5 text-[var(--color-muted)]">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--glass-border)] bg-white/[0.03] text-[var(--color-foreground)] text-sm focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]/30 transition-all placeholder:text-[var(--color-muted)]/40"
               placeholder="you@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm font-medium mb-1.5 text-[var(--color-muted)]">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--glass-border)] bg-white/[0.03] text-[var(--color-foreground)] text-sm focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]/30 transition-all placeholder:text-[var(--color-muted)]/40"
               placeholder="At least 6 characters"
             />
           </div>
 
           {error && (
-            <p className={`text-sm ${error.includes("created") ? "text-[var(--color-success)]" : "text-[var(--color-error)]"}`}>
+            <p className={`text-sm ${error.includes("created") || error.includes("Check") ? "text-[var(--color-success)]" : "text-[var(--color-error)]"}`}>
               {error}
             </p>
           )}
@@ -148,19 +156,23 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white font-semibold transition-colors disabled:opacity-50"
+            className="w-full btn-primary py-3 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "..." : mode === "login" ? "Sign In" : "Sign Up"}
+            {loading ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              mode === "login" ? "Sign In" : "Create Account"
+            )}
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-[var(--color-muted)]">
+        <p className="mt-5 text-center text-sm text-[var(--color-muted)]">
           {mode === "login" ? (
             <>
               Don&apos;t have an account?{" "}
               <button
                 onClick={() => { setMode("signup"); setError(null); }}
-                className="text-[var(--color-primary)] hover:underline"
+                className="text-[var(--color-primary-light)] hover:underline font-medium"
               >
                 Sign up
               </button>
@@ -170,7 +182,7 @@ export default function LoginPage() {
               Already have an account?{" "}
               <button
                 onClick={() => { setMode("login"); setError(null); }}
-                className="text-[var(--color-primary)] hover:underline"
+                className="text-[var(--color-primary-light)] hover:underline font-medium"
               >
                 Sign in
               </button>
