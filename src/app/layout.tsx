@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "ShakeWords - 摇头背单词",
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

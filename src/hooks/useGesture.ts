@@ -20,6 +20,8 @@ interface UseGestureReturn {
   lastGesture: GestureDirection | null;
   /** Manually recalibrate (look straight at camera) */
   recalibrate: () => void;
+  /** Update engine config at runtime */
+  updateConfig: (partial: Partial<GestureEngineConfig>) => void;
 }
 
 export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
@@ -38,6 +40,12 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
     if (engineRef.current) {
       engineRef.current.startCalibration();
       setStatus("calibrating");
+    }
+  }, []);
+
+  const updateConfig = useCallback((partial: Partial<GestureEngineConfig>) => {
+    if (engineRef.current) {
+      engineRef.current.updateConfig(partial);
     }
   }, []);
 
@@ -108,5 +116,5 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled]);
 
-  return { videoRef, status, error, pose, lastGesture, recalibrate };
+  return { videoRef, status, error, pose, lastGesture, recalibrate, updateConfig };
 }

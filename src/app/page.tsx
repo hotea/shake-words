@@ -68,6 +68,12 @@ export default function Home() {
           >
             View Stats
           </Link>
+          <Link
+            href="/settings"
+            className="text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
+          >
+            Settings
+          </Link>
         </div>
       </div>
 

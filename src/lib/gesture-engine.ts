@@ -22,7 +22,7 @@ import type { GestureDirection, GestureEvent, HeadPose } from "@/lib/types";
 export interface GestureEngineConfig {
   /** Yaw angle threshold (degrees) for left/right detection. Default: 15 */
   yawThreshold: number;
-  /** Pitch angle threshold (degrees) for up/down detection. Default: 12 */
+  /** Pitch angle threshold (degrees) for up/down detection. Default: 10 */
   pitchThreshold: number;
   /** Minimum sustain time (ms) before gesture is confirmed. Default: 300 */
   sustainMs: number;
@@ -34,7 +34,7 @@ export interface GestureEngineConfig {
 
 export const DEFAULT_CONFIG: GestureEngineConfig = {
   yawThreshold: 15,
-  pitchThreshold: 12,
+  pitchThreshold: 10,
   sustainMs: 300,
   cooldownMs: 800,
   targetFps: 15,
@@ -70,6 +70,16 @@ export class GestureEngine {
 
   constructor(config?: Partial<GestureEngineConfig>) {
     this.config = { ...DEFAULT_CONFIG, ...config };
+  }
+
+  /** Update config at runtime (e.g. from settings UI) */
+  updateConfig(partial: Partial<GestureEngineConfig>): void {
+    this.config = { ...this.config, ...partial };
+  }
+
+  /** Get current config (read-only copy) */
+  getConfig(): GestureEngineConfig {
+    return { ...this.config };
   }
 
   /** Register gesture callback */
@@ -221,9 +231,13 @@ export class GestureEngine {
   /**
    * Compute head pitch and yaw from face landmarks.
    *
-   * We use a simplified geometric approach:
-   * - Yaw: horizontal offset of nose tip relative to midpoint of ears
-   * - Pitch: vertical offset of nose tip relative to forehead-chin midpoint
+   * Yaw: horizontal offset of nose tip relative to midpoint of ears.
+   * Pitch: combines two signals for robust up/down detection:
+   *   1. Y-axis: vertical offset of nose relative to forehead-chin midpoint
+   *   2. Z-axis: depth ratio of forehead vs chin (tilting down brings forehead
+   *      forward / chin backward and vice versa)
+   * Blending both avoids the common problem where pure Y-based pitch barely
+   * changes on downward nods because the whole face translates together.
    */
   private computeHeadPose(landmarks: Landmark[]): HeadPose {
     const noseTip = landmarks[1];
@@ -240,18 +254,30 @@ export class GestureEngine {
       (chin.y - forehead.y) ** 2 + (chin.z - forehead.z) ** 2
     );
 
-    // Yaw: nose x offset from ear midpoint, normalized by face width
+    // --- Yaw ---
     const earMidX = (leftEar.x + rightEar.x) / 2;
     const yawRatio = (noseTip.x - earMidX) / (faceWidth || 1);
-    // Convert ratio to approximate degrees (empirical scaling ~60 degrees for full range)
     const yaw = yawRatio * -60;
 
-    // Pitch: nose y offset from forehead-chin midpoint
+    // --- Pitch (blended Y + Z) ---
+    // Signal 1: Y-based — nose vertical offset from forehead-chin midpoint
     const vertMidY = (forehead.y + chin.y) / 2;
-    const pitchRatio = (noseTip.y - vertMidY) / (faceHeight || 1);
-    const pitch = pitchRatio * -60;
+    const pitchRatioY = (noseTip.y - vertMidY) / (faceHeight || 1);
+    const pitchY = pitchRatioY * -60;
 
-    // Roll: angle between ears
+    // Signal 2: Z-based — when head tilts down, forehead.z decreases (moves
+    // towards camera) and chin.z increases (moves away), producing a negative
+    // delta; when tilting up the opposite happens.
+    const zDelta = forehead.z - chin.z;
+    // Normalize by face height in z-space (approximate)
+    const faceDepth = faceWidth || 0.1; // ear-to-ear distance as depth proxy
+    const pitchZ = (zDelta / faceDepth) * 80;
+
+    // Blend: 40% Y-signal + 60% Z-signal. The Z component is more reliable
+    // for downward nods where the Y displacement is small.
+    const pitch = pitchY * 0.4 + pitchZ * 0.6;
+
+    // --- Roll ---
     const roll = Math.atan2(rightEar.y - leftEar.y, rightEar.x - leftEar.x) * (180 / Math.PI);
 
     return { pitch, yaw, roll };
@@ -274,11 +300,14 @@ export class GestureEngine {
     const absPitch = Math.abs(dPitch);
     const absYaw = Math.abs(dYaw);
 
-    // Pick dominant axis
-    if (absYaw > absPitch && absYaw > this.config.yawThreshold) {
+    // Pick dominant axis. Give pitch a 1.3x boost when comparing axes because
+    // head tilts produce smaller angular changes than left/right turns.
+    const pitchWeight = absPitch * 1.3;
+
+    if (absYaw > pitchWeight && absYaw > this.config.yawThreshold) {
       direction = dYaw > 0 ? "right" : "left";
       confidence = Math.min(absYaw / (this.config.yawThreshold * 2), 1);
-    } else if (absPitch > absYaw && absPitch > this.config.pitchThreshold) {
+    } else if (absPitch > this.config.pitchThreshold) {
       direction = dPitch > 0 ? "up" : "down";
       confidence = Math.min(absPitch / (this.config.pitchThreshold * 2), 1);
     }

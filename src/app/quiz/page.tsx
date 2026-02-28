@@ -1,15 +1,19 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { useGesture } from "@/hooks/useGesture";
 import { useQuiz } from "@/hooks/useQuiz";
 import { QuizBoard } from "@/components/Quiz/QuizBoard";
 import type { GestureDirection, GestureEvent } from "@/lib/types";
 import { CET4_BOOK_ID } from "@/data/cet4";
+import { loadSettings } from "@/lib/settings";
 
 export default function QuizPage() {
   const [inputMode, setInputMode] = useState<"gesture" | "keyboard">("gesture");
   const [bookId] = useState(CET4_BOOK_ID);
+
+  // Load saved gesture config
+  const gestureConfig = useMemo(() => loadSettings().gesture, []);
 
   const quiz = useQuiz({ bookId, autoNext: true, autoNextDelay: 1500 });
 
@@ -24,6 +28,7 @@ export default function QuizPage() {
 
   const gesture = useGesture({
     enabled: inputMode === "gesture",
+    config: gestureConfig,
     onGesture: handleGesture,
   });
 
