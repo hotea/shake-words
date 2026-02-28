@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getAdapter } from "@/lib/adapter";
 import type { LearningStats, LearningRecord } from "@/lib/types";
-import { CET4_BOOK_ID } from "@/data/cet4";
+import { CET4_BOOK_ID, CET4_WORD_MAP } from "@/data/cet4";
+
+/** Resolve a wordId to the actual English word, falling back to the ID itself */
+function wordText(wordId: string): string {
+  return CET4_WORD_MAP.get(wordId)?.word ?? wordId;
+}
 
 export default function StatsPage() {
   const [stats, setStats] = useState<LearningStats | null>(null);
@@ -93,7 +98,7 @@ export default function StatsPage() {
                         record.isCorrect ? "bg-[var(--color-success)]" : "bg-[var(--color-error)]"
                       }`}
                     />
-                    <span className="text-sm font-mono">{record.wordId}</span>
+                    <span className="text-sm font-semibold">{wordText(record.wordId)}</span>
                   </div>
                   <div className="flex items-center gap-3 text-xs text-[var(--color-muted)]">
                     <span>{record.gesture}</span>
