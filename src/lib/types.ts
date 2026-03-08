@@ -11,8 +11,10 @@ export interface WordBook {
   name: string;
   description: string;
   isBuiltin: boolean;
+  isOnline?: boolean;
   wordCount: number;
   createdAt: string;
+  category?: string;
 }
 
 /** A single vocabulary word */

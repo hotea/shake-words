@@ -1,3 +1,5 @@
+"use client";
+
 import type { BackendAdapter } from "./types";
 import type {
   WordBook,
@@ -10,7 +12,7 @@ import type {
   LearningStats,
   GestureDirection,
 } from "@/lib/types";
-import { CET4_BOOK, CET4_WORDS } from "@/data/cet4";
+import { wordBookManager } from "@/data/wordbooks";
 import { calculateNextProgress, isDueForReview, isMastered, sortByReviewPriority } from "@/lib/spaced-repetition";
 
 // ============================================================
@@ -19,6 +21,7 @@ import { calculateNextProgress, isDueForReview, isMastered, sortByReviewPriority
 const STORAGE_KEYS = {
   RECORDS: "sw_records",
   PROGRESS: "sw_progress",
+  SELECTED_BOOK: "sw_selected_book",
 } as const;
 
 // ============================================================
@@ -69,32 +72,31 @@ function shuffleDirections(): GestureDirection[] {
 // LocalStorageAdapter
 // ============================================================
 export class LocalStorageAdapter implements BackendAdapter {
-  private books: WordBook[] = [CET4_BOOK];
-  private wordsByBook: Map<string, Word[]> = new Map([[CET4_BOOK.id, CET4_WORDS]]);
-
   async getWordBooks(): Promise<WordBook[]> {
-    return this.books;
+    return wordBookManager.getAllBooks();
   }
 
   async getWordBook(bookId: string): Promise<WordBook | null> {
-    return this.books.find((b) => b.id === bookId) ?? null;
+    return wordBookManager.getBook(bookId) ?? null;
   }
 
   async getWords(bookId: string, limit = 50, offset = 0): Promise<Word[]> {
-    const words = this.wordsByBook.get(bookId) ?? [];
+    const words = await wordBookManager.getWords(bookId);
     return words.slice(offset, offset + limit);
   }
 
   async getWord(wordId: string): Promise<Word | null> {
-    for (const words of this.wordsByBook.values()) {
-      const found = words.find((w) => w.id === wordId);
-      if (found) return found;
+    // Search across all books
+    for (const book of wordBookManager.getAllBooks()) {
+      const words = await wordBookManager.getWords(book.id);
+      const word = words.find((w) => w.id === wordId);
+      if (word) return word;
     }
     return null;
   }
 
   async getQuizQuestion(bookId: string): Promise<QuizQuestion | null> {
-    const allWords = this.wordsByBook.get(bookId);
+    const allWords = await wordBookManager.getWords(bookId);
     if (!allWords || allWords.length < 4) return null;
 
     // Get all progress
@@ -230,5 +232,14 @@ export class LocalStorageAdapter implements BackendAdapter {
       todayCorrectRate: todayRecords.length > 0 ? todayCorrect / todayRecords.length : 0,
       streak,
     };
+  }
+
+  // Selected book management
+  getSelectedBookId(): string | null {
+    return loadJSON<string | null>(STORAGE_KEYS.SELECTED_BOOK, null);
+  }
+
+  setSelectedBookId(bookId: string): void {
+    saveJSON(STORAGE_KEYS.SELECTED_BOOK, bookId);
   }
 }
