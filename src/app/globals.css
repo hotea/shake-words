@@ -1,63 +1,171 @@
 @import "tailwindcss";
 
 :root {
-  /* Zen Flow 主题色彩 - 清新自然风格 */
-  --color-background: #f8faf6;
-  --color-foreground: #1a1c18;
-  --color-primary: #4dec13;
-  --color-primary-light: #6ff13a;
-  --color-primary-dark: #3bc40f;
-  --color-primary-dim: rgba(77, 236, 19, 0.12);
+  /* ========================================
+     Professional Design System - Huashu Design Principles
+     Based on 8pt grid, refined color palette, and clear hierarchy
+     ======================================== */
   
-  /* 辅助色 */
-  --color-success: #22c55e;
-  --color-success-light: #86efac;
-  --color-success-dim: rgba(34, 197, 94, 0.1);
-  --color-error: #ef4444;
-  --color-error-light: #fca5a5;
-  --color-error-dim: rgba(239, 68, 68, 0.1);
-  --color-warning: #f59e0b;
-  --color-warning-dim: rgba(245, 158, 11, 0.1);
+  /* === Color Palette - Enhanced Contrast & Professional === */
+  /* Primary: Deep indigo-blue for trust and professionalism (WCAG AA compliant) */
+  --color-primary: #4f46e5;           /* Indigo 600 - professional blue-indigo */
+  --color-primary-light: #6366f1;     /* Indigo 500 */
+  --color-primary-dark: #4338ca;      /* Indigo 700 */
+  --color-primary-dim: rgba(79, 70, 229, 0.08);
+  --color-primary-subtle: rgba(79, 70, 229, 0.04);
   
-  /* 中性色 */
-  --color-muted: #6b7280;
-  --color-muted-light: #9ca3af;
+  /* Secondary Accent: Teal for complementary actions */
+  --color-accent: #0d9488;            /* Teal 600 */
+  --color-accent-light: #14b8a6;      /* Teal 500 */
+  --color-accent-dark: #0f766e;       /* Teal 700 */
+  
+  /* Background & Surface - Pure white with subtle gray tones */
+  --color-background: #f8fafc;        /* Slate 50 - clean cool white */
   --color-surface: #ffffff;
   --color-surface-elevated: #ffffff;
-  --color-border: rgba(0, 0, 0, 0.06);
-  --color-border-hover: rgba(77, 236, 19, 0.3);
-
-  /* 卡片效果 */
-  --card-bg: #ffffff;
-  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.04);
-  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 8px 30px rgba(77, 236, 19, 0.08);
-  --card-border: 1px solid rgba(0, 0, 0, 0.04);
   
-  /* 玻璃拟态 - 更轻量 */
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-blur: 12px;
-  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-
-  /* 渐变 */
-  --gradient-primary: linear-gradient(135deg, #4dec13 0%, #3bc40f 100%);
-  --gradient-hero: linear-gradient(160deg, #4dec13 0%, #6ff13a 50%, #86efac 100%);
-  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f8faf6 100%);
-  --gradient-glow: radial-gradient(600px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(77, 236, 19, 0.08), transparent 60%);
-
-  /* 圆角 - Stitch 风格 ROUND_TWELVE */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  /* Text Colors - Enhanced contrast for accessibility (WCAG AAA) */
+  --color-foreground: #0f172a;        /* Slate 900 - deep navy-black */
+  --color-foreground-secondary: #334155; /* Slate 700 */
+  --color-muted: #64748b;             /* Slate 500 */
+  --color-muted-light: #94a3b8;       /* Slate 400 */
+  --color-muted-subtle: #cbd5e1;      /* Slate 300 */
+  
+  /* Semantic Colors - Improved contrast ratios */
+  --color-success: #059669;           /* Emerald 600 - better contrast */
+  --color-success-light: #d1fae5;     /* Emerald 100 */
+  --color-success-dim: rgba(5, 150, 105, 0.08);
+  --color-error: #dc2626;             /* Red 600 - better contrast */
+  --color-error-light: #fee2e2;       /* Red 100 */
+  --color-error-dim: rgba(220, 38, 38, 0.08);
+  --color-warning: #d97706;           /* Amber 600 - better contrast */
+  --color-warning-light: #fef3c7;     /* Amber 100 */
+  --color-warning-dim: rgba(217, 119, 6, 0.08);
+  --color-info: #2563eb;              /* Blue 600 - better contrast */
+  --color-info-light: #dbeafe;        /* Blue 100 */
+  --color-info-dim: rgba(37, 99, 235, 0.08);
+  
+  /* Borders & Dividers - Subtle but visible */
+  --color-border: #e2e8f0;            /* Slate 200 */
+  --color-border-light: #f1f5f9;      /* Slate 100 */
+  --color-border-hover: #4f46e5;      /* Primary on hover */
+  
+  /* === Elevation System (based on Material Design) === */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* Card Styles */
+  --card-bg: var(--color-surface);
+  --card-shadow: var(--shadow-sm);
+  --card-shadow-hover: var(--shadow-lg);
+  --card-border: 1px solid var(--color-border);
+  
+  /* Glassmorphism - Subtle & Modern */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-blur: 16px;
+  --glass-shadow: var(--shadow-lg);
+  
+  /* === Gradients - Modern & Professional === */
+  --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  --gradient-primary-hover: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+  --gradient-hero: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  --gradient-glow: radial-gradient(800px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(79, 70, 229, 0.06), transparent 60%);
+  
+  /* === Border Radius - Consistent Scale === */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
   --radius-full: 9999px;
-
-  /* 过渡动画 */
+  
+  /* === Typography Scale (based on 1.25 Major Third ratio) === */
+  --text-xs: 0.75rem;      /* 12px - captions, labels */
+  --text-sm: 0.875rem;     /* 14px - small text, helper text */
+  --text-base: 1rem;       /* 16px - body text */
+  --text-lg: 1.125rem;     /* 18px - emphasized body text */
+  --text-xl: 1.25rem;      /* 20px - small headings */
+  --text-2xl: 1.5rem;      /* 24px - section headings */
+  --text-3xl: 1.875rem;    /* 30px - page headings */
+  --text-4xl: 2.25rem;     /* 36px - hero headings */
+  --text-5xl: 3rem;        /* 48px - display headings */
+  --text-6xl: 3.75rem;     /* 60px - large display */
+  --text-7xl: 4.5rem;      /* 72px -超大展示标题 */
+  
+  /* Font Families - Professional pairing */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
+  
+  /* Font Weights - Extended scale */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  
+  /* Line Heights - Optimized for readability */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+  
+  /* Letter Spacing - Refined */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+  
+  /* === Spacing Scale (8pt grid system) === */
+  --space-0: 0;           /* 0px */
+  --space-1: 0.25rem;     /* 4px */
+  --space-2: 0.5rem;      /* 8px */
+  --space-3: 0.75rem;     /* 12px */
+  --space-4: 1rem;        /* 16px */
+  --space-5: 1.25rem;     /* 20px */
+  --space-6: 1.5rem;      /* 24px */
+  --space-8: 2rem;        /* 32px */
+  --space-10: 2.5rem;     /* 40px */
+  --space-12: 3rem;       /* 48px */
+  --space-14: 3.5rem;     /* 56px */
+  --space-16: 4rem;       /* 64px */
+  --space-20: 5rem;       /* 80px */
+  --space-24: 6rem;       /* 96px */
+  --space-28: 7rem;       /* 112px */
+  --space-32: 8rem;       /* 128px */
+  
+  /* Container max-widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+  
+  /* === Transitions - Smooth & Natural === */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --transition-fast: 150ms var(--ease-out-expo);
-  --transition-normal: 250ms var(--ease-out-expo);
-  --transition-slow: 400ms var(--ease-out-expo);
+  --ease-spring-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  --transition-fast: 100ms var(--ease-out-expo);
+  --transition-base: 150ms var(--ease-out-expo);
+  --transition-normal: 200ms var(--ease-out-expo);
+  --transition-slow: 300ms var(--ease-out-expo);
+  --transition-slower: 500ms var(--ease-out-expo);
 }
 
 * {
@@ -70,7 +178,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-sans);
 }
 
 body {
@@ -78,7 +186,7 @@ body {
   background: var(--color-background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  line-height: var(--leading-normal);
 }
 
 /* 背景光晕效果 */
@@ -96,25 +204,189 @@ a {
   text-decoration: none;
 }
 
-/* === 卡片组件 === */
+/* === Card System - Clean & Professional === */
 .card {
   background: var(--card-bg);
   border: var(--card-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   box-shadow: var(--card-shadow);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition: all var(--transition-normal);
 }
 
 .card:hover {
   transform: translateY(-2px);
   box-shadow: var(--card-shadow-hover);
+  border-color: var(--color-primary-light);
 }
 
 .card-elevated {
   background: var(--color-surface-elevated);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--color-border-light);
+}
+
+.card-interactive {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.12);
+  transform: translateY(-2px);
+}
+
+.card-interactive:active {
+  transform: translateY(0);
+}
+
+.card-subtle {
+  background: var(--color-background);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.card-gradient {
+  background: var(--gradient-subtle);
+  border: 1px solid var(--color-border-light);
   border-radius: var(--radius-xl);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  padding: var(--space-6);
+}
+
+/* === Typography Utilities - Enhanced Hierarchy === */
+.heading-1 {
+  font-family: var(--font-heading);
+  font-size: var(--text-6xl);
+  font-weight: var(--font-extrabold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-foreground);
+}
+
+.heading-2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-5xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-foreground);
+}
+
+.heading-3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-foreground);
+}
+
+.heading-4 {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+  color: var(--color-foreground);
+}
+
+.heading-5 {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+  color: var(--color-foreground);
+}
+
+.heading-6 {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+  color: var(--color-foreground);
+}
+
+.text-body-lg {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-foreground-secondary);
+}
+
+.text-body {
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-foreground);
+}
+
+.text-body-sm {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-muted);
+}
+
+.text-caption {
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--color-muted-light);
+  font-weight: var(--font-medium);
+}
+
+/* === Layout Utilities - 8pt Grid System === */
+.container-custom {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: var(--space-4);
+  padding-left: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    max-width: var(--container-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .container-custom {
+    max-width: var(--container-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-custom {
+    max-width: var(--container-lg);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-custom {
+    max-width: var(--container-xl);
+  }
+}
+
+.section-padding {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-24);
+  }
+}
+
+.gap-grid {
+  gap: var(--space-6);
+}
+
+.gap-grid-lg {
+  gap: var(--space-8);
 }
 
 /* === 玻璃拟态 === */
@@ -133,75 +405,147 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* === 按钮 === */
+/* === Button System - Refined & Accessible === */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem 2rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-md);
   background: var(--gradient-primary);
   color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: -0.01em;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
-  box-shadow: 0 4px 16px rgba(77, 236, 19, 0.35);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  letter-spacing: var(--tracking-tight);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-md);
   border: none;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(77, 236, 19, 0.45);
+  background: var(--gradient-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
 }
 
 .btn-primary:active {
   transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem 2rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-foreground);
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: var(--font-medium);
+  font-size: var(--text-base);
   border: 1px solid var(--color-border);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-base);
   cursor: pointer;
+  min-height: 44px;
 }
 
 .btn-secondary:hover {
   background: var(--color-background);
   border-color: var(--color-primary);
   color: var(--color-primary-dark);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-ghost {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   color: var(--color-muted);
-  font-weight: 500;
-  font-size: 0.875rem;
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
   background: transparent;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-base);
   cursor: pointer;
+  min-height: 36px;
 }
 
 .btn-ghost:hover {
   color: var(--color-foreground);
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--color-background);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  border: 2px solid var(--color-primary);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.btn-outline:hover {
+  background: var(--color-primary-dim);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  color: white;
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  letter-spacing: var(--tracking-tight);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-md);
+  border: none;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.btn-accent:hover {
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-accent:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Button sizes */
+.btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  min-height: 36px;
+}
+
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
+  min-height: 52px;
 }
 
 /* === 选项卡片 - Quiz 页面 === */
@@ -222,13 +566,13 @@ a {
 .option-card:hover {
   border-color: var(--color-primary);
   transform: scale(1.02);
-  box-shadow: 0 4px 20px rgba(77, 236, 19, 0.15);
+  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.15);
 }
 
 .option-card.selected {
   border-color: var(--color-primary);
   background: var(--color-primary-dim);
-  box-shadow: 0 0 0 3px rgba(77, 236, 19, 0.2);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
 
 .option-card.correct {
@@ -369,13 +713,13 @@ input[type="range"]::-webkit-slider-thumb {
   background: var(--gradient-primary);
   cursor: pointer;
   border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(77, 236, 19, 0.4);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.1);
-  box-shadow: 0 2px 12px rgba(77, 236, 19, 0.5);
+  box-shadow: 0 2px 12px rgba(79, 70, 229, 0.5);
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -385,7 +729,7 @@ input[type="range"]::-moz-range-thumb {
   background: var(--gradient-primary);
   cursor: pointer;
   border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(77, 236, 19, 0.4);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
 }
 
 /* === 滚动条 === */
@@ -408,7 +752,7 @@ input[type="range"]::-moz-range-thumb {
 
 /* === 选中效果 === */
 ::selection {
-  background: rgba(77, 236, 19, 0.25);
+  background: rgba(79, 70, 229, 0.25);
   color: var(--color-foreground);
 }
 

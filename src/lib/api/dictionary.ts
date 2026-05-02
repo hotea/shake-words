@@ -314,6 +314,135 @@ export class OnlineWordbookService {
   async lookupWord(word: string): Promise<Word | null> {
     return this.dictionary.lookupWord(word);
   }
+
+  /**
+   * 从文本导入词书（支持多种格式）
+   * @param text 文本内容，每行一个单词或"单词\t释义"格式
+   */
+  importFromText(text: string, bookId: string): Word[] {
+    const lines = text.split("\n").filter((line) => line.trim());
+    const words: Word[] = [];
+
+    lines.forEach((line, index) => {
+      const parts = line.split(/\t|,/).map((p) => p.trim());
+      if (parts.length >= 2) {
+        // 有单词和释义
+        words.push({
+          id: `${bookId}-imported-${index}`,
+          bookId,
+          word: parts[0],
+          phonetic: "",
+          meaning: parts.slice(1).join(", "),
+        });
+      } else if (parts.length === 1 && parts[0]) {
+        // 只有单词，需要查询释义
+        words.push({
+          id: `${bookId}-imported-${index}`,
+          bookId,
+          word: parts[0],
+          phonetic: "",
+          meaning: "待查询",
+        });
+      }
+    });
+
+    return words;
+  }
+
+  /**
+   * 从 JSON 导入词书
+   * @param json JSON 字符串
+   */
+  importFromJSON(json: string, bookId: string): Word[] {
+    try {
+      const data = JSON.parse(json);
+      
+      // 支持数组格式
+      if (Array.isArray(data)) {
+        return data.map((item, index) => ({
+          id: item.id || `${bookId}-json-${index}`,
+          bookId,
+          word: item.word || item.english || "",
+          phonetic: item.phonetic || item.pronunciation || "",
+          meaning: item.meaning || item.chinese || item.definition || "",
+          example: item.example || undefined,
+        }));
+      }
+
+      // 支持对象格式 { words: [...] }
+      if (data.words && Array.isArray(data.words)) {
+        return data.words.map((item: any, index: number) => ({
+          id: item.id || `${bookId}-json-${index}`,
+          bookId,
+          word: item.word || item.english || "",
+          phonetic: item.phonetic || item.pronunciation || "",
+          meaning: item.meaning || item.chinese || item.definition || "",
+          example: item.example || undefined,
+        }));
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Failed to parse JSON:", error);
+      return [];
+    }
+  }
+
+  /**
+   * 导出词书为 JSON
+   * @param words 单词列表
+   */
+  exportToJSON(words: Word[]): string {
+    return JSON.stringify(
+      {
+        version: "1.0",
+        exportedAt: new Date().toISOString(),
+        wordCount: words.length,
+        words: words.map(({ id, word, phonetic, meaning, example }) => ({
+          id,
+          word,
+          phonetic,
+          meaning,
+          example,
+        })),
+      },
+      null,
+      2
+    );
+  }
+
+  /**
+   * 自动补全单词释义（批量查询）
+   * @param words 需要补全的单词列表
+   */
+  async enrichWords(words: Word[]): Promise<Word[]> {
+    const needsEnrichment = words.filter((w) => w.meaning === "待查询");
+    
+    if (needsEnrichment.length === 0) {
+      return words;
+    }
+
+    const enriched = await this.dictionary.lookupWords(
+      needsEnrichment.map((w) => w.word)
+    );
+
+    const enrichedMap = new Map(enriched.map((w) => [w.word, w]));
+
+    return words.map((w) => {
+      if (w.meaning === "待查询") {
+        const enriched = enrichedMap.get(w.word);
+        if (enriched) {
+          return {
+            ...w,
+            phonetic: enriched.phonetic || w.phonetic,
+            meaning: enriched.meaning,
+            example: enriched.example,
+          };
+        }
+      }
+      return w;
+    });
+  }
 }
 
 // 单例导出

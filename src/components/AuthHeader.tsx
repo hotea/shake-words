@@ -7,7 +7,7 @@ export function AuthHeader() {
   const { user, loading, signOut } = useAuth();
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="fixed top-4 left-4 z-50">
       <div className="glass flex items-center gap-2 rounded-full px-1.5 py-1.5">
         {loading ? (
           <div className="w-7 h-7 flex items-center justify-center">

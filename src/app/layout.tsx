@@ -3,8 +3,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "ShakeWords - 摇头背单词",
-  description: "通过Face Mesh识别头部动作，用摇头来选择单词释义，让背单词变得有趣",
+  title: "ShakeWords - 晃晃背单词",
+  description: "通过Face Mesh识别头部动作，用晃头来选择单词释义，让背单词变得有趣",
 };
 
 export default function RootLayout({

@@ -12,6 +12,7 @@ export interface WordBook {
   description: string;
   isBuiltin: boolean;
   isOnline?: boolean;
+  isCustom?: boolean;
   wordCount: number;
   createdAt: string;
   category?: string;

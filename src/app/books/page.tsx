@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getAdapter } from "@/lib/adapter";
+import { wordBookManager } from "@/data/wordbooks";
 import type { WordBook } from "@/lib/types";
 
-type BookCategory = "all" | "cet" | "ielts" | "toefl" | "gre" | "business" | "tech" | "daily";
+import WordbookPreview from "@/components/Books/WordbookPreview";
+
+type BookCategory = "all" | "cet" | "ielts" | "toefl" | "gre" | "business" | "tech" | "daily" | "custom" | "imported";
 
 export default function BooksPage() {
   const router = useRouter();
@@ -16,13 +19,14 @@ export default function BooksPage() {
   const [activeCategory, setActiveCategory] = useState<BookCategory>("all");
   const [loadingOnline, setLoadingOnline] = useState<string | null>(null);
 
+  const [previewBook, setPreviewBook] = useState<{ book: WordBook; words: any[] } | null>(null);
+
   useEffect(() => {
     async function load() {
-      const adapter = getAdapter();
-      const result = await adapter.getWordBooks();
-      setBooks(result);
+      await refreshBooks();
       
       // Load selected book from localStorage
+      const adapter = getAdapter();
       if (adapter instanceof Object && 'getSelectedBookId' in adapter) {
         const saved = (adapter as any).getSelectedBookId?.();
         if (saved) setSelectedBookId(saved);
@@ -33,16 +37,33 @@ export default function BooksPage() {
     load();
   }, []);
 
+  const refreshBooks = async () => {
+    const adapter = getAdapter();
+    const result = await adapter.getWordBooks();
+    setBooks(result);
+  };
+
   const handleSelectBook = async (bookId: string) => {
     // Check if it's an online book
     const book = books.find(b => b.id === bookId);
     
     if (book?.isOnline) {
       setLoadingOnline(bookId);
-      // Pre-fetch the online book data
-      const { wordBookManager } = await import("@/data/wordbooks");
-      await wordBookManager.getWords(bookId);
-      setLoadingOnline(null);
+      try {
+        // Pre-fetch the online book data
+        const words = await wordBookManager.getWords(bookId);
+        if (words.length > 0) {
+          setPreviewBook({ book, words });
+        } else {
+          alert("获取词书失败，请稍后重试");
+        }
+      } catch (error) {
+        console.error("Failed to fetch online book:", error);
+        alert("获取词书失败，请检查网络连接");
+      } finally {
+        setLoadingOnline(null);
+      }
+      return;
     }
     
     setSelectedBookId(bookId);
@@ -52,11 +73,54 @@ export default function BooksPage() {
     }
   };
 
+  const handleDeleteCustomBook = async (bookId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!confirm("确定要删除这个自定义词书吗？")) {
+      return;
+    }
+
+    wordBookManager.deleteCustomBook(bookId);
+    await refreshBooks();
+    
+    if (selectedBookId === bookId) {
+      setSelectedBookId(null);
+    }
+  };
+
+  const handleExportBook = async (bookId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    try {
+      const json = await wordBookManager.exportToJSON(bookId);
+      if (!json) {
+        alert("导出失败");
+        return;
+      }
+
+      // Download as file
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `shakewords-${bookId}-${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export failed:", error);
+      alert("导出失败");
+    }
+  };
+
   const handleStartLearning = () => {
     if (selectedBookId) {
       router.push(`/quiz?book=${selectedBookId}`);
     }
   };
+
+
 
   // Filter books by category
   const filteredBooks = books.filter((book) => {
@@ -74,6 +138,7 @@ export default function BooksPage() {
     if (book.id.includes("business")) return "💼";
     if (book.id.includes("tech")) return "💻";
     if (book.id.includes("daily")) return "🗣️";
+    if (book.isCustom) return "✨";
     return "📚";
   };
 
@@ -87,6 +152,7 @@ export default function BooksPage() {
     if (book.id.includes("business")) return "from-indigo-500 to-blue-400";
     if (book.id.includes("tech")) return "from-cyan-500 to-teal-400";
     if (book.id.includes("daily")) return "from-yellow-500 to-orange-400";
+    if (book.isCustom) return "from-purple-500 to-pink-400";
     return "from-[var(--color-primary)] to-[var(--color-primary-light)]";
   };
 
@@ -99,6 +165,7 @@ export default function BooksPage() {
     { id: "business", label: "商务" },
     { id: "tech", label: "IT" },
     { id: "daily", label: "日常" },
+    { id: "custom", label: "自定义" },
   ];
 
   return (
@@ -164,16 +231,46 @@ export default function BooksPage() {
             {filteredBooks.map((book) => {
               const isSelected = selectedBookId === book.id;
               const isLoading = loadingOnline === book.id;
+              const isCustomOrOnline = book.isCustom || book.isOnline;
+              
               return (
                 <div
                   key={book.id}
                   onClick={() => !isLoading && handleSelectBook(book.id)}
-                  className={`card p-5 cursor-pointer transition-all duration-200 ${
+                  className={`card p-5 cursor-pointer transition-all duration-200 relative group ${
                     isSelected 
                       ? "ring-2 ring-[var(--color-primary)] border-[var(--color-primary)]" 
                       : "hover:border-[var(--color-primary)]/30"
                   } ${isLoading ? "opacity-70" : ""}`}
                 >
+                  {/* Action buttons for custom/online books */}
+                  {isCustomOrOnline && !isLoading && (
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                      {book.isCustom && (
+                        <>
+                          <button
+                            onClick={(e) => handleExportBook(book.id, e)}
+                            className="p-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+                            title="导出词书"
+                          >
+                            <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={(e) => handleDeleteCustomBook(book.id, e)}
+                            className="p-1.5 rounded-lg bg-white border border-gray-200 hover:bg-red-50 transition-colors"
+                            title="删除词书"
+                          >
+                            <svg className="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
+
                   <div className="flex items-start gap-4">
                     {/* Icon */}
                     <div className={`w-14 h-14 rounded-[var(--radius-md)] bg-gradient-to-br ${getBookColor(book)} flex items-center justify-center text-2xl shadow-lg flex-shrink-0`}>
@@ -223,6 +320,11 @@ export default function BooksPage() {
                             在线
                           </span>
                         )}
+                        {book.isCustom && (
+                          <span className="ml-auto text-xs px-2.5 py-1 rounded-full bg-purple-50 text-purple-600 font-medium border border-purple-100">
+                            自定义
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -244,6 +346,23 @@ export default function BooksPage() {
           </div>
         )}
       </div>
+
+      {/* Preview modal */}
+      {previewBook && (
+        <WordbookPreview
+          book={previewBook.book}
+          words={previewBook.words}
+          onClose={() => setPreviewBook(null)}
+          onConfirm={() => {
+            setSelectedBookId(previewBook.book.id);
+            const adapter = getAdapter();
+            if (adapter instanceof Object && 'setSelectedBookId' in adapter) {
+              (adapter as any).setSelectedBookId?.(previewBook.book.id);
+            }
+            setPreviewBook(null);
+          }}
+        />
+      )}
     </main>
   );
 }

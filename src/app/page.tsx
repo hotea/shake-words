@@ -5,8 +5,8 @@ export default function Home() {
     <main className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
       {/* 背景装饰 */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[var(--color-primary)]/[0.06] blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[var(--color-success-light)]/[0.08] blur-[100px]" />
+        <div className="absolute top-[-5%] right-[-10%] w-[400px] h-[400px] rounded-full bg-[var(--color-primary)]/[0.04] blur-[100px]" />
+        <div className="absolute bottom-[-5%] left-[-10%] w-[350px] h-[350px] rounded-full bg-[var(--color-success-light)]/[0.06] blur-[80px]" />
       </div>
 
       {/* 顶部导航 */}
@@ -19,7 +19,7 @@ export default function Home() {
           </div>
           <span className="font-semibold text-[var(--color-foreground)]">ShakeWords</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-3">
           <Link href="/books" className="btn-ghost">
             <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
@@ -43,86 +43,41 @@ export default function Home() {
       </nav>
 
       {/* Hero 区域 */}
-      <div className="text-center mb-12 max-w-2xl animate-fade-in z-10">
-        <h1 className="text-5xl sm:text-6xl font-bold mb-5 tracking-tight leading-[1.1]">
-          摇头背单词
+      <div className="text-center mb-16 max-w-3xl animate-fade-in z-10">
+        <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight leading-tight">
+          晃晃背单词
           <br />
           <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-hero)" }}>
             学习时放松颈椎
           </span>
         </h1>
-        <p className="text-lg text-[var(--color-muted)] leading-relaxed max-w-md mx-auto">
-          通过摇头动作选择单词释义，边学单词边活动颈椎。
-          支持 CET-4、CET-6、雅思、托福、GRE、商务英语等多种词书。
+        <p className="text-base sm:text-lg text-[var(--color-muted)] leading-relaxed max-w-lg mx-auto">
+          通过头部动作选择单词释义，边学单词边活动颈椎。
+          支持多种词书，让学习更轻松有趣。
         </p>
       </div>
 
-      {/* 功能卡片 */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12 max-w-3xl w-full z-10">
-        {[
-          {
-            step: "1",
-            title: "选择词书",
-            desc: "CET-4/6、雅思、托福、GRE、商务英语等多种词书可选",
-            icon: (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-              </svg>
-            ),
-          },
-          {
-            step: "2",
-            title: "开启摄像头",
-            desc: "实时追踪头部动作，无需手动操作",
-            icon: (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
-              </svg>
-            ),
-          },
-          {
-            step: "3",
-            title: "摇头选择",
-            desc: "上下左右摇头选择正确答案，活动颈椎",
-            icon: (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 11120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5" />
-              </svg>
-            ),
-          },
-        ].map((item, i) => (
-          <div
-            key={item.step}
-            className={`card p-6 text-center animate-fade-in-up stagger-${i + 1} hover:border-[var(--color-primary)]/30`}
-          >
-            <div className="w-12 h-12 rounded-[var(--radius-md)] bg-[var(--color-primary-dim)] text-[var(--color-primary-dark)] flex items-center justify-center mx-auto mb-4">
-              {item.icon}
-            </div>
-            <h3 className="font-semibold mb-1.5 text-[var(--color-foreground)]">{item.title}</h3>
-            <p className="text-sm text-[var(--color-muted)] leading-relaxed">{item.desc}</p>
-          </div>
-        ))}
-      </div>
+
 
       {/* CTA 按钮 */}
-      <div className="flex flex-col sm:flex-row items-center gap-4 animate-fade-in-up stagger-4 z-10">
-        <Link href="/books" className="btn-primary text-lg px-10 py-4 rounded-[var(--radius-md)]">
+      <div className="flex flex-col sm:flex-row items-center gap-4 animate-fade-in-up stagger-2 z-10 mb-16">
+        <Link href="/books" className="btn-primary text-lg px-12 py-4 rounded-[var(--radius-md)] shadow-lg hover:shadow-xl transition-all">
           <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
           </svg>
-          选择词书
+          选择词书开始学习
         </Link>
         <Link href="/quiz" className="btn-secondary px-8 py-4 rounded-[var(--radius-md)]">
           <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
           </svg>
-          快速开始
+          快速体验
         </Link>
       </div>
 
       {/* 底部提示 */}
-      <p className="absolute bottom-6 text-xs text-[var(--color-muted)]/60 text-center max-w-sm animate-fade-in-up stagger-5">
-        支持键盘操作（方向键 / WASD）· 数据本地存储 · 可配置云端同步
+      <p className="absolute bottom-8 text-xs text-[var(--color-muted)]/50 text-center max-w-sm animate-fade-in-up stagger-3">
+        支持键盘操作 · 数据本地存储 · 可配置云端同步
       </p>
     </main>
   );
