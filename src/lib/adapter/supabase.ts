@@ -11,7 +11,7 @@ import type {
   GestureDirection,
 } from "@/lib/types";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { CET4_BOOK, CET4_WORDS } from "@/data/cet4";
+import { wordBookManager } from "@/data/wordbooks";
 import { calculateNextProgress, isDueForReview, isMastered, sortByReviewPriority } from "@/lib/spaced-repetition";
 
 // ============================================================
@@ -52,8 +52,6 @@ function shuffleDirections(): GestureDirection[] {
 // ============================================================
 export class SupabaseAdapter implements BackendAdapter {
   private supabase: SupabaseClient;
-  private books: WordBook[] = [CET4_BOOK];
-  private wordsByBook: Map<string, Word[]> = new Map([[CET4_BOOK.id, CET4_WORDS]]);
 
   constructor(supabase: SupabaseClient) {
     this.supabase = supabase;
@@ -65,20 +63,21 @@ export class SupabaseAdapter implements BackendAdapter {
   }
 
   async getWordBooks(): Promise<WordBook[]> {
-    return this.books;
+    return wordBookManager.getAllBooks();
   }
 
   async getWordBook(bookId: string): Promise<WordBook | null> {
-    return this.books.find((b) => b.id === bookId) ?? null;
+    return wordBookManager.getBook(bookId) ?? null;
   }
 
   async getWords(bookId: string, limit = 50, offset = 0): Promise<Word[]> {
-    const words = this.wordsByBook.get(bookId) ?? [];
+    const words = await wordBookManager.getWords(bookId);
     return words.slice(offset, offset + limit);
   }
 
   async getWord(wordId: string): Promise<Word | null> {
-    for (const words of this.wordsByBook.values()) {
+    for (const book of wordBookManager.getAllBooks()) {
+      const words = await wordBookManager.getWords(book.id);
       const found = words.find((w) => w.id === wordId);
       if (found) return found;
     }
@@ -86,7 +85,7 @@ export class SupabaseAdapter implements BackendAdapter {
   }
 
   async getQuizQuestion(bookId: string): Promise<QuizQuestion | null> {
-    const allWords = this.wordsByBook.get(bookId);
+    const allWords = await wordBookManager.getWords(bookId);
     if (!allWords || allWords.length < 4) return null;
 
     const progressList = await this.getProgress(bookId);

@@ -21,7 +21,7 @@ export default function AuthCallbackPage() {
 
     // The supabase-js client auto-parses the hash fragment on load.
     // Wait briefly for the session to be established, then redirect.
-    supabase.auth.onAuthStateChange((event) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_IN") {
         router.replace("/");
       }
@@ -29,7 +29,10 @@ export default function AuthCallbackPage() {
 
     // Fallback redirect after 5s
     const timer = setTimeout(() => router.replace("/"), 5000);
-    return () => clearTimeout(timer);
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timer);
+    };
   }, [router]);
 
   return (

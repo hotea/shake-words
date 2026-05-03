@@ -42,16 +42,22 @@ export function useQuiz(options: UseQuizOptions): UseQuizReturn {
   const [sessionCorrect, setSessionCorrect] = useState(0);
 
   const questionStartTime = useRef<number>(0);
-  const adapter = useRef(getAdapter());
+  const answeringRef = useRef(false);
+  const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const adapterRef = useRef<Awaited<ReturnType<typeof getAdapter>> | null>(null);
 
   const loadQuestion = useCallback(async () => {
     try {
+      if (!adapterRef.current) {
+        adapterRef.current = await getAdapter();
+      }
+      const adapter = adapterRef.current;
       setState("loading");
       setSelectedDirection(null);
       setIsCorrect(null);
       setError(null);
 
-      const q = await adapter.current.getQuizQuestion(bookId);
+      const q = await adapter.getQuizQuestion(bookId);
       if (!q) {
         setError("No quiz questions available");
         setState("error");
@@ -70,11 +76,17 @@ export function useQuiz(options: UseQuizOptions): UseQuizReturn {
 
   const answer = useCallback(
     async (direction: GestureDirection) => {
-      if (state !== "ready" || !question) return;
+      if (state !== "ready" || !question || answeringRef.current) return;
+
+      // Prevent double-answer race condition
+      answeringRef.current = true;
 
       const responseMs = Date.now() - questionStartTime.current;
       const option = question.options.find((o) => o.direction === direction);
-      if (!option) return;
+      if (!option) {
+        answeringRef.current = false;
+        return;
+      }
 
       const correct = option.isCorrect;
       setSelectedDirection(direction);
@@ -94,21 +106,32 @@ export function useQuiz(options: UseQuizOptions): UseQuizReturn {
       };
 
       try {
-        await adapter.current.submitAnswer(payload);
+        if (!adapterRef.current) adapterRef.current = await getAdapter();
+        await adapterRef.current.submitAnswer(payload);
       } catch {
         // Don't block the quiz flow for backend errors
         console.error("Failed to submit answer");
+      } finally {
+        answeringRef.current = false;
       }
 
       // Auto-advance to next question
       if (autoNext) {
-        setTimeout(() => {
+        if (autoNextTimerRef.current) clearTimeout(autoNextTimerRef.current);
+        autoNextTimerRef.current = setTimeout(() => {
           loadQuestion();
         }, autoNextDelay);
       }
     },
     [state, question, bookId, autoNext, autoNextDelay, loadQuestion],
   );
+
+  // Clean up auto-next timer on unmount
+  useEffect(() => {
+    return () => {
+      if (autoNextTimerRef.current) clearTimeout(autoNextTimerRef.current);
+    };
+  }, []);
 
   // Load first question
   useEffect(() => {

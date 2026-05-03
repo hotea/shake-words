@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { GestureEngine, type GestureEngineConfig } from "@/lib/gesture-engine";
 import type { GestureDirection, GestureEvent, HeadPose } from "@/lib/types";
+import { usePageVisibility } from "./usePageVisibility";
 
 export type GestureStatus = "idle" | "loading" | "calibrating" | "ready" | "error";
 
@@ -18,6 +19,10 @@ interface UseGestureReturn {
   error: string | null;
   pose: HeadPose | null;
   lastGesture: GestureDirection | null;
+  /** Whether tracking is paused due to page being hidden */
+  paused: boolean;
+  /** Calibrated neutral pose (null while calibrating) */
+  baselinePose: HeadPose | null;
   /** Manually recalibrate (look straight at camera) */
   recalibrate: () => void;
   /** Update engine config at runtime */
@@ -35,6 +40,9 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
   const [error, setError] = useState<string | null>(null);
   const [pose, setPose] = useState<HeadPose | null>(null);
   const [lastGesture, setLastGesture] = useState<GestureDirection | null>(null);
+  const [baselinePose, setBaselinePose] = useState<HeadPose | null>(null);
+
+  const isPageVisible = usePageVisibility();
 
   const recalibrate = useCallback(() => {
     if (engineRef.current) {
@@ -59,6 +67,7 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
     engine.setPoseCallback((p) => {
       if (destroyed) return;
       setPose(p);
+      setBaselinePose(engine.getBaselinePose());
       if (engine.isCalibrating()) {
         setStatus("calibrating");
       } else {
@@ -116,5 +125,26 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled]);
 
-  return { videoRef, status, error, pose, lastGesture, recalibrate, updateConfig };
+  // Track paused state derived from page visibility
+  const [paused, setPaused] = useState(false);
+
+  // Pause/resume engine when page visibility changes
+  useEffect(() => {
+    const engine = engineRef.current;
+    if (!engine) return;
+
+    if (isPageVisible) {
+      setPaused(false);
+      // Page became visible — resume if we were ready before
+      if (status === "ready" || status === "calibrating") {
+        engine.start();
+      }
+    } else {
+      setPaused(true);
+      // Page hidden — pause detection loop (but don't destroy camera)
+      engine.stop();
+    }
+  }, [isPageVisible, status]);
+
+  return { videoRef, status, error, pose, lastGesture, paused, baselinePose, recalibrate, updateConfig };
 }

@@ -2,170 +2,167 @@
 
 :root {
   /* ========================================
-     Professional Design System - Huashu Design Principles
-     Based on 8pt grid, refined color palette, and clear hierarchy
+     Huashu Design System — Intentional, Minimal, Human
      ======================================== */
-  
-  /* === Color Palette - Enhanced Contrast & Professional === */
-  /* Primary: Deep indigo-blue for trust and professionalism (WCAG AA compliant) */
-  --color-primary: #4f46e5;           /* Indigo 600 - professional blue-indigo */
-  --color-primary-light: #6366f1;     /* Indigo 500 */
-  --color-primary-dark: #4338ca;      /* Indigo 700 */
-  --color-primary-dim: rgba(79, 70, 229, 0.08);
-  --color-primary-subtle: rgba(79, 70, 229, 0.04);
-  
-  /* Secondary Accent: Teal for complementary actions */
-  --color-accent: #0d9488;            /* Teal 600 */
-  --color-accent-light: #14b8a6;      /* Teal 500 */
-  --color-accent-dark: #0f766e;       /* Teal 700 */
-  
-  /* Background & Surface - Pure white with subtle gray tones */
-  --color-background: #f8fafc;        /* Slate 50 - clean cool white */
+
+  /* === Color Palette — Warm & Grounded === */
+  --color-primary: #1e3a5f;
+  --color-primary-light: #2d5a87;
+  --color-primary-dark: #0f1f33;
+  --color-primary-dim: rgba(30, 58, 95, 0.08);
+  --color-primary-subtle: rgba(30, 58, 95, 0.04);
+
+  --color-accent: #b45309;
+  --color-accent-light: #d97706;
+  --color-accent-dark: #78350f;
+  --color-accent-dim: rgba(217, 119, 6, 0.08);
+
+  /* Background & Surface */
+  --color-background: #faf9f7;
   --color-surface: #ffffff;
   --color-surface-elevated: #ffffff;
-  
-  /* Text Colors - Enhanced contrast for accessibility (WCAG AAA) */
-  --color-foreground: #0f172a;        /* Slate 900 - deep navy-black */
-  --color-foreground-secondary: #334155; /* Slate 700 */
-  --color-muted: #64748b;             /* Slate 500 */
-  --color-muted-light: #94a3b8;       /* Slate 400 */
-  --color-muted-subtle: #cbd5e1;      /* Slate 300 */
-  
-  /* Semantic Colors - Improved contrast ratios */
-  --color-success: #059669;           /* Emerald 600 - better contrast */
-  --color-success-light: #d1fae5;     /* Emerald 100 */
-  --color-success-dim: rgba(5, 150, 105, 0.08);
-  --color-error: #dc2626;             /* Red 600 - better contrast */
-  --color-error-light: #fee2e2;       /* Red 100 */
-  --color-error-dim: rgba(220, 38, 38, 0.08);
-  --color-warning: #d97706;           /* Amber 600 - better contrast */
-  --color-warning-light: #fef3c7;     /* Amber 100 */
-  --color-warning-dim: rgba(217, 119, 6, 0.08);
-  --color-info: #2563eb;              /* Blue 600 - better contrast */
-  --color-info-light: #dbeafe;        /* Blue 100 */
-  --color-info-dim: rgba(37, 99, 235, 0.08);
-  
-  /* Borders & Dividers - Subtle but visible */
-  --color-border: #e2e8f0;            /* Slate 200 */
-  --color-border-light: #f1f5f9;      /* Slate 100 */
-  --color-border-hover: #4f46e5;      /* Primary on hover */
-  
-  /* === Elevation System (based on Material Design) === */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  
-  /* Card Styles */
+  --color-surface-warm: #f5f3ef;
+
+  /* Text Colors */
+  --color-foreground: #1c1917;
+  --color-foreground-secondary: #44403c;
+  --color-muted: #78716c;
+  --color-muted-light: #a8a29e;
+  --color-muted-subtle: #d6d3d1;
+
+  /* Semantic Colors */
+  --color-success: #047857;
+  --color-success-light: #d1fae5;
+  --color-success-dim: rgba(4, 120, 87, 0.08);
+  --color-error: #be123c;
+  --color-error-light: #ffe4e6;
+  --color-error-dim: rgba(190, 18, 60, 0.08);
+  --color-warning: #b45309;
+  --color-warning-light: #fef3c7;
+  --color-warning-dim: rgba(180, 83, 9, 0.08);
+  --color-info: #1d4ed8;
+  --color-info-light: #dbeafe;
+  --color-info-dim: rgba(29, 78, 216, 0.08);
+
+  /* Borders */
+  --color-border: #e7e5e4;
+  --color-border-light: #f5f5f4;
+  --color-border-hover: #1e3a5f;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px 0 rgba(28, 25, 23, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(28, 25, 23, 0.06), 0 1px 2px -1px rgba(28, 25, 23, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(28, 25, 23, 0.06), 0 2px 4px -2px rgba(28, 25, 23, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(28, 25, 23, 0.06), 0 4px 6px -4px rgba(28, 25, 23, 0.06);
+  --shadow-xl: 0 20px 25px -5px rgba(28, 25, 23, 0.06), 0 8px 10px -6px rgba(28, 25, 23, 0.06);
+  --shadow-2xl: 0 25px 50px -12px rgba(28, 25, 23, 0.12);
+
+  /* Card */
   --card-bg: var(--color-surface);
   --card-shadow: var(--shadow-sm);
-  --card-shadow-hover: var(--shadow-lg);
+  --card-shadow-hover: var(--shadow-md);
   --card-border: 1px solid var(--color-border);
-  
-  /* Glassmorphism - Subtle & Modern */
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-blur: 16px;
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(231, 229, 228, 0.5);
+  --glass-blur: 20px;
   --glass-shadow: var(--shadow-lg);
-  
-  /* === Gradients - Modern & Professional === */
-  --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-  --gradient-primary-hover: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
-  --gradient-hero: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%);
-  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  --gradient-subtle: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-  --gradient-glow: radial-gradient(800px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(79, 70, 229, 0.06), transparent 60%);
-  
-  /* === Border Radius - Consistent Scale === */
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+  --gradient-primary-hover: linear-gradient(135deg, #152a45 0%, #1e3a5f 100%);
+  --gradient-hero: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #3b82a0 100%);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #faf9f7 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(30, 58, 95, 0.04) 0%, rgba(45, 90, 135, 0.04) 100%);
+  --gradient-warm: linear-gradient(135deg, #faf9f7 0%, #f5f3ef 100%);
+  --gradient-glow: radial-gradient(800px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(30, 58, 95, 0.04), transparent 60%);
+
+  /* Border Radius */
   --radius-xs: 4px;
   --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
-  --radius-3xl: 24px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
   --radius-full: 9999px;
-  
-  /* === Typography Scale (based on 1.25 Major Third ratio) === */
-  --text-xs: 0.75rem;      /* 12px - captions, labels */
-  --text-sm: 0.875rem;     /* 14px - small text, helper text */
-  --text-base: 1rem;       /* 16px - body text */
-  --text-lg: 1.125rem;     /* 18px - emphasized body text */
-  --text-xl: 1.25rem;      /* 20px - small headings */
-  --text-2xl: 1.5rem;      /* 24px - section headings */
-  --text-3xl: 1.875rem;    /* 30px - page headings */
-  --text-4xl: 2.25rem;     /* 36px - hero headings */
-  --text-5xl: 3rem;        /* 48px - display headings */
-  --text-6xl: 3.75rem;     /* 60px - large display */
-  --text-7xl: 4.5rem;      /* 72px -超大展示标题 */
-  
-  /* Font Families - Professional pairing */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+  --text-7xl: 4.5rem;
+
+  --font-display: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-heading: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
-  
-  /* Font Weights - Extended scale */
+
   --font-light: 300;
   --font-normal: 400;
   --font-medium: 500;
   --font-semibold: 600;
   --font-bold: 700;
   --font-extrabold: 800;
-  
-  /* Line Heights - Optimized for readability */
+
   --leading-none: 1;
   --leading-tight: 1.25;
   --leading-snug: 1.375;
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
-  
-  /* Letter Spacing - Refined */
+
   --tracking-tighter: -0.05em;
   --tracking-tight: -0.025em;
   --tracking-normal: 0em;
   --tracking-wide: 0.025em;
   --tracking-wider: 0.05em;
   --tracking-widest: 0.1em;
-  
-  /* === Spacing Scale (8pt grid system) === */
-  --space-0: 0;           /* 0px */
-  --space-1: 0.25rem;     /* 4px */
-  --space-2: 0.5rem;      /* 8px */
-  --space-3: 0.75rem;     /* 12px */
-  --space-4: 1rem;        /* 16px */
-  --space-5: 1.25rem;     /* 20px */
-  --space-6: 1.5rem;      /* 24px */
-  --space-8: 2rem;        /* 32px */
-  --space-10: 2.5rem;     /* 40px */
-  --space-12: 3rem;       /* 48px */
-  --space-14: 3.5rem;     /* 56px */
-  --space-16: 4rem;       /* 64px */
-  --space-20: 5rem;       /* 80px */
-  --space-24: 6rem;       /* 96px */
-  --space-28: 7rem;       /* 112px */
-  --space-32: 8rem;       /* 128px */
-  
-  /* Container max-widths */
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-28: 7rem;
+  --space-32: 8rem;
+
+  /* Containers */
   --container-sm: 640px;
   --container-md: 768px;
   --container-lg: 1024px;
   --container-xl: 1280px;
   --container-2xl: 1536px;
-  
-  /* === Transitions - Smooth & Natural === */
+
+  /* Transitions */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-spring-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  
+
   --transition-fast: 100ms var(--ease-out-expo);
   --transition-base: 150ms var(--ease-out-expo);
-  --transition-normal: 200ms var(--ease-out-expo);
-  --transition-slow: 300ms var(--ease-out-expo);
-  --transition-slower: 500ms var(--ease-out-expo);
+  --transition-normal: 250ms var(--ease-out-expo);
+  --transition-slow: 400ms var(--ease-out-expo);
+  --transition-slower: 600ms var(--ease-out-expo);
 }
 
 * {
@@ -174,22 +171,22 @@
   margin: 0;
 }
 
-html,
-body {
+html {
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   color: var(--color-foreground);
   background: var(--color-background);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-sans);
   line-height: var(--leading-normal);
+  text-wrap: pretty;
 }
 
-/* 背景光晕效果 */
+/* Subtle warm glow background */
 body::before {
   content: "";
   position: fixed;
@@ -204,7 +201,7 @@ a {
   text-decoration: none;
 }
 
-/* === Card System - Clean & Professional === */
+/* === Card System === */
 .card {
   background: var(--card-bg);
   border: var(--card-border);
@@ -214,9 +211,8 @@ a {
 }
 
 .card:hover {
-  transform: translateY(-2px);
   box-shadow: var(--card-shadow-hover);
-  border-color: var(--color-primary-light);
+  border-color: var(--color-muted-subtle);
 }
 
 .card-elevated {
@@ -228,7 +224,7 @@ a {
 
 .card-interactive {
   background: var(--color-surface);
-  border: 2px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   transition: all var(--transition-base);
@@ -237,8 +233,8 @@ a {
 
 .card-interactive:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.12);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(30, 58, 95, 0.1);
+  transform: translateY(-1px);
 }
 
 .card-interactive:active {
@@ -259,7 +255,7 @@ a {
   padding: var(--space-6);
 }
 
-/* === Typography Utilities - Enhanced Hierarchy === */
+/* === Typography Utilities === */
 .heading-1 {
   font-family: var(--font-heading);
   font-size: var(--text-6xl);
@@ -336,7 +332,7 @@ a {
   font-weight: var(--font-medium);
 }
 
-/* === Layout Utilities - 8pt Grid System === */
+/* === Layout Utilities === */
 .container-custom {
   width: 100%;
   margin-right: auto;
@@ -346,27 +342,16 @@ a {
 }
 
 @media (min-width: 640px) {
-  .container-custom {
-    max-width: var(--container-sm);
-  }
+  .container-custom { max-width: var(--container-sm); }
 }
-
 @media (min-width: 768px) {
-  .container-custom {
-    max-width: var(--container-md);
-  }
+  .container-custom { max-width: var(--container-md); }
 }
-
 @media (min-width: 1024px) {
-  .container-custom {
-    max-width: var(--container-lg);
-  }
+  .container-custom { max-width: var(--container-lg); }
 }
-
 @media (min-width: 1280px) {
-  .container-custom {
-    max-width: var(--container-xl);
-  }
+  .container-custom { max-width: var(--container-xl); }
 }
 
 .section-padding {
@@ -381,15 +366,10 @@ a {
   }
 }
 
-.gap-grid {
-  gap: var(--space-6);
-}
+.gap-grid { gap: var(--space-6); }
+.gap-grid-lg { gap: var(--space-8); }
 
-.gap-grid-lg {
-  gap: var(--space-8);
-}
-
-/* === 玻璃拟态 === */
+/* === Glass === */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
@@ -405,7 +385,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* === Button System - Refined & Accessible === */
+/* === Button System === */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -512,7 +492,7 @@ a {
   gap: var(--space-2);
   padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
   color: white;
   font-weight: var(--font-semibold);
   font-size: var(--text-base);
@@ -525,7 +505,7 @@ a {
 }
 
 .btn-accent:hover {
-  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+  background: linear-gradient(135deg, #92400e 0%, #653208 100%);
   transform: translateY(-1px);
   box-shadow: var(--shadow-lg);
 }
@@ -535,7 +515,6 @@ a {
   box-shadow: var(--shadow-sm);
 }
 
-/* Button sizes */
 .btn-sm {
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
@@ -548,16 +527,17 @@ a {
   min-height: 52px;
 }
 
-/* === 选项卡片 - Quiz 页面 === */
+/* === Option Cards — Quiz === */
 .option-card {
   background: var(--card-bg);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
+  padding: 0.75rem 0.5rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.375rem;
   transition: all var(--transition-normal);
   cursor: pointer;
   box-shadow: var(--card-shadow);
@@ -565,14 +545,13 @@ a {
 
 .option-card:hover {
   border-color: var(--color-primary);
-  transform: scale(1.02);
-  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.15);
+  box-shadow: 0 4px 20px rgba(30, 58, 95, 0.12);
 }
 
 .option-card.selected {
   border-color: var(--color-primary);
   background: var(--color-primary-dim);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.15);
 }
 
 .option-card.correct {
@@ -586,17 +565,17 @@ a {
   animation: shake 0.5s ease-in-out;
 }
 
-/* === 动画 === */
+/* === Animations === */
 @keyframes pulse-correct {
-  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
-  70% { box-shadow: 0 0 0 20px rgba(34, 197, 94, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(4, 120, 87, 0.5); }
+  70% { box-shadow: 0 0 0 20px rgba(4, 120, 87, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(4, 120, 87, 0); }
 }
 
 @keyframes pulse-wrong {
-  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
-  70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(190, 18, 60, 0.5); }
+  70% { box-shadow: 0 0 0 20px rgba(190, 18, 60, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(190, 18, 60, 0); }
 }
 
 @keyframes slide-in-up {
@@ -692,49 +671,49 @@ a {
   animation: shimmer 2s infinite;
 }
 
-/* === 滑块样式 === */
+/* === Range Slider === */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 6px;
   border-radius: var(--radius-full);
-  background: rgba(0, 0, 0, 0.08);
   outline: none;
   transition: background var(--transition-fast);
+  cursor: pointer;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: var(--gradient-primary);
+  background: var(--color-primary);
   cursor: pointer;
   border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 1px 4px rgba(30, 58, 95, 0.3);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-  box-shadow: 0 2px 12px rgba(79, 70, 229, 0.5);
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(30, 58, 95, 0.4);
 }
 
 input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: var(--gradient-primary);
+  background: var(--color-primary);
   cursor: pointer;
   border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 1px 4px rgba(30, 58, 95, 0.3);
 }
 
-/* === 滚动条 === */
+/* === Scrollbar === */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -742,28 +721,39 @@ input[type="range"]::-moz-range-thumb {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(28, 25, 23, 0.1);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(28, 25, 23, 0.2);
 }
 
-/* === 选中效果 === */
+/* === Selection === */
 ::selection {
-  background: rgba(79, 70, 229, 0.25);
+  background: rgba(30, 58, 95, 0.15);
   color: var(--color-foreground);
 }
 
-/* === 错开动画延迟 === */
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === Stagger Delays === */
 .stagger-1 { animation-delay: 0.05s; }
 .stagger-2 { animation-delay: 0.1s; }
 .stagger-3 { animation-delay: 0.15s; }
 .stagger-4 { animation-delay: 0.2s; }
 .stagger-5 { animation-delay: 0.25s; }
 
-/* === 徽章/标签 === */
+/* === Badges === */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -785,7 +775,7 @@ input[type="range"]::-moz-range-thumb {
   color: var(--color-success);
 }
 
-/* === 统计数字 === */
+/* === Stat Number === */
 .stat-number {
   font-size: 2.5rem;
   font-weight: 700;
@@ -796,7 +786,7 @@ input[type="range"]::-moz-range-thumb {
   background-clip: text;
 }
 
-/* === 步骤指示器 === */
+/* === Step Indicator === */
 .step-indicator {
   width: 32px;
   height: 32px;

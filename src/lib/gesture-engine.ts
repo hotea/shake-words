@@ -181,6 +181,11 @@ export class GestureEngine {
     return this.baselinePose === null;
   }
 
+  /** Get current baseline pose (null if still calibrating) */
+  getBaselinePose(): HeadPose | null {
+    return this.baselinePose;
+  }
+
   // =========================================================
   // Private methods
   // =========================================================

@@ -4,7 +4,7 @@ import { LocalStorageAdapter } from "./local";
 export type { BackendAdapter } from "./types";
 
 /** Create a backend adapter based on environment config */
-export function createAdapter(): BackendAdapter {
+export async function createAdapter(): Promise<BackendAdapter> {
   const backendType = process.env.NEXT_PUBLIC_BACKEND_TYPE || "local";
 
   switch (backendType) {
@@ -13,11 +13,10 @@ export function createAdapter(): BackendAdapter {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       if (url && key) {
-        // Lazy import to avoid bundling Supabase when not needed
-        const { getSupabaseClient } = require("@/lib/supabase/client");
+        const { getSupabaseClient } = await import("@/lib/supabase/client");
         const client = getSupabaseClient();
         if (client) {
-          const { SupabaseAdapter } = require("./supabase");
+          const { SupabaseAdapter } = await import("./supabase");
           return new SupabaseAdapter(client);
         }
       }
@@ -38,15 +37,21 @@ export function createAdapter(): BackendAdapter {
 
 /** Singleton adapter instance */
 let _adapter: BackendAdapter | null = null;
+let _adapterPromise: Promise<BackendAdapter> | null = null;
 
-export function getAdapter(): BackendAdapter {
-  if (!_adapter) {
-    _adapter = createAdapter();
+export function getAdapter(): Promise<BackendAdapter> {
+  if (_adapter) return Promise.resolve(_adapter);
+  if (!_adapterPromise) {
+    _adapterPromise = createAdapter().then((a) => {
+      _adapter = a;
+      return a;
+    });
   }
-  return _adapter;
+  return _adapterPromise;
 }
 
 /** Reset the singleton (call after login/logout to switch adapters) */
 export function resetAdapter(): void {
   _adapter = null;
+  _adapterPromise = null;
 }

@@ -12,37 +12,32 @@ interface OptionCardProps {
 
 const DIRECTION_CONFIG: Record<
   GestureDirection,
-  { position: string; arrow: string; label: string; animClass: string }
+  { arrow: string; label: string; animClass: string }
 > = {
   up: {
-    position: "top-[12%] left-1/2 -translate-x-1/2",
     arrow: "↑",
-    label: "UP",
+    label: "上",
     animClass: "animate-slide-in-down",
   },
   down: {
-    position: "bottom-[12%] left-1/2 -translate-x-1/2",
     arrow: "↓",
-    label: "DOWN",
+    label: "下",
     animClass: "animate-slide-in-up",
   },
   left: {
-    position: "left-[5%] top-1/2 -translate-y-1/2",
     arrow: "←",
-    label: "LEFT",
+    label: "左",
     animClass: "animate-slide-in-right",
   },
   right: {
-    position: "right-[5%] top-1/2 -translate-y-1/2",
     arrow: "→",
-    label: "RIGHT",
+    label: "右",
     animClass: "animate-slide-in-left",
   },
 };
 
 export function OptionCard({ option, isSelected, isCorrect, showResult }: OptionCardProps) {
   const config = DIRECTION_CONFIG[option.direction];
-  const isHorizontal = option.direction === "left" || option.direction === "right";
 
   // 确定卡片状态样式
   let cardClasses = "option-card";
@@ -69,43 +64,44 @@ export function OptionCard({ option, isSelected, isCorrect, showResult }: Option
   return (
     <div
       className={`
-        absolute ${config.position}
-        ${isHorizontal ? "w-40 sm:w-48" : "w-56 sm:w-64"}
         ${cardClasses}
         ${config.animClass}
-        z-10
+        relative
+        py-2.5 px-2 sm:py-3 sm:px-3
+        h-full
+        flex flex-col items-center justify-center gap-1 sm:gap-1.5
       `}
       style={inlineStyle}
     >
       {/* 方向指示器 */}
       <div className={`
-        flex items-center justify-center w-8 h-8 rounded-[var(--radius-md)]
+        flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-[var(--radius-sm)] shrink-0
         ${isSelected && !showResult ? "bg-[var(--color-primary)] text-white" : "bg-[var(--color-primary-dim)] text-[var(--color-primary-dark)]"}
         ${showResult && option.isCorrect ? "bg-[var(--color-success)] text-white" : ""}
         ${showResult && isSelected && !isCorrect ? "bg-[var(--color-error)] text-white" : ""}
         transition-colors duration-200
       `}>
-        <span className="text-lg font-bold">{config.arrow}</span>
+        <span className="text-xs sm:text-sm font-bold">{config.arrow}</span>
       </div>
 
       {/* 选项文本 */}
-      <div className="flex-1 text-center">
-        <p className="text-sm font-medium text-[var(--color-foreground)] leading-snug">
+      <div className="text-center min-w-0 w-full">
+        <p className="text-xs sm:text-sm font-medium text-[var(--color-foreground)] leading-snug line-clamp-2">
           {option.meaning}
         </p>
       </div>
 
       {/* 结果图标 */}
       {showResult && option.isCorrect && (
-        <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[var(--color-success)] text-white flex items-center justify-center shadow-lg">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+        <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[var(--color-success)] text-white flex items-center justify-center shadow-md">
+          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
           </svg>
         </div>
       )}
       {showResult && isSelected && !isCorrect && (
-        <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[var(--color-error)] text-white flex items-center justify-center shadow-lg">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+        <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[var(--color-error)] text-white flex items-center justify-center shadow-md">
+          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </div>

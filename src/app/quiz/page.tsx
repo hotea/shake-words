@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useGesture } from "@/hooks/useGesture";
 import { useQuiz } from "@/hooks/useQuiz";
+import { useAudio } from "@/hooks/useAudio";
 import { QuizBoard } from "@/components/Quiz/QuizBoard";
 import type { GestureDirection, GestureEvent } from "@/lib/types";
 import { CET4_BOOK_ID } from "@/data/cet4";
@@ -13,9 +14,39 @@ export default function QuizPage() {
   const [bookId] = useState(CET4_BOOK_ID);
 
   // Load saved gesture config
-  const gestureConfig = useMemo(() => loadSettings().gesture, []);
+  const settings = useMemo(() => loadSettings(), []);
+  const gestureConfig = settings.gesture;
+  const showCamera = settings.showCamera;
 
   const quiz = useQuiz({ bookId, autoNext: true, autoNextDelay: 1500 });
+  const audio = useAudio();
+  const prevQuestionWord = useRef<string | null>(null);
+
+  // Auto-pronounce word when question changes
+  useEffect(() => {
+    if (quiz.question && quiz.state === "ready") {
+      const word = quiz.question.word.word;
+      if (word !== prevQuestionWord.current) {
+        prevQuestionWord.current = word;
+        // Small delay to let UI render first
+        const timer = setTimeout(() => audio.speak(word), 300);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [quiz.question, quiz.state, audio]);
+
+  // Play sound effects on answer
+  const prevAnsweredState = useRef<boolean>(false);
+  useEffect(() => {
+    if (quiz.state === "answered" && !prevAnsweredState.current) {
+      if (quiz.isCorrect) {
+        audio.playCorrect();
+      } else {
+        audio.playWrong();
+      }
+    }
+    prevAnsweredState.current = quiz.state === "answered";
+  }, [quiz.state, quiz.isCorrect, audio]);
 
   const handleGesture = useCallback(
     (event: GestureEvent) => {
@@ -83,6 +114,11 @@ export default function QuizPage() {
         onRecalibrate={gesture.recalibrate}
         inputMode={inputMode}
         onToggleInput={toggleInput}
+        showCamera={showCamera}
+        paused={gesture.paused}
+        baselinePose={gesture.baselinePose}
+        yawThreshold={gestureConfig.yawThreshold}
+        pitchThreshold={gestureConfig.pitchThreshold}
       />
     </main>
   );
