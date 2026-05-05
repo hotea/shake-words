@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getAdapter } from "@/lib/adapter";
-import { useAuth } from "@/lib/supabase/auth-context";
+import { useAuth } from "@/lib/auth";
 import type { LearningStats, LearningRecord } from "@/lib/types";
 import { CET4_BOOK_ID, CET4_WORD_MAP } from "@/data/cet4";
 
@@ -44,21 +44,32 @@ function buildDailyHistory(records: LearningRecord[]): DaySummary[] {
 }
 
 export default function StatsPage() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, authEnabled, loading: authLoading } = useAuth();
   const [stats, setStats] = useState<LearningStats | null>(null);
   const [recentRecords, setRecentRecords] = useState<LearningRecord[]>([]);
   const [allRecords, setAllRecords] = useState<LearningRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"recent" | "daily">("daily");
+  const [bookId, setBookId] = useState<string>(CET4_BOOK_ID);
 
   useEffect(() => {
-    if (authLoading || !user) return;
+    async function load() {
+      const adapter = await getAdapter();
+      // Use selected book if available
+      const selected = (adapter as any).getSelectedBookId?.();
+      if (selected) setBookId(selected);
+    }
+    load();
+  }, []);
+
+  useEffect(() => {
+    if (authEnabled && (authLoading || !user)) return;
     async function load() {
       const adapter = await getAdapter();
       const [s, recent, all] = await Promise.all([
-        adapter.getStats(CET4_BOOK_ID),
-        adapter.getRecords(CET4_BOOK_ID, 30),
-        adapter.getRecords(CET4_BOOK_ID, 10000),
+        adapter.getStats(bookId),
+        adapter.getRecords(bookId, 30),
+        adapter.getRecords(bookId, 10000),
       ]);
       setStats(s);
       setRecentRecords(recent);
@@ -66,7 +77,7 @@ export default function StatsPage() {
       setLoading(false);
     }
     load();
-  }, [authLoading, user]);
+  }, [authEnabled, authLoading, user, bookId]);
 
   const dailyHistory = buildDailyHistory(allRecords);
 
@@ -88,11 +99,11 @@ export default function StatsPage() {
           <p className="text-sm text-[var(--color-muted)] mt-1">追踪你的学习进度和成果</p>
         </div>
 
-        {authLoading ? (
+        {authEnabled && authLoading ? (
           <div className="flex justify-center py-20">
             <div className="w-10 h-10 border-[3px] border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
           </div>
-        ) : !user ? (
+        ) : authEnabled && !user ? (
           <div className="card p-10 text-center animate-fade-in">
             <div className="w-16 h-16 rounded-2xl bg-stone-100 flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -103,6 +114,19 @@ export default function StatsPage() {
             <p className="text-sm text-[var(--color-muted)] mb-6">登录后即可查看和同步你的学习统计</p>
             <Link href="/login" className="btn-primary text-sm">
               去登录
+            </Link>
+          </div>
+        ) : authEnabled && user && !user.emailVerified ? (
+          <div className="card p-10 text-center animate-fade-in">
+            <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+            </div>
+            <h2 className="text-lg font-semibold text-[var(--color-foreground)] mb-2">需要验证邮箱</h2>
+            <p className="text-sm text-[var(--color-muted)] mb-6">验证邮箱后才能使用统计功能，防止数据混乱</p>
+            <Link href="/account" className="btn-primary text-sm">
+              去验证
             </Link>
           </div>
         ) : loading ? (

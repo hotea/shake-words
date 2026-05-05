@@ -3,7 +3,6 @@ import type {
   WordBook,
   Word,
   QuizQuestion,
-  QuizOption,
   AnswerPayload,
   WordProgress,
   LearningRecord,
@@ -12,37 +11,13 @@ import type {
 } from "@/lib/types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { wordBookManager } from "@/data/wordbooks";
-import { calculateNextProgress, isDueForReview, isMastered, sortByReviewPriority } from "@/lib/spaced-repetition";
-
-// ============================================================
-// Helpers
-// ============================================================
-const DIRECTIONS: GestureDirection[] = ["up", "right", "down", "left"];
-
-function pickRandom<T>(arr: T[], n: number): T[] {
-  const copy = [...arr];
-  const result: T[] = [];
-  for (let i = 0; i < n && copy.length > 0; i++) {
-    const idx = Math.floor(Math.random() * copy.length);
-    result.push(copy.splice(idx, 1)[0]);
-  }
-  return result;
-}
-
-function shuffleDirections(): GestureDirection[] {
-  const dirs = [...DIRECTIONS];
-  for (let i = dirs.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [dirs[i], dirs[j]] = [dirs[j], dirs[i]];
-  }
-  return dirs;
-}
+import { buildQuizQuestion, calculateStats, calculateNextProgress } from "./shared";
 
 // ============================================================
 // SupabaseAdapter
 // ============================================================
 // Uses Supabase for records + progress (cloud-synced),
-// but keeps vocabulary data local (built-in CET4 words).
+// but keeps vocabulary data local (built-in wordbooks).
 //
 // Required Supabase tables:
 //   learning_records (id uuid PK, user_id uuid, word_id text, book_id text,
@@ -85,50 +60,15 @@ export class SupabaseAdapter implements BackendAdapter {
   }
 
   async getQuizQuestion(bookId: string): Promise<QuizQuestion | null> {
-    const allWords = await wordBookManager.getWords(bookId);
-    if (!allWords || allWords.length < 4) return null;
-
+    await wordBookManager.getWords(bookId);
     const progressList = await this.getProgress(bookId);
-    const progressMap = new Map(progressList.map((p) => [p.wordId, p]));
-
-    const unseenWords = allWords.filter((w) => !progressMap.has(w.id));
-    let targetWord: Word;
-
-    if (unseenWords.length > 0) {
-      targetWord = unseenWords[Math.floor(Math.random() * unseenWords.length)];
-    } else {
-      const sorted = sortByReviewPriority(progressList);
-      const targetProgress = sorted[0];
-      const found = allWords.find((w) => w.id === targetProgress.wordId);
-      if (!found) return null;
-      targetWord = found;
-    }
-
-    const wrongWords = pickRandom(
-      allWords.filter((w) => w.id !== targetWord.id),
-      3,
-    );
-
-    const dirs = shuffleDirections();
-    const correctDir = dirs[0];
-
-    const options: QuizOption[] = [
-      { direction: correctDir, meaning: targetWord.meaning, isCorrect: true },
-      ...wrongWords.map((w, i) => ({
-        direction: dirs[i + 1],
-        meaning: w.meaning,
-        isCorrect: false,
-      })),
-    ];
-
-    return { word: targetWord, options };
+    return buildQuizQuestion(bookId, progressList);
   }
 
   async submitAnswer(answer: AnswerPayload): Promise<void> {
     const userId = await this.getUserId();
     if (!userId) return;
 
-    // Insert record
     await this.supabase.from("learning_records").insert({
       user_id: userId,
       word_id: answer.wordId,
@@ -139,7 +79,6 @@ export class SupabaseAdapter implements BackendAdapter {
       created_at: new Date().toISOString(),
     });
 
-    // Upsert progress
     const progressList = await this.getProgress(answer.bookId);
     const existing = progressList.find((p) => p.wordId === answer.wordId);
     const updated = calculateNextProgress(existing ?? null, answer.wordId, answer.bookId, answer.isCorrect);
@@ -235,39 +174,6 @@ export class SupabaseAdapter implements BackendAdapter {
       progressList = await this.getProgress(bookId);
     }
 
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-    const todayRecords = records.filter(
-      (r) => new Date(r.createdAt).getTime() >= todayStart.getTime(),
-    );
-
-    const todayCorrect = todayRecords.filter((r) => r.isCorrect).length;
-
-    // Streak
-    let streak = 0;
-    const dayMs = 24 * 60 * 60 * 1000;
-    const checkDate = new Date(todayStart);
-
-    for (let i = 0; i < 365; i++) {
-      const dayStart = new Date(checkDate.getTime() - i * dayMs);
-      const dayEnd = new Date(dayStart.getTime() + dayMs);
-      const hasRecord = records.some((r) => {
-        const t = new Date(r.createdAt).getTime();
-        return t >= dayStart.getTime() && t < dayEnd.getTime();
-      });
-      if (hasRecord) {
-        streak++;
-      } else if (i > 0) {
-        break;
-      }
-    }
-
-    return {
-      totalWords: progressList.length,
-      masteredWords: progressList.filter(isMastered).length,
-      todayReviewed: todayRecords.length,
-      todayCorrectRate: todayRecords.length > 0 ? todayCorrect / todayRecords.length : 0,
-      streak,
-    };
+    return calculateStats(records, progressList, bookId);
   }
 }

@@ -1,44 +1,60 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useGesture } from "@/hooks/useGesture";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useAudio } from "@/hooks/useAudio";
 import { QuizBoard } from "@/components/Quiz/QuizBoard";
 import type { GestureDirection, GestureEvent } from "@/lib/types";
 import { CET4_BOOK_ID } from "@/data/cet4";
-import { loadSettings } from "@/lib/settings";
+import { loadSettings, saveSettings } from "@/lib/settings";
+import { getAdapter } from "@/lib/adapter";
+import { useAuth } from "@/lib/auth";
 
-export default function QuizPage() {
+function QuizContent() {
   const [inputMode, setInputMode] = useState<"gesture" | "keyboard">("gesture");
-  const [bookId] = useState(CET4_BOOK_ID);
+  const searchParams = useSearchParams();
+  const [bookId, setBookId] = useState<string>(CET4_BOOK_ID);
 
-  // Load saved gesture config
+  useEffect(() => {
+    async function resolveBookId() {
+      const urlBook = searchParams.get("book");
+      if (urlBook) {
+        setBookId(urlBook);
+        return;
+      }
+      const adapter = await getAdapter();
+      const saved = (adapter as any).getSelectedBookId?.();
+      if (saved) setBookId(saved);
+    }
+    resolveBookId();
+  }, [searchParams]);
+
   const settings = useMemo(() => loadSettings(), []);
   const gestureConfig = settings.gesture;
   const showCamera = settings.showCamera;
+  const [muted, setMuted] = useState(settings.muted);
 
   const quiz = useQuiz({ bookId, autoNext: true, autoNextDelay: 1500 });
   const audio = useAudio();
   const prevQuestionWord = useRef<string | null>(null);
 
-  // Auto-pronounce word when question changes
   useEffect(() => {
-    if (quiz.question && quiz.state === "ready") {
+    if (quiz.question && quiz.state === "ready" && !muted) {
       const word = quiz.question.word.word;
       if (word !== prevQuestionWord.current) {
         prevQuestionWord.current = word;
-        // Small delay to let UI render first
         const timer = setTimeout(() => audio.speak(word), 300);
         return () => clearTimeout(timer);
       }
     }
-  }, [quiz.question, quiz.state, audio]);
+  }, [quiz.question, quiz.state, audio, muted]);
 
-  // Play sound effects on answer
   const prevAnsweredState = useRef<boolean>(false);
   useEffect(() => {
-    if (quiz.state === "answered" && !prevAnsweredState.current) {
+    if (quiz.state === "answered" && !prevAnsweredState.current && !muted) {
       if (quiz.isCorrect) {
         audio.playCorrect();
       } else {
@@ -46,7 +62,7 @@ export default function QuizPage() {
       }
     }
     prevAnsweredState.current = quiz.state === "answered";
-  }, [quiz.state, quiz.isCorrect, audio]);
+  }, [quiz.state, quiz.isCorrect, audio, muted]);
 
   const handleGesture = useCallback(
     (event: GestureEvent) => {
@@ -63,7 +79,6 @@ export default function QuizPage() {
     onGesture: handleGesture,
   });
 
-  // Keyboard fallback
   useEffect(() => {
     if (inputMode !== "keyboard") return;
 
@@ -98,28 +113,52 @@ export default function QuizPage() {
     setInputMode((m) => (m === "gesture" ? "keyboard" : "gesture"));
   }, []);
 
+  const toggleMute = useCallback(() => {
+    setMuted((prev) => {
+      const next = !prev;
+      const s = loadSettings();
+      s.muted = next;
+      saveSettings(s);
+      return next;
+    });
+  }, []);
+
+  return (
+    <QuizBoard
+      question={quiz.question}
+      quizState={quiz.state}
+      selectedDirection={quiz.selectedDirection}
+      isCorrect={quiz.isCorrect}
+      sessionCount={quiz.sessionCount}
+      sessionCorrect={quiz.sessionCorrect}
+      videoRef={gesture.videoRef}
+      gestureStatus={gesture.status}
+      gestureError={gesture.error}
+      pose={gesture.pose}
+      onRecalibrate={gesture.recalibrate}
+      inputMode={inputMode}
+      onToggleInput={toggleInput}
+      showCamera={showCamera}
+      paused={gesture.paused}
+      baselinePose={gesture.baselinePose}
+      yawThreshold={gestureConfig.yawThreshold}
+      pitchThreshold={gestureConfig.pitchThreshold}
+      muted={muted}
+      onToggleMute={toggleMute}
+    />
+  );
+}
+
+export default function QuizPage() {
   return (
     <main>
-      <QuizBoard
-        question={quiz.question}
-        quizState={quiz.state}
-        selectedDirection={quiz.selectedDirection}
-        isCorrect={quiz.isCorrect}
-        sessionCount={quiz.sessionCount}
-        sessionCorrect={quiz.sessionCorrect}
-        videoRef={gesture.videoRef}
-        gestureStatus={gesture.status}
-        gestureError={gesture.error}
-        pose={gesture.pose}
-        onRecalibrate={gesture.recalibrate}
-        inputMode={inputMode}
-        onToggleInput={toggleInput}
-        showCamera={showCamera}
-        paused={gesture.paused}
-        baselinePose={gesture.baselinePose}
-        yawThreshold={gestureConfig.yawThreshold}
-        pitchThreshold={gestureConfig.pitchThreshold}
-      />
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-10 h-10 border-[3px] border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
+        </div>
+      }>
+        <QuizContent />
+      </Suspense>
     </main>
   );
 }

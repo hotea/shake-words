@@ -1,15 +1,13 @@
 import type { BackendAdapter } from "./types";
-import { LocalStorageAdapter } from "./local";
+import { RestAdapter } from "./rest";
 
 export type { BackendAdapter } from "./types";
 
-/** Create a backend adapter based on environment config */
 export async function createAdapter(): Promise<BackendAdapter> {
-  const backendType = process.env.NEXT_PUBLIC_BACKEND_TYPE || "local";
+  const backendType = process.env.NEXT_PUBLIC_BACKEND_TYPE || "mysql";
 
   switch (backendType) {
     case "supabase": {
-      // Dynamic import check — only use Supabase if env vars are set
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       if (url && key) {
@@ -20,18 +18,16 @@ export async function createAdapter(): Promise<BackendAdapter> {
           return new SupabaseAdapter(client);
         }
       }
-      console.warn("Supabase env vars not set, falling back to local");
-      return new LocalStorageAdapter();
+      throw new Error("Supabase env vars (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY) are required for supabase mode");
     }
 
-    case "rest":
-      // TODO: implement RestApiAdapter
-      console.warn("REST adapter not yet implemented, falling back to local");
-      return new LocalStorageAdapter();
-
-    case "local":
-    default:
-      return new LocalStorageAdapter();
+    case "mysql":
+    default: {
+      if (typeof window !== "undefined") {
+        return new RestAdapter();
+      }
+      throw new Error("Server-side MySqlAdapter requires a userId. Use new MySqlAdapter(userId) in API routes.");
+    }
   }
 }
 

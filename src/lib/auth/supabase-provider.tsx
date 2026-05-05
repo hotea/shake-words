@@ -1,46 +1,10 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-  type ReactNode,
-} from "react";
+import { useEffect, useState, useCallback, type ReactNode } from "react";
 import type { User, Session } from "@supabase/supabase-js";
 import { getSupabaseClient } from "@/lib/supabase/client";
-
-interface AuthContextValue {
-  user: User | null;
-  session: Session | null;
-  loading: boolean;
-  /** Whether Supabase is configured (env vars present) */
-  supabaseEnabled: boolean;
-  signInWithGitHub: () => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
-  signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
-  signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null; needsConfirmation?: boolean }>;
-  resendConfirmation: (email: string) => Promise<{ error: string | null }>;
-  signOut: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextValue>({
-  user: null,
-  session: null,
-  loading: true,
-  supabaseEnabled: false,
-  signInWithGitHub: async () => {},
-  signInWithGoogle: async () => {},
-  signInWithEmail: async () => ({ error: null }),
-  signUpWithEmail: async () => ({ error: null }),
-  resendConfirmation: async () => ({ error: null }),
-  signOut: async () => {},
-});
-
-export function useAuth() {
-  return useContext(AuthContext);
-}
+import { AuthContext } from "./context";
+import type { AuthUser, AuthContextValue } from "./types";
 
 /** Translate common Supabase auth error messages to Chinese */
 function translateError(msg: string | null | undefined): string | null {
@@ -57,22 +21,28 @@ function translateError(msg: string | null | undefined): string | null {
     "For security purposes, you can only request this after": "操作过于频繁，请稍后再试",
     "New password should be different from the old password": "新密码不能与旧密码相同",
   };
-  // Exact match first
   if (map[msg]) return map[msg];
-  // Partial match
   for (const [en, zh] of Object.entries(map)) {
     if (msg.includes(en)) return zh;
   }
   return msg;
 }
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+function toAuthUser(user: User | null): AuthUser | null {
+  if (!user) return null;
+  return {
+    id: user.id,
+    email: user.email ?? undefined,
+    name: user.user_metadata?.name ?? user.user_metadata?.full_name ?? undefined,
+    avatarUrl: user.user_metadata?.avatar_url ?? undefined,
+  };
+}
+
+export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   const supabase = getSupabaseClient();
-  const supabaseEnabled = supabase !== null;
 
   useEffect(() => {
     if (!supabase) {
@@ -80,19 +50,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session: s } }) => {
-      setSession(s);
-      setUser(s?.user ?? null);
+      setUser(toAuthUser(s?.user ?? null));
       setLoading(false);
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, s) => {
-      setSession(s);
-      setUser(s?.user ?? null);
+      setUser(toAuthUser(s?.user ?? null));
     });
 
     return () => subscription.unsubscribe();
@@ -102,14 +68,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!supabase) return;
     await supabase.auth.signInWithOAuth({
       provider: "github",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-  }, [supabase]);
-
-  const signInWithGoogle = useCallback(async () => {
-    if (!supabase) return;
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
   }, [supabase]);
@@ -129,22 +87,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
       });
-
-      if (error) {
-        return { error: translateError(error.message) };
-      }
-
-      // If user exists but is unconfirmed, Supabase returns user with no session
-      // and no error — we should inform the user
+      if (error) return { error: translateError(error.message) };
       if (data.user && !data.session) {
-        // Email confirmation required
         return { error: null, needsConfirmation: true as const };
       }
-
       return { error: null };
     },
     [supabase],
@@ -156,9 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase.auth.resend({
         type: "signup",
         email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
       });
       return { error: translateError(error?.message) };
     },
@@ -170,22 +116,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   }, [supabase]);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        session,
-        loading,
-        supabaseEnabled,
-        signInWithGitHub,
-        signInWithGoogle,
-        signInWithEmail,
-        signUpWithEmail,
-        resendConfirmation,
-        signOut,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const value: AuthContextValue = {
+    user,
+    loading,
+    authEnabled: supabase !== null,
+    signInWithGitHub,
+    signInWithEmail,
+    signUpWithEmail,
+    resendConfirmation,
+    signOut,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

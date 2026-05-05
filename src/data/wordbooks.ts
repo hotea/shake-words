@@ -420,6 +420,17 @@ export class WordBookManager {
     return [];
   }
 
+  /** Synchronous access to cached words (no network fetch) */
+  getCachedWords(bookId: string): Word[] | null {
+    const localWords = this.words.get(bookId);
+    if (localWords) return localWords;
+    const customWords = this.customWords.get(bookId);
+    if (customWords) return customWords;
+    const cached = this.onlineCache.get(bookId);
+    if (cached) return cached.words;
+    return null;
+  }
+
   getWord(bookId: string, wordId: string): Word | undefined {
     const words = this.words.get(bookId);
     return words?.find((w) => w.id === wordId);

@@ -305,11 +305,7 @@ export class GestureEngine {
     const absPitch = Math.abs(dPitch);
     const absYaw = Math.abs(dYaw);
 
-    // Pick dominant axis. Give pitch a 1.3x boost when comparing axes because
-    // head tilts produce smaller angular changes than left/right turns.
-    const pitchWeight = absPitch * 1.3;
-
-    if (absYaw > pitchWeight && absYaw > this.config.yawThreshold) {
+    if (absYaw > absPitch && absYaw > this.config.yawThreshold) {
       direction = dYaw > 0 ? "right" : "left";
       confidence = Math.min(absYaw / (this.config.yawThreshold * 2), 1);
     } else if (absPitch > this.config.pitchThreshold) {

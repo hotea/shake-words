@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 
+const basePath = process.env.NEXT_BASE_PATH || "";
+
 export const metadata: Metadata = {
   title: "ShakeWords - 晃晃背单词",
   description: "通过Face Mesh识别头部动作，用晃头来选择单词释义，让背单词变得有趣",
@@ -15,6 +17,8 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <head>
+        <link rel="icon" type="image/svg+xml" href={`${basePath}/favicon.svg`} />
+        <link rel="shortcut icon" type="image/svg+xml" href={`${basePath}/favicon.svg`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link 

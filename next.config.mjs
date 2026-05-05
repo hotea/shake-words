@@ -1,10 +1,9 @@
-/** @type {import('next').NextConfig} */
+const basePath = process.env.NEXT_BASE_PATH || "";
+
 const nextConfig = {
-  output: 'export',
-  distDir: 'dist',
-  images: {
-    unoptimized: true,
-  },
+  output: "standalone",
+  basePath: basePath || undefined,
+  images: { unoptimized: true },
   turbopack: {},
 };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/lib/supabase/auth-context";
+import { useAuth } from "@/lib/auth";
 
 export function AuthHeader() {
   const { user, loading, signOut } = useAuth();
@@ -14,21 +14,25 @@ export function AuthHeader() {
         </div>
       ) : user ? (
         <>
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-[#8b5cf6] flex items-center justify-center text-white text-xs font-bold shadow-md">
-            {(user.email?.[0] ?? user.user_metadata?.name?.[0] ?? "U").toUpperCase()}
-          </div>
+          <Link
+            href="/account"
+            className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-[#8b5cf6] flex items-center justify-center text-white text-xs font-bold shadow-md hover:opacity-90 transition-opacity"
+            title="账户管理"
+          >
+            {(user.email?.[0] ?? user.name?.[0] ?? "U").toUpperCase()}
+          </Link>
           <button
             onClick={() => signOut()}
             className="text-xs px-3 py-1 rounded-full text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
           >
-            Sign Out
+            退出
           </button>
         </>
       ) : (
         <Link
           href="/login"
           className="flex items-center justify-center w-7 h-7 rounded-full text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors"
-          title="Sign In"
+          title="登录"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />

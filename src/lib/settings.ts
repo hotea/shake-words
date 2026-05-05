@@ -1,20 +1,17 @@
-// ============================================================
-// Settings persistence (localStorage)
-// ============================================================
-
 import { DEFAULT_CONFIG, type GestureEngineConfig } from "@/lib/gesture-engine";
 
 const SETTINGS_KEY = "sw_settings";
 
 export interface AppSettings {
   gesture: GestureEngineConfig;
-  /** Whether to show the raw camera feed. If false, show an animated illustration instead. */
   showCamera: boolean;
+  muted: boolean;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
   gesture: { ...DEFAULT_CONFIG },
   showCamera: true,
+  muted: false,
 };
 
 export function loadSettings(): AppSettings {
@@ -26,6 +23,7 @@ export function loadSettings(): AppSettings {
     return {
       gesture: { ...DEFAULT_CONFIG, ...parsed.gesture },
       showCamera: parsed.showCamera !== undefined ? parsed.showCamera : true,
+      muted: parsed.muted === true,
     };
   } catch {
     return DEFAULT_SETTINGS;

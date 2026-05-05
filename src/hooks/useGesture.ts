@@ -109,7 +109,15 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
         engine.start();
       } catch (err) {
         if (destroyed) return;
-        const msg = err instanceof Error ? err.message : "Failed to start gesture engine";
+        let msg: string;
+        if (err instanceof Error) {
+          msg = err.message;
+        } else if (typeof err === "string") {
+          msg = err;
+        } else {
+          msg = `Failed to start gesture engine: ${JSON.stringify(err)}`;
+        }
+        console.error("[useGesture] init failed:", err);
         setError(msg);
         setStatus("error");
       }

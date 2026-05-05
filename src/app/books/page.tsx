@@ -52,11 +52,16 @@ export default function BooksPage() {
 
   useEffect(() => {
     async function load() {
-      await refreshBooks();
-      const adapter = await getAdapter();
-      const saved = (adapter as any).getSelectedBookId?.();
-      if (saved) setSelectedBookId(saved);
-      setLoading(false);
+      try {
+        await refreshBooks();
+        const adapter = await getAdapter();
+        const saved = (adapter as any).getSelectedBookId?.();
+        if (saved) setSelectedBookId(saved);
+      } catch (e) {
+        console.error("Failed to load books:", e);
+      } finally {
+        setLoading(false);
+      }
     }
     load();
   }, []);

@@ -1,12 +1,13 @@
 "use client";
 
-import { AuthProvider } from "@/lib/supabase/auth-context";
+import { SupabaseAuthProvider, MySqlAuthProvider } from "@/lib/auth";
 import type { ReactNode } from "react";
 
+const backendType = process.env.NEXT_PUBLIC_BACKEND_TYPE || "mysql";
+
 export function Providers({ children }: { children: ReactNode }) {
-  return (
-    <AuthProvider>
-      {children}
-    </AuthProvider>
-  );
+  if (backendType === "supabase") {
+    return <SupabaseAuthProvider>{children}</SupabaseAuthProvider>;
+  }
+  return <MySqlAuthProvider>{children}</MySqlAuthProvider>;
 }
