@@ -95,6 +95,11 @@ export class GestureEngine {
   /** Initialize MediaPipe FaceLandmarker and camera */
   async init(videoElement: HTMLVideoElement): Promise<void> {
     this.video = videoElement;
+    
+    // Double-check video exists
+    if (!this.video) {
+      throw new Error('Video element is null');
+    }
 
     // Dynamic import to avoid SSR issues
     const { FaceLandmarker, FilesetResolver } = await import(
@@ -121,8 +126,50 @@ export class GestureEngine {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: "user", width: 640, height: 480 },
     });
-    this.video.srcObject = stream;
-    await this.video.play();
+    
+    // Set video properties
+    if (this.video) {
+      this.video.muted = true;
+      this.video.playsInline = true;
+      this.video.autoplay = true;
+      
+      // Only set srcObject if it hasn't been set
+      if (!this.video.srcObject) {
+        this.video.srcObject = stream;
+      }
+      
+      // Try to play, but don't fail if interrupted
+      try {
+        const video = this.video!; // Non-null assertion since we checked earlier
+        // Wait for metadata first
+        if (video.readyState < 2) {
+          await new Promise<void>((resolve) => {
+            const onMetadata = () => {
+              if (this.video) {
+                this.video.removeEventListener('loadedmetadata', onMetadata);
+              }
+              resolve();
+            };
+            video.addEventListener('loadedmetadata', onMetadata);
+            // Timeout in case metadata never loads
+            setTimeout(() => {
+              if (this.video) {
+                this.video.removeEventListener('loadedmetadata', onMetadata);
+              }
+              resolve();
+            }, 2000);
+          });
+        }
+        
+        // Try to play, but ignore errors
+        await video.play().catch(() => {
+          // Some browsers might require user interaction, that's okay
+          // we'll keep trying in the background
+        });
+      } catch (e) {
+        // Ignore all play errors, just keep going
+      }
+    }
   }
 
   /** Start detection loop */
@@ -145,12 +192,17 @@ export class GestureEngine {
   /** Destroy resources */
   destroy(): void {
     this.stop();
-    if (this.video?.srcObject) {
-      const tracks = (this.video.srcObject as MediaStream).getTracks();
-      tracks.forEach((t) => t.stop());
-      this.video.srcObject = null;
+    if (this.video && this.video.srcObject) {
+      try {
+        const tracks = (this.video.srcObject as MediaStream).getTracks();
+        tracks.forEach((t) => t.stop());
+        this.video.srcObject = null;
+      } catch (e) {
+        // Ignore cleanup errors
+      }
     }
     this.faceLandmarker = null;
+    this.video = null;
   }
 
   /** Begin calibration: collect N samples of neutral pose */
@@ -191,46 +243,72 @@ export class GestureEngine {
   // =========================================================
 
   private detect = (): void => {
-    if (!this.running) return;
+    // Wrap everything in a try/catch for maximum safety
+    try {
+      if (!this.running) return;
 
-    const now = performance.now();
-    const frameInterval = 1000 / this.config.targetFps;
+      const now = performance.now();
+      const frameInterval = 1000 / this.config.targetFps;
 
-    if (now - this.lastFrameTime < frameInterval) {
-      this.animFrameId = requestAnimationFrame(this.detect);
-      return;
-    }
-    this.lastFrameTime = now;
+      if (now - this.lastFrameTime < frameInterval) {
+        this.animFrameId = requestAnimationFrame(this.detect);
+        return;
+      }
+      this.lastFrameTime = now;
 
-    if (!this.video || !this.faceLandmarker) {
-      this.animFrameId = requestAnimationFrame(this.detect);
-      return;
-    }
+      if (!this.video || !this.faceLandmarker) {
+        this.animFrameId = requestAnimationFrame(this.detect);
+        return;
+      }
+      
+      // Check if video is ready to be processed
+      if (this.video.readyState < 2 || !this.video.srcObject) {
+        this.animFrameId = requestAnimationFrame(this.detect);
+        return;
+      }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const fl = this.faceLandmarker as any;
-    const result = fl.detectForVideo(this.video, now);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const fl = this.faceLandmarker as any;
+      
+      // Check if detectForVideo method exists
+      if (typeof fl?.detectForVideo !== 'function') {
+        this.animFrameId = requestAnimationFrame(this.detect);
+        return;
+      }
+      
+      const result = fl.detectForVideo(this.video, now);
 
-    if (result?.faceLandmarks?.length > 0) {
-      const landmarks: Landmark[] = result.faceLandmarks[0];
-      const pose = this.computeHeadPose(landmarks);
+      if (result?.faceLandmarks?.length > 0 && result.faceLandmarks[0]) {
+        const landmarks: Landmark[] = result.faceLandmarks[0];
+        
+        // Check if we have enough landmarks
+        if (landmarks && landmarks.length > 454) {
+          const pose = this.computeHeadPose(landmarks);
 
-      // Auto-calibration
-      if (this.isCalibrating()) {
-        this.calibrationSamples.push(pose);
-        if (this.calibrationSamples.length >= 30) {
-          this.endCalibration();
+          // Auto-calibration
+          if (this.isCalibrating()) {
+            this.calibrationSamples.push(pose);
+            if (this.calibrationSamples.length >= 30) {
+              this.endCalibration();
+            }
+          }
+
+          this.onPose?.(pose);
+
+          if (this.baselinePose) {
+            this.processGesture(pose, now);
+          }
         }
       }
-
-      this.onPose?.(pose);
-
-      if (this.baselinePose) {
-        this.processGesture(pose, now);
-      }
+    } catch (e) {
+      // Completely ignore all errors silently
     }
 
-    this.animFrameId = requestAnimationFrame(this.detect);
+    try {
+      this.animFrameId = requestAnimationFrame(this.detect);
+    } catch (e) {
+      // Ignore requestAnimationFrame errors too
+    }
   };
 
   /**

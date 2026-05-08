@@ -35,26 +35,16 @@ function QuizContent() {
   const settings = useMemo(() => loadSettings(), []);
   const gestureConfig = settings.gesture;
   const showCamera = settings.showCamera;
-  const [muted, setMuted] = useState(settings.muted);
 
   const quiz = useQuiz({ bookId, autoNext: true, autoNextDelay: 1500 });
   const audio = useAudio();
-  const prevQuestionWord = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (quiz.question && quiz.state === "ready" && !muted) {
-      const word = quiz.question.word.word;
-      if (word !== prevQuestionWord.current) {
-        prevQuestionWord.current = word;
-        const timer = setTimeout(() => audio.speak(word), 300);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [quiz.question, quiz.state, audio, muted]);
+  const handleSpeakWord = useCallback((word: string) => {
+    audio.speak(word);
+  }, [audio]);
 
   const prevAnsweredState = useRef<boolean>(false);
   useEffect(() => {
-    if (quiz.state === "answered" && !prevAnsweredState.current && !muted) {
+    if (quiz.state === "answered" && !prevAnsweredState.current) {
       if (quiz.isCorrect) {
         audio.playCorrect();
       } else {
@@ -62,7 +52,7 @@ function QuizContent() {
       }
     }
     prevAnsweredState.current = quiz.state === "answered";
-  }, [quiz.state, quiz.isCorrect, audio, muted]);
+  }, [quiz.state, quiz.isCorrect, audio]);
 
   const handleGesture = useCallback(
     (event: GestureEvent) => {
@@ -113,16 +103,6 @@ function QuizContent() {
     setInputMode((m) => (m === "gesture" ? "keyboard" : "gesture"));
   }, []);
 
-  const toggleMute = useCallback(() => {
-    setMuted((prev) => {
-      const next = !prev;
-      const s = loadSettings();
-      s.muted = next;
-      saveSettings(s);
-      return next;
-    });
-  }, []);
-
   return (
     <QuizBoard
       question={quiz.question}
@@ -143,22 +123,19 @@ function QuizContent() {
       baselinePose={gesture.baselinePose}
       yawThreshold={gestureConfig.yawThreshold}
       pitchThreshold={gestureConfig.pitchThreshold}
-      muted={muted}
-      onToggleMute={toggleMute}
+      onSpeakWord={handleSpeakWord}
     />
   );
 }
 
 export default function QuizPage() {
   return (
-    <main>
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="w-10 h-10 border-[3px] border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
-        <QuizContent />
-      </Suspense>
-    </main>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-10 h-10 border-[3px] border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <QuizContent />
+    </Suspense>
   );
 }

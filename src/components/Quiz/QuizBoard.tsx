@@ -27,8 +27,7 @@ interface QuizBoardProps {
   baselinePose?: HeadPose | null;
   yawThreshold?: number;
   pitchThreshold?: number;
-  muted?: boolean;
-  onToggleMute?: () => void;
+  onSpeakWord?: (word: string) => void;
 }
 
 export function QuizBoard({
@@ -50,8 +49,7 @@ export function QuizBoard({
   baselinePose = null,
   yawThreshold = 15,
   pitchThreshold = 10,
-  muted = false,
-  onToggleMute,
+  onSpeakWord,
 }: QuizBoardProps) {
   if (quizState === "loading" && !question) {
     return (
@@ -120,24 +118,8 @@ export function QuizBoard({
           </div>
         </div>
 
-        {/* 输入模式切换 + 静音 + 设置 */}
+        {/* 输入模式切换 + 设置 */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={onToggleMute}
-            className="flex items-center gap-2 bg-white rounded-[var(--radius-md)] px-2.5 py-1.5 border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] hover:border-[var(--color-primary)]/30 transition-all"
-            title={muted ? "取消静音" : "静音"}
-          >
-            {muted ? (
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
-              </svg>
-            ) : (
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
-              </svg>
-            )}
-          </button>
-
           <button
             onClick={onToggleInput}
             className="flex items-center gap-2 bg-white rounded-[var(--radius-md)] px-2.5 py-1.5 border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] hover:border-[var(--color-primary)]/30 transition-all"
@@ -219,15 +201,27 @@ export function QuizBoard({
           {/* 中央：单词卡片 + 摄像头 */}
           <div className="col-start-2 row-start-2 flex flex-col items-center gap-1.5 sm:gap-2 w-[148px] sm:w-[180px]">
             {/* 单词卡片 */}
-            <div
-              className={`card p-3 sm:p-4 text-center w-full ${showResult ? "" : "animate-fade-in"}`}
-              key={question.word.word}
+        <div
+          className={`card p-3 sm:p-4 text-center w-full ${showResult ? "" : "animate-fade-in"}`}
+          key={question.word.word}
+        >
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-foreground)] tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+              {question.word.word}
+            </h1>
+            <button
+              onClick={() => onSpeakWord?.(question.word.word)}
+              className="w-8 h-8 rounded-full bg-[var(--color-primary)] bg-opacity-10 hover:bg-opacity-20 transition-all flex items-center justify-center text-[var(--color-primary)]"
+              title="发音"
             >
-              <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-foreground)] tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                {question.word.word}
-              </h1>
-              <p className="text-[var(--color-muted)] text-xs sm:text-sm mt-0.5">{question.word.phonetic}</p>
-            </div>
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+            </button>
+          </div>
+          <p className="text-[var(--color-muted)] text-xs sm:text-sm mt-0.5">{question.word.phonetic}</p>
+        </div>
 
             {/* 摄像头 — 适配容器宽度 */}
             {inputMode === "gesture" && (

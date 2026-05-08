@@ -16,8 +16,7 @@ export function useAudio() {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
 
     try {
-      window.speechSynthesis.cancel();
-
+      // Don't cancel, just let the queue handle it
       const utterance = new SpeechSynthesisUtterance(word);
       utterance.lang = "en-US";
       utterance.rate = 0.85;
@@ -30,12 +29,17 @@ export function useAudio() {
       ) || voices.find((v) => v.lang.startsWith("en"));
       if (enVoice) utterance.voice = enVoice;
 
+      // Speak the word
       window.speechSynthesis.speak(utterance);
-
-      wakeUpSpeech();
-      setTimeout(wakeUpSpeech, 50);
-      setTimeout(wakeUpSpeech, 150);
-      setTimeout(wakeUpSpeech, 300);
+      
+      // Keep the speech synthesis alive
+      setTimeout(() => {
+        if (window.speechSynthesis && window.speechSynthesis.paused) {
+          try {
+            window.speechSynthesis.resume();
+          } catch {}
+        }
+      }, 50);
     } catch (e) {
       console.error("Speak error:", e);
     }

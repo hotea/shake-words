@@ -19,13 +19,9 @@ interface UseGestureReturn {
   error: string | null;
   pose: HeadPose | null;
   lastGesture: GestureDirection | null;
-  /** Whether tracking is paused due to page being hidden */
   paused: boolean;
-  /** Calibrated neutral pose (null while calibrating) */
   baselinePose: HeadPose | null;
-  /** Manually recalibrate (look straight at camera) */
   recalibrate: () => void;
-  /** Update engine config at runtime */
   updateConfig: (partial: Partial<GestureEngineConfig>) => void;
 }
 
@@ -43,6 +39,7 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
   const [baselinePose, setBaselinePose] = useState<HeadPose | null>(null);
 
   const isPageVisible = usePageVisibility();
+  const [paused, setPaused] = useState(false);
 
   const recalibrate = useCallback(() => {
     if (engineRef.current) {
@@ -58,7 +55,9 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
   }, []);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      return;
+    }
 
     let destroyed = false;
     const engine = new GestureEngine(config);
@@ -79,30 +78,33 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
       if (destroyed) return;
       setLastGesture(event.direction);
       onGestureRef.current?.(event);
-      // Clear after animation time
       setTimeout(() => {
         if (!destroyed) setLastGesture(null);
       }, 600);
     });
 
-    async function waitForVideoRef(timeout = 3000): Promise<HTMLVideoElement> {
-      const start = Date.now();
-      while (Date.now() - start < timeout) {
-        if (videoRef.current) return videoRef.current;
-        await new Promise((r) => setTimeout(r, 50));
+    async function waitAndStart() {
+      // Wait for video element to be mounted
+      let attempts = 0;
+      while (!videoRef.current && attempts < 100) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+        attempts++;
       }
-      throw new Error("Camera view not available. Please try refreshing the page.");
-    }
+      
+      if (destroyed) return;
+      
+      if (!videoRef.current) {
+        setError("Video element not found");
+        setStatus("error");
+        return;
+      }
 
-    async function start() {
       try {
         setStatus("loading");
         setError(null);
 
-        const video = await waitForVideoRef();
-        if (destroyed) return;
-
-        await engine.init(video);
+        await engine.init(videoRef.current);
+        
         if (destroyed) return;
 
         setStatus("calibrating");
@@ -115,7 +117,7 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
         } else if (typeof err === "string") {
           msg = err;
         } else {
-          msg = `Failed to start gesture engine: ${JSON.stringify(err)}`;
+          msg = "Failed to start gesture engine";
         }
         console.error("[useGesture] init failed:", err);
         setError(msg);
@@ -123,36 +125,39 @@ export function useGesture(options: UseGestureOptions = {}): UseGestureReturn {
       }
     }
 
-    start();
+    waitAndStart();
 
     return () => {
       destroyed = true;
       engine.destroy();
       engineRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled]);
 
-  // Track paused state derived from page visibility
-  const [paused, setPaused] = useState(false);
-
-  // Pause/resume engine when page visibility changes
   useEffect(() => {
     const engine = engineRef.current;
     if (!engine) return;
 
     if (isPageVisible) {
       setPaused(false);
-      // Page became visible — resume if we were ready before
       if (status === "ready" || status === "calibrating") {
         engine.start();
       }
     } else {
       setPaused(true);
-      // Page hidden — pause detection loop (but don't destroy camera)
       engine.stop();
     }
   }, [isPageVisible, status]);
 
-  return { videoRef, status, error, pose, lastGesture, paused, baselinePose, recalibrate, updateConfig };
+  return { 
+    videoRef, 
+    status, 
+    error, 
+    pose, 
+    lastGesture, 
+    paused, 
+    baselinePose, 
+    recalibrate, 
+    updateConfig 
+  };
 }
