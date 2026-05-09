@@ -41,6 +41,11 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
+# Update version number
+echo "Updating version..."
+chmod +x "$(dirname "$0")/update-version.sh"
+"$(dirname "$0")/update-version.sh"
+
 echo "Building Docker image for AMD64..."
 cd "$(dirname "$0")/.."
 

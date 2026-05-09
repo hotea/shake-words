@@ -4,6 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { loadSettings, saveSettings, DEFAULT_SETTINGS, type AppSettings } from "@/lib/settings";
 
+interface VersionInfo {
+  version: string;
+  buildTime: string;
+  timestamp: string;
+}
+
 interface SliderFieldProps {
   label: string;
   description: string;
@@ -56,13 +62,43 @@ function SliderField({ label, description, value, min, max, step, unit, icon, on
   );
 }
 
+function formatDate(dateStr: string): string {
+  try {
+    const date = new Date(dateStr);
+    return date.toLocaleString("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZoneName: "short",
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
 export default function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     setSettings(loadSettings());
+  }, []);
+
+  useEffect(() => {
+    async function fetchVersion() {
+      try {
+        const response = await fetch("/api/version", { cache: "no-store" });
+        const data = await response.json();
+        setVersionInfo(data);
+      } catch (error) {
+        console.error("Failed to fetch version:", error);
+      }
+    }
+    fetchVersion();
   }, []);
 
   function updateGesture(key: string, value: number) {
@@ -237,7 +273,23 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        <p className="mt-8 text-xs text-[var(--color-muted)]/60">
+        {/* Version Info */}
+        <div className="mt-8 pt-6 border-t border-[var(--color-border)]/50 animate-fade-in-up stagger-2">
+          {versionInfo ? (
+            <div className="flex flex-col gap-1">
+              <p className="text-xs text-[var(--color-muted)]/80 font-mono">
+                版本: <span className="font-semibold text-[var(--color-primary)]">{versionInfo.version}</span>
+              </p>
+              <p className="text-xs text-[var(--color-muted)]/60">
+                构建时间: {formatDate(versionInfo.buildTime)}
+              </p>
+            </div>
+          ) : (
+            <p className="text-xs text-[var(--color-muted)]/40">加载版本信息...</p>
+          )}
+        </div>
+
+        <p className="mt-4 text-xs text-[var(--color-muted)]/60">
           设置自动保存，下次测验时生效。
         </p>
       </div>
