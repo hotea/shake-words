@@ -13,9 +13,11 @@ for arg in "$@"; do
     case "$arg" in
         --no-basepath)
             NEXT_BASE_PATH=""
+            IMAGE_TAG="latest"
             ;;
         --with-basepath)
             NEXT_BASE_PATH="/words"
+            IMAGE_TAG="qa"
             ;;
         *)
             if [ -z "$IMAGE_TAG" ] || [ "$IMAGE_TAG" = "latest" ]; then
@@ -26,11 +28,6 @@ for arg in "$@"; do
             ;;
     esac
 done
-
-if [ -z "$NEXT_BASE_PATH" ] && [ "$IMAGE_TAG" = "latest" ]; then
-    # Default to wyld-bj mode (no basePath)
-    NEXT_BASE_PATH=""
-fi
 
 FULL_IMAGE="${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
 
@@ -64,5 +61,5 @@ echo "=== Build and push completed! ==="
 echo "Image: ${FULL_IMAGE}"
 echo ""
 echo "Quick deploy:"
-echo "  ./scripts/deploy-wyldbj.sh ${IMAGE_TAG}   # Deploy to wyld-bj"
-echo "  ./scripts/deploy-qa.sh ${IMAGE_TAG}       # Deploy to wyld-qa"
+echo "  ./scripts/deploy-wyldbj.sh   # Deploy production (latest)"
+echo "  ./scripts/deploy-qa.sh       # Deploy QA (qa tag)"

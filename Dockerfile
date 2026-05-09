@@ -32,6 +32,4 @@ COPY --from=builder /app/public ./public
 
 EXPOSE 3000
 ENV HOSTNAME="0.0.0.0"
-ENV NEXT_BASE_PATH="/words"
-ENV NEXT_PUBLIC_BASE_PATH="/words"
 CMD ["node", "server.js"]

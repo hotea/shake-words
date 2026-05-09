@@ -5,12 +5,7 @@ set -e
 REMOTE_HOST="wyld-qa"
 REGISTRY="registry.cn-hangzhou.aliyuncs.com/hotea"
 IMAGE_NAME="shakewords"
-
-if [ -n "$1" ]; then
-    IMAGE_TAG="$1"
-else
-    IMAGE_TAG="latest"
-fi
+IMAGE_TAG="qa"
 
 FULL_IMAGE="${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
 CONFIG_DIR="/home/ecs-user/.shakewords"
@@ -74,4 +69,4 @@ EOF
 
 echo ""
 echo "=== QA Deployment completed! ==="
-echo "Health check: ssh ${REMOTE_HOST} 'curl -s http://localhost:3001'"
+echo "Health check: ssh ${REMOTE_HOST} 'curl -s http://localhost:3001/words'"
