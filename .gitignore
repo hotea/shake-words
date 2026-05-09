@@ -77,3 +77,6 @@ temp/
 .Spotlight-V100
 .Trashes
 ehthumbs.db
+
+# Auto-generated version file
+src/lib/version.ts

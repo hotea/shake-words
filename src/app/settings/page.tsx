@@ -3,12 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { loadSettings, saveSettings, DEFAULT_SETTINGS, type AppSettings } from "@/lib/settings";
-
-interface VersionInfo {
-  version: string;
-  buildTime: string;
-  timestamp: string;
-}
+import { getVersionInfo } from "@/lib/version";
 
 interface SliderFieldProps {
   label: string;
@@ -81,24 +76,11 @@ function formatDate(dateStr: string): string {
 export default function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
-  const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const versionInfo = getVersionInfo();
 
   useEffect(() => {
     setSettings(loadSettings());
-  }, []);
-
-  useEffect(() => {
-    async function fetchVersion() {
-      try {
-        const response = await fetch("/api/version", { cache: "no-store" });
-        const data = await response.json();
-        setVersionInfo(data);
-      } catch (error) {
-        console.error("Failed to fetch version:", error);
-      }
-    }
-    fetchVersion();
   }, []);
 
   function updateGesture(key: string, value: number) {
