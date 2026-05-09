@@ -8,6 +8,7 @@ IMAGE_NAME="shakewords"
 # Parse arguments
 NEXT_BASE_PATH=""
 IMAGE_TAG="latest"
+SKIP_VERSION_UPDATE=false
 
 for arg in "$@"; do
     case "$arg" in
@@ -18,6 +19,9 @@ for arg in "$@"; do
         --with-basepath)
             NEXT_BASE_PATH="/words"
             IMAGE_TAG="qa"
+            ;;
+        --skip-version)
+            SKIP_VERSION_UPDATE=true
             ;;
         *)
             if [ -z "$IMAGE_TAG" ] || [ "$IMAGE_TAG" = "latest" ]; then
@@ -41,10 +45,14 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
-# Update version number
-echo "Updating version..."
-chmod +x "$(dirname "$0")/update-version.sh"
-"$(dirname "$0")/update-version.sh"
+# Update version number (unless skipped)
+if [ "$SKIP_VERSION_UPDATE" = false ]; then
+    echo "Updating version..."
+    chmod +x "$(dirname "$0")/update-version.sh"
+    "$(dirname "$0")/update-version.sh"
+else
+    echo "Skipping version update..."
+fi
 
 echo "Building Docker image for AMD64..."
 cd "$(dirname "$0")/.."
@@ -65,6 +73,9 @@ echo ""
 echo "=== Build and push completed! ==="
 echo "Image: ${FULL_IMAGE}"
 echo ""
-echo "Quick deploy:"
+echo "Quick deploy both:"
+echo "  ./scripts/build-and-push.sh --no-basepath && ./scripts/build-and-push.sh --with-basepath --skip-version"
+echo ""
+echo "Quick deploy single:"
 echo "  ./scripts/deploy-wyldbj.sh   # Deploy production (latest)"
 echo "  ./scripts/deploy-qa.sh       # Deploy QA (qa tag)"
