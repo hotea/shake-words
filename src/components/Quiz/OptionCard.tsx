@@ -8,6 +8,7 @@ interface OptionCardProps {
   isSelected: boolean;
   isCorrect: boolean | null;
   showResult: boolean;
+  fontSize?: "small" | "medium" | "large";
 }
 
 const DIRECTION_CONFIG: Record<
@@ -36,8 +37,30 @@ const DIRECTION_CONFIG: Record<
   },
 };
 
-export function OptionCard({ option, isSelected, isCorrect, showResult }: OptionCardProps) {
+const fontSizeConfig = {
+  small: {
+    arrow: "text-sm sm:text-base md:text-lg",
+    meaning: "text-xs sm:text-sm md:text-base",
+    padding: "py-2 px-2 sm:py-3 sm:px-3",
+    indicator: "w-7 h-7 sm:w-8 sm:h-8",
+  },
+  medium: {
+    arrow: "text-base sm:text-lg md:text-xl lg:text-2xl",
+    meaning: "text-sm sm:text-base md:text-lg lg:text-xl",
+    padding: "py-3 px-3 sm:py-4 sm:px-4",
+    indicator: "w-8 h-8 sm:w-9 sm:h-9",
+  },
+  large: {
+    arrow: "text-lg sm:text-xl md:text-2xl lg:text-3xl",
+    meaning: "text-base sm:text-lg md:text-xl lg:text-2xl",
+    padding: "py-4 px-4 sm:py-5 sm:px-5",
+    indicator: "w-9 h-9 sm:w-10 sm:h-10",
+  },
+};
+
+export function OptionCard({ option, isSelected, isCorrect, showResult, fontSize = "medium" }: OptionCardProps) {
   const config = DIRECTION_CONFIG[option.direction];
+  const fs = fontSizeConfig[fontSize];
 
   // 确定卡片状态样式
   let cardClasses = "option-card";
@@ -67,7 +90,7 @@ export function OptionCard({ option, isSelected, isCorrect, showResult }: Option
         ${cardClasses}
         ${config.animClass}
         relative
-        py-3 px-3 sm:py-4 sm:px-4
+        ${fs.padding}
         h-full
         flex flex-col items-center justify-center gap-1.5 sm:gap-2
       `}
@@ -75,18 +98,18 @@ export function OptionCard({ option, isSelected, isCorrect, showResult }: Option
     >
       {/* 方向指示器 */}
       <div className={`
-        flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-sm)] shrink-0
+        flex items-center justify-center ${fs.indicator} rounded-[var(--radius-sm)] shrink-0
         ${isSelected && !showResult ? "bg-[var(--color-primary)] text-white" : "bg-[var(--color-primary-dim)] text-[var(--color-primary-dark)]"}
         ${showResult && option.isCorrect ? "bg-[var(--color-success)] text-white" : ""}
         ${showResult && isSelected && !isCorrect ? "bg-[var(--color-error)] text-white" : ""}
         transition-colors duration-200
       `}>
-        <span className="text-base sm:text-lg font-bold">{config.arrow}</span>
+        <span className={`${fs.arrow} font-bold`}>{config.arrow}</span>
       </div>
 
       {/* 选项文本 */}
       <div className="text-center min-w-0 w-full">
-        <p className="text-sm sm:text-base md:text-lg font-medium text-[var(--color-foreground)] leading-snug line-clamp-2">
+        <p className={`${fs.meaning} font-medium text-[var(--color-foreground)] leading-snug line-clamp-2`}>
           {option.meaning}
         </p>
       </div>

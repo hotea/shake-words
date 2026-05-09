@@ -31,6 +31,35 @@ interface QuizBoardProps {
   onSpeakWord?: (word: string) => void;
 }
 
+type FontSize = "small" | "medium" | "large";
+
+const fontSizeConfig = {
+  small: {
+    word: "text-xl sm:text-2xl md:text-3xl",
+    phonetic: "text-xs sm:text-sm md:text-base",
+    option: "text-xs sm:text-sm md:text-base",
+    arrow: "text-sm sm:text-base md:text-lg",
+    button: "w-8 h-8",
+    buttonIcon: "w-4 h-4",
+  },
+  medium: {
+    word: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl",
+    phonetic: "text-sm sm:text-base md:text-lg lg:text-xl",
+    option: "text-sm sm:text-base md:text-lg lg:text-xl",
+    arrow: "text-base sm:text-lg md:text-xl lg:text-2xl",
+    button: "w-10 h-10",
+    buttonIcon: "w-5 h-5",
+  },
+  large: {
+    word: "text-3xl sm:text-4xl md:text-5xl lg:text-6xl",
+    phonetic: "text-base sm:text-lg md:text-xl lg:text-2xl",
+    option: "text-base sm:text-lg md:text-xl lg:text-2xl",
+    arrow: "text-lg sm:text-xl md:text-2xl lg:text-3xl",
+    button: "w-12 h-12",
+    buttonIcon: "w-6 h-6",
+  },
+};
+
 export function QuizBoard({
   question,
   quizState,
@@ -53,6 +82,7 @@ export function QuizBoard({
   onSpeakWord,
 }: QuizBoardProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fontSize, setFontSize] = useState<FontSize>("medium");
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -81,6 +111,15 @@ export function QuizBoard({
       }
     }
   };
+
+  const cycleFontSize = () => {
+    const order: FontSize[] = ["small", "medium", "large"];
+    const currentIndex = order.indexOf(fontSize);
+    const nextIndex = (currentIndex + 1) % order.length;
+    setFontSize(order[nextIndex]);
+  };
+
+  const fs = fontSizeConfig[fontSize];
   if (quizState === "loading" && !question) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[var(--color-background)]">
@@ -148,7 +187,7 @@ export function QuizBoard({
           </div>
         </div>
 
-        {/* 输入模式切换 + 全屏 + 设置 */}
+        {/* 输入模式切换 + 字体大小 + 全屏 + 设置 */}
         <div className="flex items-center gap-2">
           <button
             onClick={onToggleInput}
@@ -169,6 +208,16 @@ export function QuizBoard({
               <span className="text-xs font-medium hidden sm:inline">键盘</span>
             </>
           )}
+        </button>
+
+        <button
+          onClick={cycleFontSize}
+          className="flex items-center justify-center bg-white rounded-[var(--radius-md)] px-2.5 py-1.5 border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] hover:border-[var(--color-primary)]/30 transition-all"
+          title={`字体大小: ${fontSize === "small" ? "小" : fontSize === "medium" ? "中" : "大"}`}
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.272 8.5a18.022 18.022 0 01-3.284-8.5m0 0h-1.668a6.99 6.99 0 00-.433 2.446v2.868c0 .838.145 1.643.413 2.395M9.586 9h1.668a6.99 6.99 0 01.433 2.446v2.868a7 7 0 01-.413 2.395m0 0h.001M21 14h-1m-1 0a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1z" />
+          </svg>
         </button>
 
         <button
@@ -216,7 +265,7 @@ export function QuizBoard({
 
         {/* 四方向网格 — 使用 CSS Grid 精确控制 */}
         <div
-          className="z-10 w-full max-w-md grid gap-2 sm:gap-2.5"
+          className="z-10 w-full max-w-lg md:max-w-2xl lg:max-w-3xl grid gap-3 sm:gap-4"
           style={{
             gridTemplateColumns: "1fr auto 1fr",
             gridTemplateRows: "auto auto auto",
@@ -225,48 +274,50 @@ export function QuizBoard({
           }}
         >
           {/* 上选项 — 跨三列 */}
-          <div className="col-start-1 col-end-4 w-full max-w-[260px] sm:max-w-[300px]">
+          <div className="col-start-1 col-end-4 w-full max-w-[280px] sm:max-w-[340px] md:max-w-[400px]">
             <OptionCard
               option={upOption}
               isSelected={selectedDirection === "up"}
               isCorrect={isCorrect}
               showResult={showResult}
+              fontSize={fontSize}
             />
           </div>
 
           {/* 左选项 */}
-          <div className="col-start-1 row-start-2 w-full max-w-[120px] sm:max-w-[140px] justify-self-end">
+          <div className="col-start-1 row-start-2 w-full max-w-[140px] sm:max-w-[170px] md:max-w-[200px] justify-self-end">
             <OptionCard
               option={leftOption}
               isSelected={selectedDirection === "left"}
               isCorrect={isCorrect}
               showResult={showResult}
+              fontSize={fontSize}
             />
           </div>
 
           {/* 中央：单词卡片 + 摄像头 */}
-          <div className="col-start-2 row-start-2 flex flex-col items-center gap-1.5 sm:gap-2 w-[160px] sm:w-[200px]">
+          <div className="col-start-2 row-start-2 flex flex-col items-center gap-1.5 sm:gap-2 w-[180px] sm:w-[240px] md:w-[280px]">
             {/* 单词卡片 */}
         <div
-          className={`card p-4 sm:p-5 text-center w-full ${showResult ? "" : "animate-fade-in"}`}
+          className={`card p-4 sm:p-5 md:p-6 text-center w-full ${showResult ? "" : "animate-fade-in"}`}
           key={question.word.word}
         >
           <div className="flex items-center justify-center gap-2">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--color-foreground)] tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+            <h1 className={`${fs.word} font-bold text-[var(--color-foreground)] tracking-tight`} style={{ fontFamily: "var(--font-heading)" }}>
               {question.word.word}
             </h1>
             <button
               onClick={() => onSpeakWord?.(question.word.word)}
-              className="w-10 h-10 rounded-full bg-[var(--color-primary)] bg-opacity-10 hover:bg-opacity-20 transition-all flex items-center justify-center text-[var(--color-primary)]"
+              className={`${fs.button} rounded-full bg-[var(--color-primary)] bg-opacity-10 hover:bg-opacity-20 transition-all flex items-center justify-center text-[var(--color-primary)]`}
               title="发音"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className={`${fs.buttonIcon}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
               </svg>
             </button>
           </div>
-          <p className="text-[var(--color-muted)] text-sm sm:text-base md:text-lg mt-1">{question.word.phonetic}</p>
+          <p className={`${fs.phonetic} text-[var(--color-muted)] mt-1`}>{question.word.phonetic}</p>
         </div>
 
             {/* 摄像头 — 适配容器宽度 */}
@@ -299,22 +350,24 @@ export function QuizBoard({
           </div>
 
           {/* 右选项 */}
-          <div className="col-start-3 row-start-2 w-full max-w-[120px] sm:max-w-[140px] justify-self-start">
+          <div className="col-start-3 row-start-2 w-full max-w-[140px] sm:max-w-[170px] md:max-w-[200px] justify-self-start">
             <OptionCard
               option={rightOption}
               isSelected={selectedDirection === "right"}
               isCorrect={isCorrect}
               showResult={showResult}
+              fontSize={fontSize}
             />
           </div>
 
           {/* 下选项 — 跨三列 */}
-          <div className="col-start-1 col-end-4 row-start-3 w-full max-w-[260px] sm:max-w-[300px]">
+          <div className="col-start-1 col-end-4 row-start-3 w-full max-w-[280px] sm:max-w-[340px] md:max-w-[400px]">
             <OptionCard
               option={downOption}
               isSelected={selectedDirection === "down"}
               isCorrect={isCorrect}
               showResult={showResult}
+              fontSize={fontSize}
             />
           </div>
 
