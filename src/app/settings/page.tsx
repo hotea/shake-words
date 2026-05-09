@@ -261,18 +261,14 @@ export default function SettingsPage() {
 
         {/* Version Info */}
         <div className="mt-8 pt-6 border-t border-[var(--color-border)]/50 animate-fade-in-up stagger-2">
-          {mounted ? (
-            <div className="flex flex-col gap-1">
-              <p className="text-xs text-[var(--color-muted)]/80 font-mono">
-                版本: <span className="font-semibold text-[var(--color-primary)]">{VERSION}</span>
-              </p>
-              <p className="text-xs text-[var(--color-muted)]/60">
-                构建时间: {formatDate(BUILD_TIME)}
-              </p>
-            </div>
-          ) : (
-            <p className="text-xs text-[var(--color-muted)]/40">加载中...</p>
-          )}
+          <div className="flex flex-col gap-1">
+            <p className="text-xs text-[var(--color-muted)]/80 font-mono">
+              版本: <span className="font-semibold text-[var(--color-primary)]">{VERSION}</span>
+            </p>
+            <p className="text-xs text-[var(--color-muted)]/60">
+              构建时间: {formatDate(BUILD_TIME)}
+            </p>
+          </div>
         </div>
 
         <p className="mt-4 text-xs text-[var(--color-muted)]/60">
