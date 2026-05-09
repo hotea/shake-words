@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { loadSettings, saveSettings, DEFAULT_SETTINGS, type AppSettings } from "@/lib/settings";
-import { getVersionInfo } from "@/lib/version";
+import { VERSION, BUILD_TIME } from "@/lib/version";
 
 interface SliderFieldProps {
   label: string;
@@ -76,8 +76,12 @@ function formatDate(dateStr: string): string {
 export default function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [mounted, setMounted] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const versionInfo = getVersionInfo();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setSettings(loadSettings());
@@ -257,17 +261,17 @@ export default function SettingsPage() {
 
         {/* Version Info */}
         <div className="mt-8 pt-6 border-t border-[var(--color-border)]/50 animate-fade-in-up stagger-2">
-          {versionInfo ? (
+          {mounted ? (
             <div className="flex flex-col gap-1">
               <p className="text-xs text-[var(--color-muted)]/80 font-mono">
-                版本: <span className="font-semibold text-[var(--color-primary)]">{versionInfo.version}</span>
+                版本: <span className="font-semibold text-[var(--color-primary)]">{VERSION}</span>
               </p>
               <p className="text-xs text-[var(--color-muted)]/60">
-                构建时间: {formatDate(versionInfo.buildTime)}
+                构建时间: {formatDate(BUILD_TIME)}
               </p>
             </div>
           ) : (
-            <p className="text-xs text-[var(--color-muted)]/40">加载版本信息...</p>
+            <p className="text-xs text-[var(--color-muted)]/40">加载中...</p>
           )}
         </div>
 
