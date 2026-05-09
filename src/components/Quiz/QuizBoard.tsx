@@ -7,6 +7,7 @@ import { OptionCard } from "./OptionCard";
 import { FaceMeshOverlay } from "@/components/FaceMesh/FaceMeshOverlay";
 import type { HeadPose } from "@/lib/types";
 import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
 
 interface QuizBoardProps {
   question: QuizQuestion | null;
@@ -51,6 +52,35 @@ export function QuizBoard({
   pitchThreshold = 10,
   onSpeakWord,
 }: QuizBoardProps) {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    if (!containerRef.current) return;
+
+    if (!document.fullscreenElement) {
+      try {
+        await containerRef.current.requestFullscreen();
+      } catch (err) {
+        console.error("Error attempting to enable fullscreen:", err);
+      }
+    } else {
+      try {
+        await document.exitFullscreen();
+      } catch (err) {
+        console.error("Error attempting to exit fullscreen:", err);
+      }
+    }
+  };
   if (quizState === "loading" && !question) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[var(--color-background)]">
@@ -91,7 +121,7 @@ export function QuizBoard({
   const rightOption = getOption("right");
 
   return (
-    <div className="relative w-full min-h-screen bg-[var(--color-background)] flex flex-col">
+    <div ref={containerRef} className="relative w-full min-h-screen bg-[var(--color-background)] flex flex-col">
       {/* 顶部导航栏 */}
       <header className="flex items-center justify-between px-4 sm:px-6 py-3 z-20">
         <div className="flex items-center gap-3">
@@ -107,18 +137,18 @@ export function QuizBoard({
           {/* 统计信息 */}
           <div className="flex items-center gap-3 bg-white rounded-[var(--radius-md)] px-3 py-1.5 border border-[var(--color-border)]">
             <div className="flex items-center gap-1">
-              <span className="text-[var(--color-muted)] text-xs">已答</span>
-              <span className="text-[var(--color-foreground)] font-semibold text-sm">{sessionCount}</span>
+              <span className="text-[var(--color-muted)] text-sm">已答</span>
+              <span className="text-[var(--color-foreground)] font-semibold text-base">{sessionCount}</span>
             </div>
             <span className="w-px h-3 bg-[var(--color-border)]" />
             <div className="flex items-center gap-1">
-              <span className="text-[var(--color-success)] font-semibold text-sm">{accuracy}%</span>
-              <span className="text-[var(--color-muted)] text-xs">正确</span>
+              <span className="text-[var(--color-success)] font-semibold text-base">{accuracy}%</span>
+              <span className="text-[var(--color-muted)] text-sm">正确</span>
             </div>
           </div>
         </div>
 
-        {/* 输入模式切换 + 设置 */}
+        {/* 输入模式切换 + 全屏 + 设置 */}
         <div className="flex items-center gap-2">
           <button
             onClick={onToggleInput}
@@ -138,6 +168,22 @@ export function QuizBoard({
               </svg>
               <span className="text-xs font-medium hidden sm:inline">键盘</span>
             </>
+          )}
+        </button>
+
+        <button
+          onClick={toggleFullscreen}
+          className="flex items-center justify-center bg-white rounded-[var(--radius-md)] px-2.5 py-1.5 border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] hover:border-[var(--color-primary)]/30 transition-all"
+          title={isFullscreen ? "退出全屏" : "全屏"}
+        >
+          {isFullscreen ? (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5M15 15l5.25 5.25" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4a2 2 0 012-2h4M16 4h4a2 2 0 012 2v4M4 16v4a2 2 0 002 2h4M20 16v4a2 2 0 01-2 2h-4" />
+            </svg>
           )}
         </button>
 
@@ -199,28 +245,28 @@ export function QuizBoard({
           </div>
 
           {/* 中央：单词卡片 + 摄像头 */}
-          <div className="col-start-2 row-start-2 flex flex-col items-center gap-1.5 sm:gap-2 w-[148px] sm:w-[180px]">
+          <div className="col-start-2 row-start-2 flex flex-col items-center gap-1.5 sm:gap-2 w-[160px] sm:w-[200px]">
             {/* 单词卡片 */}
         <div
-          className={`card p-3 sm:p-4 text-center w-full ${showResult ? "" : "animate-fade-in"}`}
+          className={`card p-4 sm:p-5 text-center w-full ${showResult ? "" : "animate-fade-in"}`}
           key={question.word.word}
         >
           <div className="flex items-center justify-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-foreground)] tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--color-foreground)] tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
               {question.word.word}
             </h1>
             <button
               onClick={() => onSpeakWord?.(question.word.word)}
-              className="w-8 h-8 rounded-full bg-[var(--color-primary)] bg-opacity-10 hover:bg-opacity-20 transition-all flex items-center justify-center text-[var(--color-primary)]"
+              className="w-10 h-10 rounded-full bg-[var(--color-primary)] bg-opacity-10 hover:bg-opacity-20 transition-all flex items-center justify-center text-[var(--color-primary)]"
               title="发音"
             >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
               </svg>
             </button>
           </div>
-          <p className="text-[var(--color-muted)] text-xs sm:text-sm mt-0.5">{question.word.phonetic}</p>
+          <p className="text-[var(--color-muted)] text-sm sm:text-base md:text-lg mt-1">{question.word.phonetic}</p>
         </div>
 
             {/* 摄像头 — 适配容器宽度 */}

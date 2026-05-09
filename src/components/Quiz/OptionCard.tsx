@@ -67,41 +67,41 @@ export function OptionCard({ option, isSelected, isCorrect, showResult }: Option
         ${cardClasses}
         ${config.animClass}
         relative
-        py-2.5 px-2 sm:py-3 sm:px-3
+        py-3 px-3 sm:py-4 sm:px-4
         h-full
-        flex flex-col items-center justify-center gap-1 sm:gap-1.5
+        flex flex-col items-center justify-center gap-1.5 sm:gap-2
       `}
       style={inlineStyle}
     >
       {/* 方向指示器 */}
       <div className={`
-        flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-[var(--radius-sm)] shrink-0
+        flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-[var(--radius-sm)] shrink-0
         ${isSelected && !showResult ? "bg-[var(--color-primary)] text-white" : "bg-[var(--color-primary-dim)] text-[var(--color-primary-dark)]"}
         ${showResult && option.isCorrect ? "bg-[var(--color-success)] text-white" : ""}
         ${showResult && isSelected && !isCorrect ? "bg-[var(--color-error)] text-white" : ""}
         transition-colors duration-200
       `}>
-        <span className="text-xs sm:text-sm font-bold">{config.arrow}</span>
+        <span className="text-base sm:text-lg font-bold">{config.arrow}</span>
       </div>
 
       {/* 选项文本 */}
       <div className="text-center min-w-0 w-full">
-        <p className="text-xs sm:text-sm font-medium text-[var(--color-foreground)] leading-snug line-clamp-2">
+        <p className="text-sm sm:text-base md:text-lg font-medium text-[var(--color-foreground)] leading-snug line-clamp-2">
           {option.meaning}
         </p>
       </div>
 
       {/* 结果图标 */}
       {showResult && option.isCorrect && (
-        <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[var(--color-success)] text-white flex items-center justify-center shadow-md">
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
+        <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[var(--color-success)] text-white flex items-center justify-center shadow-md">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
           </svg>
         </div>
       )}
       {showResult && isSelected && !isCorrect && (
-        <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[var(--color-error)] text-white flex items-center justify-center shadow-md">
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
+        <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[var(--color-error)] text-white flex items-center justify-center shadow-md">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </div>
