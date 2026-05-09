@@ -33,9 +33,8 @@ ssh -t ${REMOTE_HOST} << EOF
 
     if [ ! -f ${CONFIG_DIR}/.env ]; then
         echo "[Remote] ERROR: ${CONFIG_DIR}/.env not found"
-        echo "[Remote] Creating .env from QA config..."
-        ssh wyld-qa "cat /home/ecs-user/.shakewords/.env" | sudo tee ${CONFIG_DIR}/.env > /dev/null
-        echo "[Remote] Please check and update the config if needed"
+        echo "[Remote] Please create the .env file manually in ${CONFIG_DIR}/"
+        exit 1
     fi
 
     echo "[Remote] Pulling image from Aliyun registry..."
