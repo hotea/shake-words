@@ -313,7 +313,7 @@ export default function LoginPage() {
           )}
 
           {/* Email form */}
-          {mode === "login" && isSelfHosted && signInWithEmailCode ? (
+          {mode === "login" && isSelfHosted && signInWithEmailCode && loginType === "code" ? (
             <form onSubmit={handleCodeLogin} className="space-y-3">
               <div>
                 <label className="block text-sm font-medium mb-1.5 text-slate-600">邮箱</label>
@@ -334,7 +334,7 @@ export default function LoginPage() {
                     value={emailCode}
                     onChange={(e) => setEmailCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                     required
-                    maxLength={6}
+maxLength={6}
                     className="flex-1 px-3.5 h-10 rounded-lg border border-slate-200 bg-white text-slate-800 text-sm placeholder:text-slate-300 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all tracking-widest"
                     placeholder="6 位数字验证码"
                   />
@@ -389,89 +389,89 @@ export default function LoginPage() {
               </div>
             </form>
           ) : (
-          <form onSubmit={handleEmailSubmit} className="space-y-3">
-            <div>
-              <label className="block text-sm font-medium mb-1.5 text-slate-600">邮箱</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-3.5 h-10 rounded-lg border border-slate-200 bg-white text-slate-800 text-sm placeholder:text-slate-300 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
-                placeholder="you@example.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1.5 text-slate-600">密码</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full px-3.5 h-10 rounded-lg border border-slate-200 bg-white text-slate-800 text-sm placeholder:text-slate-300 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
-                placeholder="至少 6 位字符"
-              />
-            </div>
+            <form onSubmit={handleEmailSubmit} className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium mb-1.5 text-slate-600">邮箱</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full px-3.5 h-10 rounded-lg border border-slate-200 bg-white text-slate-800 text-sm placeholder:text-slate-300 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
+                  placeholder="you@example.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1.5 text-slate-600">密码</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="w-full px-3.5 h-10 rounded-lg border border-slate-200 bg-white text-slate-800 text-sm placeholder:text-slate-300 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
+                  placeholder="至少 6 位字符"
+                />
+              </div>
 
-            {error && (
-              <div className={`flex items-start gap-2 p-3 rounded-lg text-sm leading-relaxed ${
-                error.includes("成功") || error.includes("已重新") || error.includes("验证邮件")
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "bg-red-50 text-red-600"
-              }`}>
-                {error.includes("成功") || error.includes("已重新") || error.includes("验证邮件") ? (
-                  <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                ) : (
-                  <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                  </svg>
-                )}
-                <div className="flex-1">
-                  <p>{error}</p>
-                  {showResend && (
-                    <button
-                      type="button"
-                      onClick={handleResend}
-                      disabled={loading || cooldown > 0}
-                      className="mt-1 text-xs font-medium underline underline-offset-2 decoration-current/30 hover:decoration-current disabled:opacity-50 cursor-pointer"
-                    >
-                      {cooldown > 0
-                        ? `重新发送（${cooldown}s）`
-                        : "重新发送验证邮件"}
-                    </button>
+              {error && (
+                <div className={`flex items-start gap-2 p-3 rounded-lg text-sm leading-relaxed ${
+                  error.includes("成功") || error.includes("已重新") || error.includes("验证邮件")
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "bg-red-50 text-red-600"
+                }`}>
+                  {error.includes("成功") || error.includes("已重新") || error.includes("验证邮件") ? (
+                    <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
                   )}
+                  <div className="flex-1">
+                    <p>{error}</p>
+                    {showResend && (
+                      <button
+                        type="button"
+                        onClick={handleResend}
+                        disabled={loading || cooldown > 0}
+                        className="mt-1 text-xs font-medium underline underline-offset-2 decoration-current/30 hover:decoration-current disabled:opacity-50 cursor-pointer"
+                      >
+                        {cooldown > 0
+                          ? `重新发送（${cooldown}s）`
+                          : "重新发送验证邮件"}
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading || cooldown > 0}
-              className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
-              ) : cooldown > 0 ? (
-                `请等待 ${cooldown}s`
-              ) : (
-                mode === "login" ? "登录" : "创建账号"
               )}
-            </button>
-            {mode === "login" && isSelfHosted && signInWithEmailCode && (
-              <div className="text-center">
-                <button
-                  type="button"
-                  onClick={() => { setLoginType("code"); setError(null); }}
-                  className="text-xs text-slate-400 hover:text-slate-500 cursor-pointer"
-                >
-                  使用验证码登录
-                </button>
-              </div>
-            )}
-          </form>
+
+              <button
+                type="submit"
+                disabled={loading || cooldown > 0}
+                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
+                ) : cooldown > 0 ? (
+                  `请等待 ${cooldown}s`
+                ) : (
+                  mode === "login" ? "登录" : "创建账号"
+                )}
+              </button>
+              {mode === "login" && isSelfHosted && signInWithEmailCode && loginType === "password" && (
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => { setLoginType("code"); setError(null); }}
+                    className="text-xs text-slate-400 hover:text-slate-500 cursor-pointer"
+                  >
+                    使用验证码登录
+                  </button>
+                </div>
+              )}
+            </form>
           )}
 
           {/* Switch mode */}
