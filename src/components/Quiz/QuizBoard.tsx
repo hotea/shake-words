@@ -8,6 +8,7 @@ import { FaceMeshOverlay } from "@/components/FaceMesh/FaceMeshOverlay";
 import type { HeadPose } from "@/lib/types";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { OnlineCounter } from "@/components/OnlineCounter";
 
 interface QuizBoardProps {
   question: QuizQuestion | null;
@@ -415,6 +416,9 @@ export function QuizBoard({
           </div>
         </div>
       </div>
+
+      {/* 在线人数 — 右下角角落，不影响主功能 */}
+      <OnlineCounter />
     </div>
   );
 }
