@@ -71,7 +71,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-[var(--color-foreground)] mb-3">AI 动作识别</h3>
               <p className="text-[var(--color-muted)] leading-relaxed">
-                通过摄像头实时识别头部动作，向左转头选择左侧答案，向右转头选择右侧答案，点头确认选择。
+                通过摄像头实时识别头部动作，向左转头选择左侧答案，向右转头选择右侧答案，向上或向下转头选择对应方向的答案。
               </p>
             </div>
 
