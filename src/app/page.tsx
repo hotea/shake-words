@@ -1,6 +1,19 @@
 import Link from "next/link";
 import { AuthHeader } from "@/components/AuthHeader";
 import { AppLogo } from "@/components/AppLogo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ShakeWords - 晃晃背单词 | 边学单词边放松颈椎",
+  description: "创新的英语单词学习应用，通过摄像头识别头部动作（点头、摇头、转头）来选择单词释义。边背单词边活动颈椎，缓解久坐疲劳，让学习更健康有趣。",
+  keywords: ["背单词", "英语学习", "颈椎放松", "头部运动", "健康学习", "CET4", "CET6", "GRE", "雅思", "托福"],
+  openGraph: {
+    title: "ShakeWords - 晃晃背单词",
+    description: "边背单词边活动颈椎，让学习更健康有趣",
+    url: "https://shakewords.wyld.cc",
+    type: "website",
+  },
+};
 
 export default function Home() {
   return (
@@ -72,7 +85,57 @@ export default function Home() {
         </Link>
       </div>
 
+      {/* SEO 内容区域 */}
+      <section className="max-w-4xl mx-auto px-6 py-16 z-10">
+        <div className="grid md:grid-cols-2 gap-12">
+          <div>
+            <h2 className="text-2xl font-bold mb-4 text-[var(--color-foreground)]">边学单词边放松颈椎</h2>
+            <p className="text-[var(--color-muted)] leading-relaxed mb-4">
+              ShakeWords 是一款创新的英语单词学习应用，通过摄像头识别头部动作，让你在背单词的同时活动颈椎，缓解久坐带来的颈部疲劳。
+            </p>
+            <p className="text-[var(--color-muted)] leading-relaxed">
+              向左转头选择左侧答案，向右转头选择右侧答案，点头确认。简单的动作让学习过程更加生动有趣，同时保护你的颈椎健康。
+            </p>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold mb-4 text-[var(--color-foreground)]">丰富的词书资源</h2>
+            <ul className="space-y-2 text-[var(--color-muted)]">
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
+                CET-4 大学英语四级词汇
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
+                CET-6 大学英语六级词汇
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
+                GRE 美国研究生入学考试词汇
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
+                雅思 IELTS 词汇
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
+                托福 TOEFL 词汇
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
+                BEC 商务英语词汇
+              </li>
+            </ul>
+          </div>
+        </div>
 
+        <div className="mt-16 text-center">
+          <h2 className="text-2xl font-bold mb-4 text-[var(--color-foreground)]">健康学习，从 ShakeWords 开始</h2>
+          <p className="text-[var(--color-muted)] max-w-2xl mx-auto">
+            长时间伏案工作学习容易导致颈椎问题。ShakeWords 将英语学习与颈部运动相结合，
+            让你在记忆单词的同时，通过自然的头部转动活动颈椎，预防久坐带来的健康隐患。
+          </p>
+        </div>
+      </section>
     </main>
   );
 }

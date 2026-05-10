@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+Sitemap: https://shakewords.wyld.cc/sitemap.xml
+
+# Crawl-delay for bots
+Crawl-delay: 1
