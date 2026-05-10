@@ -43,3 +43,15 @@ CREATE TABLE IF NOT EXISTS user_settings (
   updated_at DATETIME(3) NOT NULL,
   PRIMARY KEY (user_id, key_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS online_stats (
+  id           INT          NOT NULL PRIMARY KEY DEFAULT 1,
+  total_count  INT          NOT NULL DEFAULT 0,
+  updated_at   DATETIME(3)  NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS online_daily (
+  date_key     VARCHAR(10)  NOT NULL PRIMARY KEY,
+  count        INT          NOT NULL DEFAULT 0,
+  updated_at   DATETIME(3)  NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
