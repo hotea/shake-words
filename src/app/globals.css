@@ -172,6 +172,9 @@
 }
 
 html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -179,22 +182,25 @@ html {
 }
 
 body {
-  color: var(--color-foreground);
-  background: var(--color-background);
-  font-family: var(--font-sans);
-  line-height: var(--leading-normal);
-  text-wrap: pretty;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  color: #1c1917;
+  background: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
 }
 
-/* Subtle warm glow background */
-body::before {
+/* Subtle warm glow background - disabled for clean white pages */
+/* body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   background-image: var(--gradient-glow);
   pointer-events: none;
-}
+} */
 
 a {
   color: inherit;

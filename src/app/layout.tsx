@@ -106,7 +106,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
+      <body className="min-h-screen bg-white text-stone-900">
         <Providers>{children}</Providers>
       </body>
     </html>
