@@ -55,7 +55,6 @@ export default function StatsPage() {
   useEffect(() => {
     async function load() {
       const adapter = await getAdapter();
-      // Use selected book if available
       const selected = (adapter as any).getSelectedBookId?.();
       if (selected) setBookId(selected);
     }
@@ -105,7 +104,7 @@ export default function StatsPage() {
           </div>
         ) : authEnabled && !user ? (
           <div className="card p-10 text-center animate-fade-in">
-            <div className="w-16 h-16 rounded-2xl bg-stone-100 flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--color-primary-dim)] flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
               </svg>
@@ -118,8 +117,8 @@ export default function StatsPage() {
           </div>
         ) : authEnabled && user && !user.emailVerified ? (
           <div className="card p-10 text-center animate-fade-in">
-            <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--color-warning-dim)] flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-[var(--color-warning)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
               </svg>
             </div>
@@ -146,7 +145,7 @@ export default function StatsPage() {
               </div>
               <div className="card p-5 animate-fade-in-up stagger-2">
                 <div className="text-xs text-[var(--color-muted)] mb-1">已掌握</div>
-                <div className="text-3xl font-bold text-emerald-600" style={{ fontFamily: "var(--font-heading)" }}>
+                <div className="text-3xl font-bold text-[var(--color-success)]" style={{ fontFamily: "var(--font-heading)" }}>
                   {stats.masteredWords}
                 </div>
                 <div className="text-xs text-[var(--color-muted)] mt-1">熟练度 ≥ 4</div>
@@ -160,7 +159,7 @@ export default function StatsPage() {
               </div>
               <div className="card p-5 animate-fade-in-up stagger-4">
                 <div className="text-xs text-[var(--color-muted)] mb-1">正确率</div>
-                <div className="text-3xl font-bold text-amber-600" style={{ fontFamily: "var(--font-heading)" }}>
+                <div className="text-3xl font-bold text-[var(--color-accent-dark)]" style={{ fontFamily: "var(--font-heading)" }}>
                   {Math.round(stats.todayCorrectRate * 100)}%
                 </div>
                 <div className="text-xs text-[var(--color-muted)] mt-1">今日</div>
@@ -169,8 +168,8 @@ export default function StatsPage() {
 
             {/* Streak */}
             <div className="card p-5 mb-8 animate-fade-in-up stagger-5 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0">
-                <svg className="w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-dim)] flex items-center justify-center shrink-0">
+                <svg className="w-6 h-6 text-[var(--color-accent-dark)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
                 </svg>
@@ -182,14 +181,14 @@ export default function StatsPage() {
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-1 mb-5 p-1 rounded-xl bg-stone-100 w-fit">
+            <div className="flex gap-1 mb-5 p-1 rounded-xl bg-[var(--color-background)] w-fit border border-[var(--color-border)]">
               {(["daily", "recent"] as const).map((t) => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
                   className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     tab === t
-                      ? "bg-white text-[var(--color-foreground)] shadow-sm"
+                      ? "bg-[var(--color-surface)] text-[var(--color-foreground)] shadow-sm"
                       : "text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
                   }`}
                 >
@@ -208,7 +207,7 @@ export default function StatsPage() {
                 ) : (
                   <div className="space-y-3">
                     {dailyHistory.map((day, i) => {
-                      const accColor = day.accuracy >= 0.8 ? "bg-emerald-500" : day.accuracy >= 0.5 ? "bg-amber-500" : "bg-red-500";
+                      const accColor = day.accuracy >= 0.8 ? "bg-[var(--color-success)]" : day.accuracy >= 0.5 ? "bg-[var(--color-warning)]" : "bg-[var(--color-error)]";
                       return (
                         <div
                           key={day.date}
@@ -232,7 +231,7 @@ export default function StatsPage() {
                               <div className="text-[11px] text-[var(--color-muted)]">正确率</div>
                             </div>
                           </div>
-                          <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden">
+                          <div className="h-1.5 bg-[var(--color-border-light)] rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full transition-all duration-500 ${accColor}`}
                               style={{ width: `${Math.round(day.accuracy * 100)}%` }}
@@ -261,7 +260,7 @@ export default function StatsPage() {
                         className={`card p-3.5 flex items-center justify-between animate-fade-in-up stagger-${Math.min(i + 1, 5)}`}
                       >
                         <div className="flex items-center gap-3">
-                          <span className={`w-2 h-2 rounded-full ${record.isCorrect ? "bg-emerald-500" : "bg-red-500"}`} />
+                          <span className={`w-2 h-2 rounded-full ${record.isCorrect ? "bg-[var(--color-success)]" : "bg-[var(--color-error)]"}`} />
                           <span className="text-sm font-medium text-[var(--color-foreground)]">{wordText(record.wordId)}</span>
                         </div>
                         <div className="flex items-center gap-3 text-xs text-[var(--color-muted)]">

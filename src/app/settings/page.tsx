@@ -22,7 +22,7 @@ function SliderField({ label, description, value, min, max, step, unit, icon, on
   return (
     <div className="py-5 border-b border-[var(--color-border)]/50 last:border-b-0">
       <div className="flex items-start gap-3 mb-4">
-        <div className="w-9 h-9 rounded-xl bg-stone-100 text-stone-500 flex items-center justify-center shrink-0 mt-0.5">
+        <div className="w-9 h-9 rounded-xl bg-[var(--color-primary-dim)] text-[var(--color-primary)] flex items-center justify-center shrink-0 mt-0.5">
           {icon}
         </div>
         <div className="flex-1 min-w-0">
@@ -76,12 +76,7 @@ function formatDate(dateStr: string): string {
 export default function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
-  const [mounted, setMounted] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     setSettings(loadSettings());
@@ -145,8 +140,8 @@ export default function SettingsPage() {
             {saveStatus !== "idle" && (
               <span className={`text-xs px-2.5 py-1 rounded-full transition-all font-medium ${
                 saveStatus === "saving"
-                  ? "text-amber-600 bg-amber-50"
-                  : "text-emerald-600 bg-emerald-50"
+                  ? "text-[var(--color-warning)] bg-[var(--color-warning-dim)]"
+                  : "text-[var(--color-success)] bg-[var(--color-success-dim)]"
               }`}>
                 {saveStatus === "saving" ? "保存中..." : "已保存"}
               </span>
@@ -225,7 +220,7 @@ export default function SettingsPage() {
           {/* Camera feed toggle */}
           <div className="flex items-center justify-between py-3 border-b border-[var(--color-border)]/50">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-stone-100 text-stone-500 flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-[var(--color-primary-dim)] text-[var(--color-primary)] flex items-center justify-center shrink-0">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
                 </svg>
@@ -240,7 +235,7 @@ export default function SettingsPage() {
               aria-checked={settings.showCamera}
               onClick={() => updateSetting("showCamera", !settings.showCamera)}
               className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
-                settings.showCamera ? "bg-[var(--color-primary)]" : "bg-stone-300"
+                settings.showCamera ? "bg-[var(--color-primary)]" : "bg-[var(--color-muted-subtle)]"
               }`}
             >
               <span
@@ -254,7 +249,7 @@ export default function SettingsPage() {
 
         {/* Reset */}
         <div className="flex items-center gap-3 animate-fade-in-up stagger-2">
-          <button onClick={handleReset} className="text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors px-3 py-2 rounded-lg hover:bg-stone-100">
+          <button onClick={handleReset} className="text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors px-3 py-2 rounded-lg hover:bg-[var(--color-background)]">
             恢复默认设置
           </button>
         </div>

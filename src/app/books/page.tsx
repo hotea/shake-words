@@ -31,16 +31,6 @@ function getBookIconType(book: WordBook): string {
   return "default";
 }
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string; selectedBg: string; selectedText: string }> = {
-  cet:     { bg: "bg-blue-50",   text: "text-blue-600",   border: "border-blue-200",   selectedBg: "bg-blue-500",   selectedText: "text-white" },
-  ielts:   { bg: "bg-teal-50",   text: "text-teal-600",   border: "border-teal-200",   selectedBg: "bg-teal-500",   selectedText: "text-white" },
-  toefl:   { bg: "bg-indigo-50", text: "text-indigo-600", border: "border-indigo-200", selectedBg: "bg-indigo-500", selectedText: "text-white" },
-  gre:     { bg: "bg-purple-50", text: "text-purple-600", border: "border-purple-200", selectedBg: "bg-purple-500", selectedText: "text-white" },
-  sat:     { bg: "bg-amber-50",  text: "text-amber-600",  border: "border-amber-200",  selectedBg: "bg-amber-500",  selectedText: "text-white" },
-  business:{ bg: "bg-rose-50",   text: "text-rose-600",   border: "border-rose-200",   selectedBg: "bg-rose-500",   selectedText: "text-white" },
-  default: { bg: "bg-slate-50",  text: "text-slate-600",  border: "border-slate-200",  selectedBg: "bg-slate-500",  selectedText: "text-white" },
-};
-
 export default function BooksPage() {
   const router = useRouter();
   const [books, setBooks] = useState<WordBook[]>([]);
@@ -108,20 +98,20 @@ export default function BooksPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#faf9f7] flex flex-col">
+    <main className="min-h-screen bg-[var(--color-background)] flex flex-col">
       {/* Top bar */}
-      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60">
+      <header className="sticky top-0 z-20 bg-[var(--color-surface)]/80 backdrop-blur-xl border-b border-[var(--color-border)]">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors cursor-pointer"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
             </Link>
-            <h1 className="text-lg font-semibold text-slate-800">选择词书</h1>
+            <h1 className="text-lg font-semibold text-[var(--color-foreground)]">选择词书</h1>
           </div>
 
           {selectedBookId && (
@@ -139,7 +129,7 @@ export default function BooksPage() {
       </header>
 
       {/* Category pills */}
-      <div className="sticky top-14 z-10 bg-[#faf9f7]/90 backdrop-blur-sm">
+      <div className="sticky top-14 z-10 bg-[var(--color-background)]/90 backdrop-blur-sm">
         <div className="max-w-2xl mx-auto px-4 pt-3 pb-2">
           <div className="flex gap-2 overflow-x-auto scrollbar-none">
             {CATEGORIES.map((cat) => {
@@ -150,8 +140,8 @@ export default function BooksPage() {
                   onClick={() => setActiveCategory(cat.id)}
                   className={`cursor-pointer shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? "bg-slate-800 text-white shadow-sm"
-                      : "bg-white text-slate-500 hover:text-slate-700 border border-slate-200"
+                      ? "bg-[var(--color-primary)] text-white shadow-sm"
+                      : "bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] border border-[var(--color-border)]"
                   }`}
                 >
                   {cat.label}
@@ -162,23 +152,21 @@ export default function BooksPage() {
         </div>
       </div>
 
-      {/* Content — grid layout */}
+      {/* Content */}
       <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-3">
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="w-7 h-7 border-[2.5px] border-slate-300 border-t-slate-600 rounded-full animate-spin" />
+            <div className="w-7 h-7 border-[2.5px] border-[var(--color-border)] border-t-[var(--color-primary)] rounded-full animate-spin" />
           </div>
         ) : filteredBooks.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-slate-400 text-sm">该分类下暂无词书</p>
+            <p className="text-[var(--color-muted)] text-sm">该分类下暂无词书</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {filteredBooks.map((book) => {
               const isSelected = selectedBookId === book.id;
               const isLoading = loadingOnline === book.id;
-              const iconType = getBookIconType(book);
-              const colors = CATEGORY_COLORS[iconType] || CATEGORY_COLORS.default;
 
               return (
                 <div
@@ -186,39 +174,39 @@ export default function BooksPage() {
                   onClick={() => !isLoading && handleSelectBook(book.id)}
                   className={`group relative cursor-pointer rounded-2xl transition-all duration-200 ${
                     isSelected
-                      ? `ring-2 ${colors.border} ${colors.bg} shadow-sm`
-                      : "bg-white hover:shadow-md border border-slate-100"
+                      ? "ring-2 ring-[var(--color-primary)]/30 bg-[var(--color-primary-dim)] shadow-sm"
+                      : "bg-[var(--color-surface)] hover:shadow-md border border-[var(--color-border)]"
                   } ${isLoading ? "opacity-60" : ""}`}
                 >
                   <div className="p-4">
                     {/* Icon */}
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${
                       isSelected
-                        ? `${colors.selectedBg} ${colors.selectedText}`
-                        : `${colors.bg} ${colors.text}`
+                        ? "bg-[var(--color-primary)] text-white"
+                        : "bg-[var(--color-primary-dim)] text-[var(--color-primary)]"
                     }`}>
                       {isLoading ? (
                         <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
                       ) : (
-                        <BookIcon type={iconType} className="w-5 h-5" />
+                        <BookIcon type={getBookIconType(book)} className="w-5 h-5" />
                       )}
                     </div>
 
                     {/* Name */}
-                    <h2 className="text-sm font-semibold text-slate-800 leading-snug">
+                    <h2 className="text-sm font-semibold text-[var(--color-foreground)] leading-snug">
                       {book.name}
                     </h2>
 
                     {/* Word count */}
                     {book.wordCount > 0 && (
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-xs text-[var(--color-muted)] mt-1">
                         {book.wordCount.toLocaleString()} 词
                       </p>
                     )}
 
-                    {/* Selected check — bottom right */}
+                    {/* Selected check */}
                     {isSelected && !isLoading && (
-                      <div className={`absolute top-3 right-3 w-5 h-5 rounded-full ${colors.selectedBg} flex items-center justify-center`}>
+                      <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
                         <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                         </svg>
