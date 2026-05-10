@@ -91,8 +91,15 @@ export function FaceMeshOverlay({
                   backgroundColor: "rgba(30, 58, 95, 0.04)",
                 }}
               />
-              {/* Head outline - fixed at center */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              {/* Head outline + center dot - move together with pose */}
+              <div
+                className="absolute transition-all duration-100"
+                style={{
+                  left: `${50 + (pose.yaw / 30) * mapFactor}%`,
+                  top: `${50 - (pose.pitch / 30) * mapFactor}%`,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
                 <div className="w-16 h-20 rounded-[50%] border-2 border-[var(--color-primary)]/40 bg-[var(--color-primary)]/5 relative">
                   <div className="absolute top-7 left-1/2 -translate-x-1/2 flex gap-3">
                     <div className="w-2 h-2 rounded-full bg-[var(--color-primary)]/50" />
@@ -100,18 +107,16 @@ export function FaceMeshOverlay({
                   </div>
                   <div className="absolute top-10 left-1/2 -translate-x-1/2 w-1.5 h-2 bg-[var(--color-primary)]/20 rounded-b-full" />
                 </div>
+                {/* Center dot at nose position (bottom center of head) */}
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full"
+                  style={{
+                    top: "85%",
+                    background: "var(--gradient-primary)",
+                    boxShadow: "0 0 10px rgba(30, 58, 95, 0.4)",
+                  }}
+                />
               </div>
-              {/* Center dot - moves with pose, independent of head outline */}
-              <div
-                className="absolute w-3 h-3 rounded-full shadow-lg transition-all duration-100"
-                style={{
-                  background: "var(--gradient-primary)",
-                  boxShadow: "0 0 10px rgba(30, 58, 95, 0.4)",
-                  left: `${50 + (pose.yaw / 30) * mapFactor}%`,
-                  top: `${50 - (pose.pitch / 30) * mapFactor}%`,
-                  transform: "translate(-50%, -50%)",
-                }}
-              />
             </div>
           )}
           {(!baselinePose || status !== "ready") && (
