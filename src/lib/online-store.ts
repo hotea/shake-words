@@ -82,23 +82,23 @@ async function loadFromDb() {
 
   try {
     // 恢复历史总用户数
-    const [totalRows] = await query<{ total_count: number }[]>(
+    const totalRows = await query<{ total_count: number }>(
       "SELECT total_count FROM online_stats WHERE id = 1"
     );
-    if (totalRows) {
+    if (totalRows && totalRows.length > 0) {
       // 用数据库值初始化 allTimeUsers 的计数基准
       // 由于无法恢复具体 visitorId，我们用计数器方式补偿
-      (allTimeUsers as any)._dbBaseCount = totalRows.total_count;
+      (allTimeUsers as any)._dbBaseCount = totalRows[0].total_count;
     }
 
     // 恢复今日用户数
     const dateKey = getTodayKey();
-    const [dailyRows] = await query<{ count: number }[]>(
+    const dailyRows = await query<{ count: number }>(
       "SELECT count FROM online_daily WHERE date_key = ?",
       [dateKey]
     );
-    if (dailyRows) {
-      (todayUsers as any)._dbBaseCount = dailyRows.count;
+    if (dailyRows && dailyRows.length > 0) {
+      (todayUsers as any)._dbBaseCount = dailyRows[0].count;
     }
   } catch (error) {
     console.error("[online-store] load failed:", error);

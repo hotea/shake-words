@@ -1,10 +1,13 @@
 import mysql from "mysql2/promise";
+import { runMigrations } from "./migrate";
 
 let pool: mysql.Pool | null = null;
+let migrationPromise: Promise<void> | null = null;
 
 /**
  * Get a MySQL connection pool (singleton).
  * Configured via DATABASE_URL or individual env vars.
+ * Automatically runs pending migrations on first connection.
  */
 export function getPool(): mysql.Pool {
   if (pool) return pool;
@@ -27,7 +30,22 @@ export function getPool(): mysql.Pool {
     });
   }
 
+  // Trigger migrations on first pool creation (non-blocking)
+  if (!migrationPromise) {
+    migrationPromise = runMigrations().catch((err) => {
+      console.error("[mysql] Auto-migration failed:", err);
+    });
+  }
+
   return pool;
+}
+
+/** Wait for migrations to complete (useful for startup health checks) */
+export async function ensureMigrated(): Promise<void> {
+  getPool(); // Ensure pool and migration are triggered
+  if (migrationPromise) {
+    await migrationPromise;
+  }
 }
 
 /** Execute a query and return rows */
