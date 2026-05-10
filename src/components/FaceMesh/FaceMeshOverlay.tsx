@@ -107,11 +107,11 @@ export function FaceMeshOverlay({
                   </div>
                   <div className="absolute top-10 left-1/2 -translate-x-1/2 w-1.5 h-2 bg-[var(--color-primary)]/20 rounded-b-full" />
                 </div>
-                {/* Center dot at nose position (bottom center of head) */}
+                {/* Center dot at nose position */}
                 <div
                   className="absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full"
                   style={{
-                    top: "85%",
+                    top: "62%",
                     background: "var(--gradient-primary)",
                     boxShadow: "0 0 10px rgba(30, 58, 95, 0.4)",
                   }}
