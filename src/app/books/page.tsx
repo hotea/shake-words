@@ -105,19 +105,19 @@ export default function BooksPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors cursor-pointer"
+              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-ink-700)] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
             </Link>
-            <h1 className="text-lg font-semibold text-[var(--color-foreground)]">选择词书</h1>
+            <h1 className="text-lg font-semibold text-[var(--color-rice)]" style={{ fontFamily: "var(--font-display)" }}>选择词书</h1>
           </div>
 
           {selectedBookId && (
             <button
               onClick={handleStartLearning}
-              className="cursor-pointer inline-flex items-center gap-1.5 px-4 h-9 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-dark)] transition-colors shadow-sm"
+              className="btn-primary btn-sm"
             >
               开始学习
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
@@ -140,8 +140,8 @@ export default function BooksPage() {
                   onClick={() => setActiveCategory(cat.id)}
                   className={`cursor-pointer shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? "bg-[var(--color-primary)] text-white shadow-sm"
-                      : "bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] border border-[var(--color-border)]"
+                      ? "bg-[var(--color-primary)] text-[var(--color-rice)] shadow-[var(--shadow-glow)]"
+                      : "bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-gold)] border border-[var(--color-border)] hover:border-[var(--color-gold)]"
                   }`}
                 >
                   {cat.label}
@@ -172,18 +172,18 @@ export default function BooksPage() {
                 <div
                   key={book.id}
                   onClick={() => !isLoading && handleSelectBook(book.id)}
-                  className={`group relative cursor-pointer rounded-2xl transition-all duration-200 ${
+                  className={`group relative cursor-pointer rounded-2xl transition-all duration-200 border ${
                     isSelected
-                      ? "ring-2 ring-[var(--color-primary)]/30 bg-[var(--color-primary-dim)] shadow-sm"
-                      : "bg-[var(--color-surface)] hover:shadow-md border border-[var(--color-border)]"
+                      ? "border-[var(--color-gold)] bg-[var(--color-gold-dim)] shadow-[var(--shadow-glow-gold)]"
+                      : "border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-ink-700)] hover:shadow-[var(--shadow-glow-gold)] hover:border-[var(--color-gold)]"
                   } ${isLoading ? "opacity-60" : ""}`}
                 >
                   <div className="p-4">
                     {/* Icon */}
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${
                       isSelected
-                        ? "bg-[var(--color-primary)] text-white"
-                        : "bg-[var(--color-primary-dim)] text-[var(--color-primary)]"
+                        ? "bg-[var(--color-primary)] text-[var(--color-rice)] shadow-[var(--shadow-glow)]"
+                        : "bg-[var(--color-cinnabar-dim)] text-[var(--color-cinnabar)]"
                     }`}>
                       {isLoading ? (
                         <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
@@ -193,7 +193,7 @@ export default function BooksPage() {
                     </div>
 
                     {/* Name */}
-                    <h2 className="text-sm font-semibold text-[var(--color-foreground)] leading-snug">
+                    <h2 className="text-sm font-semibold text-[var(--color-rice)] leading-snug" style={{ fontFamily: "var(--font-sans)" }}>
                       {book.name}
                     </h2>
 
@@ -206,8 +206,8 @@ export default function BooksPage() {
 
                     {/* Selected check */}
                     {isSelected && !isLoading && (
-                      <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
-                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
+                      <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[var(--color-gold)] flex items-center justify-center">
+                        <svg className="w-3 h-3 text-[var(--color-ink-900)]" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                         </svg>
                       </div>

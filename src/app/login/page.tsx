@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth";
@@ -97,7 +97,7 @@ export default function LoginPage() {
         <header className="h-14 flex items-center px-4">
           <Link
             href="/"
-            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors cursor-pointer"
+            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-gold-dim)] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -107,12 +107,12 @@ export default function LoginPage() {
 
         <div className="flex-1 flex flex-col items-center justify-center px-6 pb-20">
           <div className="w-full max-w-sm">
-            <div className="w-14 h-14 rounded-2xl bg-[var(--color-primary)] text-white flex items-center justify-center mx-auto mb-6">
+            <div className="w-14 h-14 rounded-2xl bg-[var(--color-cinnabar)] text-[var(--color-rice)] flex items-center justify-center mx-auto mb-6 shadow-[var(--shadow-glow)]">
               <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-[var(--color-foreground)] text-center mb-2">ShakeWords</h1>
+            <h1 className="text-2xl font-bold text-[var(--color-rice)] text-center mb-2" style={{ fontFamily: "var(--font-display)" }}>ShakeWords</h1>
             <p className="text-sm text-[var(--color-muted)] text-center mb-8">摇头晃脑，轻松背词</p>
 
             <div className="card p-5">
@@ -122,8 +122,8 @@ export default function LoginPage() {
                   "本地追踪每日学习进度",
                   "使用 Face Mesh 手势控制",
                 ].map((text) => (
-                  <div key={text} className="flex items-center gap-3 text-sm text-[var(--color-muted)]">
-                    <svg className="w-4 h-4 text-[var(--color-success)] shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                  <div key={text} className="flex items-center gap-3 text-sm text-[var(--color-rice)]">
+                    <svg className="w-4 h-4 text-[var(--color-jade)] shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                     {text}
@@ -132,7 +132,7 @@ export default function LoginPage() {
               </div>
               <Link
                 href="/"
-                className="cursor-pointer w-full inline-flex justify-center items-center h-10 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-dark)] transition-colors"
+                className="cursor-pointer w-full inline-flex justify-center items-center h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-cinnabar-deep)] transition-colors shadow-[var(--shadow-glow)]"
               >
                 开始学习
               </Link>
@@ -269,7 +269,7 @@ export default function LoginPage() {
       <header className="h-14 flex items-center px-4">
         <Link
           href="/"
-          className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-background)] text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors cursor-pointer"
+          className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-gold-dim)] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -282,7 +282,7 @@ export default function LoginPage() {
         <div className="w-full max-w-sm">
           {/* Brand */}
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-[var(--color-foreground)]">
+            <h1 className="text-2xl font-bold text-[var(--color-rice)]" style={{ fontFamily: "var(--font-display)" }}>
               {mode === "login" ? "欢迎回来" : "创建账号"}
             </h1>
             <p className="text-sm text-[var(--color-muted)] mt-1.5">
@@ -295,7 +295,7 @@ export default function LoginPage() {
             <>
               <button
                 onClick={signInWithGitHub}
-                className="cursor-pointer w-full flex items-center justify-center gap-2 h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-background)] transition-colors text-sm font-medium text-[var(--color-foreground-secondary)] mb-5"
+                className="cursor-pointer w-full flex items-center justify-center gap-2 h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-ink-700)] transition-colors text-sm font-medium text-[var(--color-rice)] mb-5"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -306,7 +306,7 @@ export default function LoginPage() {
               {/* Divider */}
               <div className="flex items-center gap-3 mb-5">
                 <div className="flex-1 h-px bg-[var(--color-border)]" />
-                <span className="text-xs text-[var(--color-muted-light)] uppercase tracking-wider">or</span>
+                <span className="text-xs text-[var(--color-muted)] uppercase tracking-wider">or</span>
                 <div className="flex-1 h-px bg-[var(--color-border)]" />
               </div>
             </>
@@ -316,18 +316,17 @@ export default function LoginPage() {
           {mode === "login" && isSelfHosted && signInWithEmailCode && loginType === "code" ? (
             <form onSubmit={handleCodeLogin} className="space-y-3">
               <div>
-                <label className="block text-sm font-medium mb-1.5 text-[var(--color-foreground-secondary)]">邮箱</label>
+                <label className="block text-sm font-medium mb-1.5 text-[var(--color-rice)]">邮箱</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-3.5 h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] text-sm placeholder:text-[var(--color-muted-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary-dim)] transition-all"
                   placeholder="you@example.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5 text-[var(--color-foreground-secondary)]">验证码</label>
+                <label className="block text-sm font-medium mb-1.5 text-[var(--color-rice)]">验证码</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -335,14 +334,15 @@ export default function LoginPage() {
                     onChange={(e) => setEmailCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                     required
                     maxLength={6}
-                    className="flex-1 px-3.5 h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] text-sm placeholder:text-[var(--color-muted-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary-dim)] transition-all tracking-widest"
                     placeholder="6 位数字验证码"
+                    className="flex-1"
+                    style={{ letterSpacing: "0.15em" }}
                   />
                   <button
                     type="button"
                     onClick={handleSendCode}
                     disabled={loading || codeCooldown > 0}
-                    className="cursor-pointer shrink-0 px-3.5 h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-sm font-medium text-[var(--color-foreground-secondary)] hover:bg-[var(--color-background)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                    className="cursor-pointer shrink-0 px-3.5 h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-sm font-medium text-[var(--color-rice)] hover:bg-[var(--color-ink-700)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                   >
                     {codeCooldown > 0 ? `${codeCooldown}s` : "获取验证码"}
                   </button>
@@ -352,8 +352,8 @@ export default function LoginPage() {
               {error && (
                 <div className={`flex items-start gap-2 p-3 rounded-lg text-sm leading-relaxed ${
                   error.includes("已发送")
-                    ? "bg-[var(--color-success-dim)] text-[var(--color-success)]"
-                    : "bg-[var(--color-error-dim)] text-[var(--color-error)]"
+                    ? "bg-[var(--color-jade-dim)] text-[var(--color-jade)]"
+                    : "bg-[var(--color-cinnabar-dim)] text-[var(--color-cinnabar)]"
                 }`}>
                   <svg className={`w-4 h-4 shrink-0 mt-0.5`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     {error.includes("已发送") ? (
@@ -369,10 +369,10 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-cinnabar-deep)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[var(--shadow-glow)]"
               >
                 {loading ? (
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
+                  <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin mx-auto" />
                 ) : (
                   "登录"
                 )}
@@ -382,7 +382,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => { setLoginType("password"); setError(null); }}
-                  className="text-xs text-[var(--color-muted)] hover:text-[var(--color-foreground-secondary)] cursor-pointer"
+                  className="text-xs text-[var(--color-muted)] hover:text-[var(--color-gold)] cursor-pointer"
                 >
                   使用密码登录
                 </button>
@@ -391,25 +391,23 @@ export default function LoginPage() {
           ) : (
             <form onSubmit={handleEmailSubmit} className="space-y-3">
               <div>
-                <label className="block text-sm font-medium mb-1.5 text-[var(--color-foreground-secondary)]">邮箱</label>
+                <label className="block text-sm font-medium mb-1.5 text-[var(--color-rice)]">邮箱</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-3.5 h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] text-sm placeholder:text-[var(--color-muted-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary-dim)] transition-all"
                   placeholder="you@example.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5 text-[var(--color-foreground-secondary)]">密码</label>
+                <label className="block text-sm font-medium mb-1.5 text-[var(--color-rice)]">密码</label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-3.5 h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] text-sm placeholder:text-[var(--color-muted-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary-dim)] transition-all"
                   placeholder="至少 6 位字符"
                 />
               </div>
@@ -417,8 +415,8 @@ export default function LoginPage() {
               {error && (
                 <div className={`flex items-start gap-2 p-3 rounded-lg text-sm leading-relaxed ${
                   error.includes("成功") || error.includes("已重新") || error.includes("验证邮件")
-                    ? "bg-[var(--color-success-dim)] text-[var(--color-success)]"
-                    : "bg-[var(--color-error-dim)] text-[var(--color-error)]"
+                    ? "bg-[var(--color-jade-dim)] text-[var(--color-jade)]"
+                    : "bg-[var(--color-cinnabar-dim)] text-[var(--color-cinnabar)]"
                 }`}>
                   {error.includes("成功") || error.includes("已重新") || error.includes("验证邮件") ? (
                     <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -450,10 +448,10 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || cooldown > 0}
-                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-cinnabar-deep)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[var(--shadow-glow)]"
               >
                 {loading ? (
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
+                  <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin mx-auto" />
                 ) : cooldown > 0 ? (
                   `请等待 ${cooldown}s`
                 ) : (
@@ -465,7 +463,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => { setLoginType("code"); setError(null); }}
-                    className="text-xs text-[var(--color-muted)] hover:text-[var(--color-foreground-secondary)] cursor-pointer"
+                    className="text-xs text-[var(--color-muted)] hover:text-[var(--color-gold)] cursor-pointer"
                   >
                     使用验证码登录
                   </button>
@@ -481,7 +479,7 @@ export default function LoginPage() {
                 还没有账号？{" "}
                 <button
                   onClick={() => { setMode("signup"); setError(null); }}
-                  className="text-[var(--color-primary)] font-medium cursor-pointer hover:underline"
+                  className="text-[var(--color-cinnabar)] font-medium cursor-pointer hover:underline"
                 >
                   注册
                 </button>
@@ -491,7 +489,7 @@ export default function LoginPage() {
                 已有账号？{" "}
                 <button
                   onClick={() => { setMode("login"); setError(null); }}
-                  className="text-[var(--color-primary)] font-medium cursor-pointer hover:underline"
+                  className="text-[var(--color-cinnabar)] font-medium cursor-pointer hover:underline"
                 >
                   登录
                 </button>

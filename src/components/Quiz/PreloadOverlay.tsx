@@ -58,7 +58,7 @@ export function PreloadOverlay({ progress, error, onRetry }: PreloadOverlayProps
             </p>
             
             {/* Progress bar */}
-            <div className="w-full h-2 bg-white rounded-full overflow-hidden border border-[var(--color-border)]">
+            <div className="w-full h-2 bg-[var(--color-ink-700)] rounded-full overflow-hidden border border-[var(--color-border)]">
               <div
                 className="h-full bg-[var(--gradient-primary)] transition-all duration-300 ease-out"
                 style={{ width: `${progress.progress}%` }}

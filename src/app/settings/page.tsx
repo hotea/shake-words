@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { loadSettings, saveSettings, DEFAULT_SETTINGS, type AppSettings } from "@/lib/settings";
-import { VERSION, BUILD_TIME } from "@/lib/version";
 
 interface SliderFieldProps {
   label: string;
@@ -22,13 +21,13 @@ function SliderField({ label, description, value, min, max, step, unit, icon, on
   return (
     <div className="py-5 border-b border-[var(--color-border)]/50 last:border-b-0">
       <div className="flex items-start gap-3 mb-4">
-        <div className="w-9 h-9 rounded-xl bg-[var(--color-primary-dim)] text-[var(--color-primary)] flex items-center justify-center shrink-0 mt-0.5">
+        <div className="w-9 h-9 rounded-xl bg-[var(--color-cinnabar-dim)] text-[var(--color-cinnabar)] flex items-center justify-center shrink-0 mt-0.5">
           {icon}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
-            <span className="font-medium text-sm text-[var(--color-foreground)]">{label}</span>
-            <span className="text-sm font-mono font-semibold text-[var(--color-primary)] tabular-nums">
+            <span className="font-medium text-sm text-[var(--color-rice)]">{label}</span>
+            <span className="text-sm font-mono font-semibold text-[var(--color-cinnabar)] tabular-nums">
               {value}{unit}
             </span>
           </div>
@@ -45,10 +44,10 @@ function SliderField({ label, description, value, min, max, step, unit, icon, on
             value={value}
             onChange={(e) => onChange(Number(e.target.value))}
             className="w-full relative z-10"
-            style={{ background: `linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) ${pct}%, rgba(0,0,0,0.06) ${pct}%, rgba(0,0,0,0.06) 100%)` }}
+            style={{ background: `linear-gradient(to right, var(--color-cinnabar) 0%, var(--color-cinnabar) ${pct}%, var(--color-ink-700) ${pct}%, var(--color-ink-700) 100%)` }}
           />
         </div>
-        <div className="flex justify-between text-[10px] text-[var(--color-muted)]/60 mt-0.5">
+        <div className="flex justify-between text-[10px] text-[var(--color-muted)] mt-0.5">
           <span>{min}{unit}</span>
           <span>{max}{unit}</span>
         </div>
@@ -57,26 +56,9 @@ function SliderField({ label, description, value, min, max, step, unit, icon, on
   );
 }
 
-function formatDate(dateStr: string): string {
-  try {
-    const date = new Date(dateStr);
-    return date.toLocaleString("zh-CN", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZoneName: "short",
-    });
-  } catch {
-    return dateStr;
-  }
-}
-
 export default function SettingsPage() {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     setSettings(loadSettings());
@@ -86,24 +68,22 @@ export default function SettingsPage() {
     const updated = { ...settings, gesture: { ...settings.gesture, [key]: value } };
     setSettings(updated);
     setSaveStatus("saving");
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
+    setTimeout(() => {
       saveSettings(updated);
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 1500);
-    }, 500);
+    }, 300);
   }
 
   function updateSetting<K extends keyof AppSettings>(key: K, value: AppSettings[K]) {
     const updated = { ...settings, [key]: value };
     setSettings(updated);
     setSaveStatus("saving");
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
+    setTimeout(() => {
       saveSettings(updated);
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 1500);
-    }, 500);
+    }, 300);
   }
 
   function handleReset() {
@@ -122,26 +102,26 @@ export default function SettingsPage() {
         <div className="mb-8 animate-fade-in">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors mb-5"
+            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors mb-5"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
             返回
           </Link>
-          <h1 className="text-2xl font-bold text-[var(--color-foreground)]" style={{ fontFamily: "var(--font-heading)" }}>设置</h1>
+          <h1 className="text-2xl font-bold text-[var(--color-rice)]" style={{ fontFamily: "var(--font-display)" }}>设置</h1>
           <p className="text-sm text-[var(--color-muted)] mt-1">调整手势检测灵敏度</p>
         </div>
 
         {/* Gesture Card */}
         <div className="card p-6 mb-6 animate-fade-in-up stagger-1">
           <div className="flex items-center justify-between mb-1">
-            <h2 className="text-base font-semibold text-[var(--color-foreground)]">手势检测</h2>
+            <h2 className="text-base font-semibold text-[var(--color-rice)]">手势检测</h2>
             {saveStatus !== "idle" && (
               <span className={`text-xs px-2.5 py-1 rounded-full transition-all font-medium ${
                 saveStatus === "saving"
-                  ? "text-[var(--color-warning)] bg-[var(--color-warning-dim)]"
-                  : "text-[var(--color-success)] bg-[var(--color-success-dim)]"
+                  ? "text-[var(--color-gold)] bg-[var(--color-gold-dim)]"
+                  : "text-[var(--color-jade)] bg-[var(--color-jade-dim)]"
               }`}>
                 {saveStatus === "saving" ? "保存中..." : "已保存"}
               </span>
@@ -215,18 +195,18 @@ export default function SettingsPage() {
 
         {/* Display Card */}
         <div className="card p-6 mb-6 animate-fade-in-up stagger-2">
-          <h2 className="text-base font-semibold text-[var(--color-foreground)] mb-4">显示</h2>
+          <h2 className="text-base font-semibold text-[var(--color-rice)] mb-4">显示</h2>
 
           {/* Camera feed toggle */}
           <div className="flex items-center justify-between py-3 border-b border-[var(--color-border)]/50">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[var(--color-primary-dim)] text-[var(--color-primary)] flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-[var(--color-cinnabar-dim)] text-[var(--color-cinnabar)] flex items-center justify-center shrink-0">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
                 </svg>
               </div>
               <div>
-                <span className="font-medium text-sm text-[var(--color-foreground)]">摄像头画面</span>
+                <span className="font-medium text-sm text-[var(--color-rice)]">摄像头画面</span>
                 <p className="text-xs text-[var(--color-muted)] leading-relaxed">关闭后将用动画示意图代替原始摄像头图像</p>
               </div>
             </div>
@@ -235,11 +215,11 @@ export default function SettingsPage() {
               aria-checked={settings.showCamera}
               onClick={() => updateSetting("showCamera", !settings.showCamera)}
               className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
-                settings.showCamera ? "bg-[var(--color-primary)]" : "bg-[var(--color-muted-subtle)]"
+                settings.showCamera ? "bg-[var(--color-cinnabar)] shadow-[var(--shadow-glow)]" : "bg-[var(--color-ink-600)]"
               }`}
             >
               <span
-                className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
+                className={`inline-block h-5 w-5 rounded-full bg-[var(--color-rice)] shadow-sm transition-transform ${
                   settings.showCamera ? "translate-x-6" : "translate-x-1"
                 }`}
               />
@@ -249,24 +229,12 @@ export default function SettingsPage() {
 
         {/* Reset */}
         <div className="flex items-center gap-3 animate-fade-in-up stagger-2">
-          <button onClick={handleReset} className="text-sm text-[var(--color-muted)] hover:text-[var(--color-foreground)] transition-colors px-3 py-2 rounded-lg hover:bg-[var(--color-background)]">
+          <button onClick={handleReset} className="text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors px-3 py-2 rounded-lg hover:bg-[var(--color-gold-dim)] cursor-pointer">
             恢复默认设置
           </button>
         </div>
 
-        {/* Version Info */}
-        <div className="mt-8 pt-6 border-t border-[var(--color-border)]/50 animate-fade-in-up stagger-2">
-          <div className="flex flex-col gap-1">
-            <p className="text-xs text-[var(--color-muted)]/80 font-mono">
-              版本: <span className="font-semibold text-[var(--color-primary)]">{VERSION}</span>
-            </p>
-            <p className="text-xs text-[var(--color-muted)]/60">
-              构建时间: {formatDate(BUILD_TIME)}
-            </p>
-          </div>
-        </div>
-
-        <p className="mt-4 text-xs text-[var(--color-muted)]/60">
+        <p className="mt-4 text-xs text-[var(--color-muted)]">
           设置自动保存，下次测验时生效。
         </p>
       </div>

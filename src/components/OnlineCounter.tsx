@@ -69,13 +69,13 @@ export function OnlineCounter({ className = "" }: OnlineCounterProps) {
     >
       {/* 展开状态：显示详细数据 */}
       {expanded && (
-        <div className="mb-1 px-3 py-2 bg-white/90 backdrop-blur-sm rounded-xl border border-[var(--color-border)] shadow-sm text-xs text-[var(--color-muted)] animate-fade-in-up">
+        <div className="mb-1 px-3 py-2 bg-[var(--color-surface)]/90 backdrop-blur-sm rounded-xl border border-[var(--color-border)] shadow-[var(--shadow-md)] text-xs text-[var(--color-muted)] animate-fade-in-up">
           <div className="flex items-center gap-2 py-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]/40" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-jade)]" style={{ boxShadow: "0 0 6px rgba(106, 170, 138, 0.5)" }} />
             <span>今日 {todayCount} 人</span>
           </div>
           <div className="flex items-center gap-2 py-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]/60" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-bamboo)]" style={{ boxShadow: "0 0 6px rgba(184, 164, 114, 0.5)" }} />
             <span>累计 {totalCount} 人</span>
           </div>
         </div>
@@ -84,13 +84,13 @@ export function OnlineCounter({ className = "" }: OnlineCounterProps) {
       {/* 主按钮：当前在线 */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex items-center gap-2 px-3 py-2 bg-white/90 backdrop-blur-sm rounded-full border border-[var(--color-border)] shadow-sm text-sm text-[var(--color-foreground-secondary)] hover:border-[var(--color-primary)]/30 transition-all cursor-pointer"
+        className="flex items-center gap-2 px-3 py-2 bg-[var(--color-surface)]/90 backdrop-blur-sm rounded-full border border-[var(--color-border)] shadow-[var(--shadow-md)] text-sm text-[var(--color-rice)] hover:border-[var(--color-gold)] hover:shadow-[var(--shadow-glow-gold)] transition-all cursor-pointer"
       >
         <span className="relative flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-success)] opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-success)]"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-jade)] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-jade)]" style={{ boxShadow: "0 0 8px rgba(106, 170, 138, 0.6)" }}></span>
         </span>
-        <span className="font-medium">{count} 人在线</span>
+        <span className="font-medium" style={{ fontFamily: "var(--font-display)", letterSpacing: "0.05em" }}>{count} 人在线</span>
         <svg
           className={`w-3.5 h-3.5 text-[var(--color-muted)] transition-transform ${expanded ? "rotate-180" : ""}`}
           fill="none"
