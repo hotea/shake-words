@@ -21,7 +21,7 @@ export function AuthHeader() {
           <div
             className="w-4 h-4 border-2 rounded-full animate-spin"
             style={{
-              borderColor: "var(--color-cinnabar)",
+              borderColor: "var(--color-jade)",
               borderTopColor: "transparent",
             }}
           />
@@ -66,7 +66,7 @@ export function AuthHeader() {
           style={{ color: "var(--color-muted)" }}
           title="登录"
           onMouseEnter={(e) =>
-            (e.currentTarget.style.color = "var(--color-gold)")
+            (e.currentTarget.style.color = "var(--color-bamboo)")
           }
           onMouseLeave={(e) =>
             (e.currentTarget.style.color = "var(--color-muted)")

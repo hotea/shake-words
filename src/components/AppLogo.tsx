@@ -26,7 +26,7 @@ export function AppLogo({
     >
       {/* 墨字符号：摇头晃脑 */}
       <span
-        className="text-[var(--color-gold)] font-bold leading-none"
+        className="text-[var(--color-bamboo)] font-bold leading-none"
         style={{
           fontFamily: "var(--font-brand)",
           fontSize:

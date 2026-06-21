@@ -192,6 +192,8 @@ export function usePoetryQuiz(): UsePoetryQuizReturn {
   const startPoem = useCallback((p: Poem, currentMode: PoetryMode = modeRef.current) => {
     setPoem(p);
     poemRef.current = p;
+    setMode(currentMode);
+    modeRef.current = currentMode;
     setPlaced([]);
     placedRef.current = [];
     setTargetIndex(0);

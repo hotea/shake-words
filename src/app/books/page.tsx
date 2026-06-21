@@ -105,7 +105,7 @@ export default function BooksPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-ink-700)] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
+              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-ink-700)] text-[var(--color-muted)] hover:text-[var(--color-bamboo)] transition-colors cursor-pointer"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -141,7 +141,7 @@ export default function BooksPage() {
                   className={`cursor-pointer shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                     isActive
                       ? "bg-[var(--color-primary)] text-[var(--color-rice)] shadow-[var(--shadow-glow)]"
-                      : "bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-gold)] border border-[var(--color-border)] hover:border-[var(--color-gold)]"
+                      : "bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-bamboo)] border border-[var(--color-border)] hover:border-[var(--color-bamboo)]"
                   }`}
                 >
                   {cat.label}
@@ -174,8 +174,8 @@ export default function BooksPage() {
                   onClick={() => !isLoading && handleSelectBook(book.id)}
                   className={`group relative cursor-pointer rounded-2xl transition-all duration-200 border ${
                     isSelected
-                      ? "border-[var(--color-gold)] bg-[var(--color-gold-dim)] shadow-[var(--shadow-glow-gold)]"
-                      : "border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-ink-700)] hover:shadow-[var(--shadow-glow-gold)] hover:border-[var(--color-gold)]"
+                      ? "border-[var(--color-bamboo)] bg-[var(--color-bamboo-dim)] shadow-[var(--shadow-glow-bamboo)]"
+                      : "border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-ink-700)] hover:shadow-[var(--shadow-glow-bamboo)] hover:border-[var(--color-bamboo)]"
                   } ${isLoading ? "opacity-60" : ""}`}
                 >
                   <div className="p-4">
@@ -183,7 +183,7 @@ export default function BooksPage() {
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${
                       isSelected
                         ? "bg-[var(--color-primary)] text-[var(--color-rice)] shadow-[var(--shadow-glow)]"
-                        : "bg-[var(--color-cinnabar-dim)] text-[var(--color-cinnabar)]"
+                        : "bg-[var(--color-jade-dim)] text-[var(--color-jade)]"
                     }`}>
                       {isLoading ? (
                         <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
@@ -206,7 +206,7 @@ export default function BooksPage() {
 
                     {/* Selected check */}
                     {isSelected && !isLoading && (
-                      <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[var(--color-gold)] flex items-center justify-center">
+                      <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[var(--color-bamboo)] flex items-center justify-center">
                         <svg className="w-3 h-3 text-[var(--color-ink-900)]" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                         </svg>

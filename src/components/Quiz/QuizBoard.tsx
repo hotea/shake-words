@@ -251,7 +251,7 @@ export function QuizBoard({
             style={{
               background: "var(--color-surface)",
               border: "1px solid var(--color-border)",
-              color: "var(--color-gold)",
+              color: "var(--color-bamboo)",
             }}
           >
             <svg
@@ -305,7 +305,7 @@ export function QuizBoard({
               <span
                 className="text-base font-semibold"
                 style={{
-                  color: "var(--color-gold-bright)",
+                  color: "var(--color-bamboo-bright)",
                   fontFamily: "var(--font-brand)",
                 }}
               >
@@ -328,7 +328,7 @@ export function QuizBoard({
         <div className="flex items-center gap-2">
           <button
             onClick={onToggleInput}
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-gold)] hover:text-[var(--color-gold)]"
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-bamboo)] hover:text-[var(--color-bamboo)]"
             style={{
               background: "var(--color-surface)",
               border: "1px solid var(--color-border)",
@@ -384,7 +384,7 @@ export function QuizBoard({
 
           <button
             onClick={cycleFontSize}
-            className="flex items-center justify-center px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-gold)] hover:text-[var(--color-gold)]"
+            className="flex items-center justify-center px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-bamboo)] hover:text-[var(--color-bamboo)]"
             style={{
               background: "var(--color-surface)",
               border: "1px solid var(--color-border)",
@@ -411,7 +411,7 @@ export function QuizBoard({
 
           <button
             onClick={toggleFullscreen}
-            className="flex items-center justify-center px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-gold)] hover:text-[var(--color-gold)]"
+            className="flex items-center justify-center px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-bamboo)] hover:text-[var(--color-bamboo)]"
             style={{
               background: "var(--color-surface)",
               border: "1px solid var(--color-border)",
@@ -452,7 +452,7 @@ export function QuizBoard({
 
           <Link
             href="/settings"
-            className="flex items-center justify-center px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-gold)] hover:text-[var(--color-gold)]"
+            className="flex items-center justify-center px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-bamboo)] hover:text-[var(--color-bamboo)]"
             style={{
               background: "var(--color-surface)",
               border: "1px solid var(--color-border)",
@@ -506,7 +506,7 @@ export function QuizBoard({
               <button
                 onClick={() => onSpeakWord?.(question.word.word)}
                 className={`${fs.button} rounded-lg flex items-center justify-center transition-all hover:scale-105`}
-                style={{ background: "var(--color-gold-dim)", border: "1px solid var(--color-border)", color: "var(--color-gold-bright)" }}
+                style={{ background: "var(--color-bamboo-dim)", border: "1px solid var(--color-border)", color: "var(--color-bamboo-bright)" }}
                 title="发音"
               >
                 <svg className={`${fs.buttonIcon}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -539,7 +539,7 @@ export function QuizBoard({
         {/* 圆环容器 */}
         <div className="z-10 relative w-full max-w-[480px] sm:max-w-[560px] md:max-w-[640px]" style={{ aspectRatio: "1/1" }}>
           {/* 装饰圆环 */}
-          <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle, var(--color-gold-dim) 0%, transparent 70%)" }} />
+          <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle, var(--color-bamboo-dim) 0%, transparent 70%)" }} />
           <div className="absolute rounded-full border border-dashed border-[var(--color-border)] opacity-40"
             style={{ inset: "12%" }} />
 
@@ -566,7 +566,7 @@ export function QuizBoard({
               <div className="flex items-center gap-1 px-3 py-2 rounded-lg" style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}>
                 {["W", "A", "S", "D"].map((key) => (
                   <span key={key} className="px-2 py-1 rounded text-xs font-mono"
-                    style={{ background: "var(--color-ink-700)", color: "var(--color-gold-bright)", border: "1px solid var(--color-border)", fontFamily: "var(--font-mono)" }}>
+                    style={{ background: "var(--color-ink-700)", color: "var(--color-bamboo-bright)", border: "1px solid var(--color-border)", fontFamily: "var(--font-mono)" }}>
                     {key}
                   </span>
                 ))}
@@ -646,7 +646,7 @@ export function QuizBoard({
               style={{
                 width: `${Math.min((sessionCount % 10) * 10, 100)}%`,
                 background:
-                  "linear-gradient(90deg, var(--color-cinnabar), var(--color-gold))",
+                  "linear-gradient(90deg, var(--color-jade-deep), var(--color-jade-bright))",
               }}
             />
           </div>

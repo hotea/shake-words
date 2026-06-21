@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 
 const features = [
   { icon: "視", title: "AI 视觉交互", desc: "头部动作实时识别，抬头点头即选答案", accent: "gold" },
-  { icon: "頸", title: "颈椎友好", desc: "答题即颈部运动，学习中自然放松", accent: "cinnabar" },
+  { icon: "頸", title: "颈椎友好", desc: "答题即颈部运动，学习中自然放松", accent: "bamboo" },
   { icon: "詩", title: "双内容体系", desc: "英语词书 + 古诗古文，同一动作两种收获", accent: "jade" },
   { icon: "憶", title: "间隔重复", desc: "SM-2 算法调度，在遗忘临界点复习", accent: "gold" },
-  { icon: "計", title: "学习追踪", desc: "正确率、连续记录，量化每次进步", accent: "cinnabar" },
+  { icon: "計", title: "学习追踪", desc: "正确率、连续记录，量化每次进步", accent: "bamboo" },
   { icon: "隱", title: "隐私至上", desc: "本地识别不上传，进度可随时导出删除", accent: "jade" },
 ];
 
@@ -25,7 +25,7 @@ export default function Home() {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="flex flex-col leading-tight">
               <span
-                className="text-xl text-[var(--color-rice)] tracking-[0.3em] group-hover:text-[var(--color-gold)] transition-colors"
+                className="text-xl text-[var(--color-rice)] tracking-[0.3em] group-hover:text-[var(--color-bamboo)] transition-colors"
                 style={{ fontFamily: "var(--font-brand)" }}
               >
                 晃晃学
@@ -49,7 +49,7 @@ export default function Home() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm text-[var(--color-muted)] hover:text-[var(--color-gold-bright)] transition-colors tracking-[0.25em]"
+                className="text-sm text-[var(--color-muted)] hover:text-[var(--color-bamboo-bright)] transition-colors tracking-[0.25em]"
               >
                 {item.label}
               </Link>
@@ -57,13 +57,13 @@ export default function Home() {
             <div className="w-px h-5 bg-[var(--color-border)]" />
             <Link
               href="/quiz"
-              className="text-sm text-[var(--color-rice)] hover:text-[var(--color-cinnabar-light)] transition-colors tracking-[0.2em]"
+              className="text-sm text-[var(--color-rice)] hover:text-[var(--color-bamboo-bright)] transition-colors tracking-[0.2em]"
             >
               背单词 →
             </Link>
             <Link
               href="/poetry"
-              className="text-sm text-[var(--color-rice)] hover:text-[var(--color-gold-bright)] transition-colors tracking-[0.2em]"
+              className="text-sm text-[var(--color-rice)] hover:text-[var(--color-bamboo-bright)] transition-colors tracking-[0.2em]"
             >
               拼诗词 →
             </Link>
@@ -78,7 +78,7 @@ export default function Home() {
       </header>
 
       {/* ===== Hero ===== */}
-      <main className="flex-1 flex flex-col items-center justify-center relative overflow-hidden">
+      <main className="flex-1 w-full relative overflow-hidden">
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -87,20 +87,20 @@ export default function Home() {
           }}
         />
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-24 md:py-32">
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-6 py-24 md:py-32 text-center">
           {/* 顶部小标签 */}
           <div
             className="flex items-center justify-center gap-4 mb-10 animate-fade-in"
             style={{ animationDelay: "0.05s", animationFillMode: "both" }}
           >
-            <div className="h-px w-10 bg-gradient-to-r from-transparent to-[var(--color-gold)] opacity-60" />
+            <div className="h-px w-10 bg-gradient-to-r from-transparent to-[var(--color-bamboo)] opacity-60" />
             <span
-              className="text-xs tracking-[0.4em] text-[var(--color-gold)] uppercase"
+              className="text-xs tracking-[0.4em] text-[var(--color-bamboo)] uppercase"
               style={{ fontFamily: "var(--font-en)" }}
             >
               AI · Vision · Interaction
             </span>
-            <div className="h-px w-10 bg-gradient-to-l from-transparent to-[var(--color-gold)] opacity-60" />
+            <div className="h-px w-10 bg-gradient-to-l from-transparent to-[var(--color-bamboo)] opacity-60" />
           </div>
 
           {/* 主标题 */}
@@ -116,7 +116,7 @@ export default function Home() {
           >
             晃晃学
             <span
-              className="block text-[var(--color-gold-bright)] mt-4 font-normal"
+              className="block text-[var(--color-bamboo-bright)] mt-4 font-normal"
               style={{
                 fontFamily: "var(--font-en)",
                 fontSize: "clamp(18px, 2.8vw, 42px)",
@@ -195,7 +195,7 @@ export default function Home() {
             {/* 标题 */}
             <div className="text-center mb-20">
               <div
-                className="text-xs tracking-[0.4em] text-[var(--color-gold)] uppercase mb-4"
+                className="text-xs tracking-[0.4em] text-[var(--color-bamboo)] uppercase mb-4"
                 style={{ fontFamily: "var(--font-en)" }}
               >
                 Features
@@ -216,22 +216,22 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {features.map((feature, idx) => {
                 const accentColor =
-                  feature.accent === "cinnabar"
-                    ? "var(--color-cinnabar)"
+                  feature.accent === "bamboo"
+                    ? "var(--color-bamboo)"
                     : feature.accent === "jade"
                     ? "var(--color-jade)"
-                    : "var(--color-gold)";
+                    : "var(--color-bamboo)";
                 const accentDim =
-                  feature.accent === "cinnabar"
-                    ? "var(--color-cinnabar-dim)"
+                  feature.accent === "bamboo"
+                    ? "var(--color-bamboo-dim)"
                     : feature.accent === "jade"
                     ? "var(--color-jade-dim)"
-                    : "var(--color-gold-dim)";
+                    : "var(--color-bamboo-dim)";
 
                 return (
                   <div
                     key={idx}
-                    className="group relative p-8 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-gold)]/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden"
+                    className="group relative p-8 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-bamboo)]/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden"
                   >
                     {/* 顶部装饰发光线 */}
                     <div
@@ -293,7 +293,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-16">
               <div
-                className="text-xs tracking-[0.4em] text-[var(--color-gold)] uppercase mb-4"
+                className="text-xs tracking-[0.4em] text-[var(--color-bamboo)] uppercase mb-4"
                 style={{ fontFamily: "var(--font-en)" }}
               >
                 Interaction Flow
@@ -321,7 +321,7 @@ export default function Home() {
                   className="absolute inset-0 rounded-full border border-[var(--color-border)]"
                   style={{
                     background:
-                      "radial-gradient(circle, var(--color-gold-dim) 0%, transparent 70%)",
+                      "radial-gradient(circle, var(--color-bamboo-dim) 0%, transparent 70%)",
                   }}
                 />
                 <div className="absolute inset-10 rounded-full border border-dashed border-[var(--color-border)] opacity-60" />
@@ -331,8 +331,8 @@ export default function Home() {
                     className="w-40 h-40 rounded-full flex items-center justify-center"
                     style={{
                       background:
-                        "radial-gradient(circle, var(--color-cinnabar-dim), transparent 80%)",
-                      border: "1px solid var(--color-cinnabar-glow)",
+                      "radial-gradient(circle, var(--color-jade-dim), transparent 80%)",
+                    border: "1px solid var(--color-jade-glow)",
                     }}
                   >
                     <div
@@ -355,7 +355,7 @@ export default function Home() {
                     className={`absolute ${d.pos} flex flex-col items-center gap-1`}
                   >
                     <span
-                      className="text-2xl text-[var(--color-gold-bright)]"
+                      className="text-2xl text-[var(--color-bamboo-bright)]"
                       style={{ fontFamily: "var(--font-brand)" }}
                     >
                       {d.arrow}
@@ -389,7 +389,7 @@ export default function Home() {
                     className="flex gap-5 items-start p-5 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]"
                   >
                     <div
-                      className="shrink-0 w-10 h-10 rounded flex items-center justify-center text-[var(--color-gold-bright)] bg-[var(--color-gold-dim)] border border-[var(--color-border)]"
+                      className="shrink-0 w-10 h-10 rounded flex items-center justify-center text-[var(--color-bamboo-bright)] bg-[var(--color-bamboo-dim)] border border-[var(--color-border)]"
                       style={{ fontFamily: "var(--font-brand)" }}
                     >
                       {idx + 1}
@@ -427,7 +427,7 @@ export default function Home() {
                 className="absolute -top-px left-1/2 -translate-x-1/2 w-40 h-px"
                 style={{
                   background:
-                    "linear-gradient(90deg, transparent, var(--color-cinnabar), transparent)",
+                    "linear-gradient(90deg, transparent, var(--color-bamboo), transparent)",
                 }}
               />
               <h3

@@ -97,7 +97,7 @@ export default function LoginPage() {
         <header className="h-14 flex items-center px-4">
           <Link
             href="/"
-            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-gold-dim)] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
+            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-bamboo-dim)] text-[var(--color-muted)] hover:text-[var(--color-bamboo)] transition-colors cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -107,7 +107,7 @@ export default function LoginPage() {
 
         <div className="flex-1 flex flex-col items-center justify-center px-6 pb-20">
           <div className="w-full max-w-sm">
-            <div className="w-14 h-14 rounded-2xl bg-[var(--color-cinnabar)] text-[var(--color-rice)] flex items-center justify-center mx-auto mb-6 shadow-[var(--shadow-glow)]">
+            <div className="w-14 h-14 rounded-2xl bg-[var(--color-jade)] text-[var(--color-rice)] flex items-center justify-center mx-auto mb-6 shadow-[var(--shadow-glow)]">
               <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
               </svg>
@@ -132,7 +132,7 @@ export default function LoginPage() {
               </div>
               <Link
                 href="/"
-                className="cursor-pointer w-full inline-flex justify-center items-center h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-cinnabar-deep)] transition-colors shadow-[var(--shadow-glow)]"
+                className="cursor-pointer w-full inline-flex justify-center items-center h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-jade-deep)] transition-colors shadow-[var(--shadow-glow)]"
               >
                 开始学习
               </Link>
@@ -269,7 +269,7 @@ export default function LoginPage() {
       <header className="h-14 flex items-center px-4">
         <Link
           href="/"
-          className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-gold-dim)] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
+          className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-bamboo-dim)] text-[var(--color-muted)] hover:text-[var(--color-bamboo)] transition-colors cursor-pointer"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -369,7 +369,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-cinnabar-deep)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[var(--shadow-glow)]"
+                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-jade-deep)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[var(--shadow-glow)]"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin mx-auto" />
@@ -382,7 +382,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => { setLoginType("password"); setError(null); }}
-                  className="text-xs text-[var(--color-muted)] hover:text-[var(--color-gold)] cursor-pointer"
+                  className="text-xs text-[var(--color-muted)] hover:text-[var(--color-bamboo)] cursor-pointer"
                 >
                   使用密码登录
                 </button>
@@ -448,7 +448,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || cooldown > 0}
-                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-cinnabar-deep)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[var(--shadow-glow)]"
+                className="cursor-pointer w-full h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-sm font-medium hover:bg-[var(--color-jade-deep)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[var(--shadow-glow)]"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin mx-auto" />
@@ -463,7 +463,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => { setLoginType("code"); setError(null); }}
-                    className="text-xs text-[var(--color-muted)] hover:text-[var(--color-gold)] cursor-pointer"
+                    className="text-xs text-[var(--color-muted)] hover:text-[var(--color-bamboo)] cursor-pointer"
                   >
                     使用验证码登录
                   </button>
@@ -479,7 +479,7 @@ export default function LoginPage() {
                 还没有账号？{" "}
                 <button
                   onClick={() => { setMode("signup"); setError(null); }}
-                  className="text-[var(--color-cinnabar)] font-medium cursor-pointer hover:underline"
+                  className="text-[var(--color-jade)] font-medium cursor-pointer hover:underline"
                 >
                   注册
                 </button>
@@ -489,7 +489,7 @@ export default function LoginPage() {
                 已有账号？{" "}
                 <button
                   onClick={() => { setMode("login"); setError(null); }}
-                  className="text-[var(--color-cinnabar)] font-medium cursor-pointer hover:underline"
+                  className="text-[var(--color-jade)] font-medium cursor-pointer hover:underline"
                 >
                   登录
                 </button>

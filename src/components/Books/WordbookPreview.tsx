@@ -37,7 +37,7 @@ export default function WordbookPreview({
                   {words.length} 个单词
                 </span>
                 {book.isCustom && (
-                  <span className="badge badge-gold">
+                  <span className="badge badge-bamboo">
                     自定义
                   </span>
                 )}
@@ -86,9 +86,9 @@ export default function WordbookPreview({
               {filteredWords.map((word, index) => (
                 <div
                   key={word.id}
-                  className="flex items-start gap-4 p-3 rounded-lg hover:bg-[var(--color-gold-dim)] transition-colors cursor-pointer border border-transparent hover:border-[var(--color-border)]"
+                  className="flex items-start gap-4 p-3 rounded-lg hover:bg-[var(--color-bamboo-dim)] transition-colors cursor-pointer border border-transparent hover:border-[var(--color-border)]"
                 >
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-ink-700)] text-[var(--color-gold)] flex items-center justify-center text-sm font-medium">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-ink-700)] text-[var(--color-bamboo)] flex items-center justify-center text-sm font-medium">
                     {index + 1}
                   </span>
                   <div className="flex-1 min-w-0">

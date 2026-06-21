@@ -21,13 +21,13 @@ function SliderField({ label, description, value, min, max, step, unit, icon, on
   return (
     <div className="py-5 border-b border-[var(--color-border)]/50 last:border-b-0">
       <div className="flex items-start gap-3 mb-4">
-        <div className="w-9 h-9 rounded-xl bg-[var(--color-cinnabar-dim)] text-[var(--color-cinnabar)] flex items-center justify-center shrink-0 mt-0.5">
+        <div className="w-9 h-9 rounded-xl bg-[var(--color-jade-dim)] text-[var(--color-jade)] flex items-center justify-center shrink-0 mt-0.5">
           {icon}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
             <span className="font-medium text-sm text-[var(--color-rice)]">{label}</span>
-            <span className="text-sm font-mono font-semibold text-[var(--color-cinnabar)] tabular-nums">
+            <span className="text-sm font-mono font-semibold text-[var(--color-jade)] tabular-nums">
               {value}{unit}
             </span>
           </div>
@@ -44,7 +44,7 @@ function SliderField({ label, description, value, min, max, step, unit, icon, on
             value={value}
             onChange={(e) => onChange(Number(e.target.value))}
             className="w-full relative z-10"
-            style={{ background: `linear-gradient(to right, var(--color-cinnabar) 0%, var(--color-cinnabar) ${pct}%, var(--color-ink-700) ${pct}%, var(--color-ink-700) 100%)` }}
+            style={{ background: `linear-gradient(to right, var(--color-jade) 0%, var(--color-jade) ${pct}%, var(--color-ink-700) ${pct}%, var(--color-ink-700) 100%)` }}
           />
         </div>
         <div className="flex justify-between text-[10px] text-[var(--color-muted)] mt-0.5">
@@ -102,7 +102,7 @@ export default function SettingsPage() {
         <div className="mb-8 animate-fade-in">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors mb-5"
+            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-bamboo)] transition-colors mb-5"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -120,7 +120,7 @@ export default function SettingsPage() {
             {saveStatus !== "idle" && (
               <span className={`text-xs px-2.5 py-1 rounded-full transition-all font-medium ${
                 saveStatus === "saving"
-                  ? "text-[var(--color-gold)] bg-[var(--color-gold-dim)]"
+                  ? "text-[var(--color-bamboo)] bg-[var(--color-bamboo-dim)]"
                   : "text-[var(--color-jade)] bg-[var(--color-jade-dim)]"
               }`}>
                 {saveStatus === "saving" ? "保存中..." : "已保存"}
@@ -200,7 +200,7 @@ export default function SettingsPage() {
           {/* Camera feed toggle */}
           <div className="flex items-center justify-between py-3 border-b border-[var(--color-border)]/50">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[var(--color-cinnabar-dim)] text-[var(--color-cinnabar)] flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-[var(--color-jade-dim)] text-[var(--color-jade)] flex items-center justify-center shrink-0">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
                 </svg>
@@ -215,7 +215,7 @@ export default function SettingsPage() {
               aria-checked={settings.showCamera}
               onClick={() => updateSetting("showCamera", !settings.showCamera)}
               className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
-                settings.showCamera ? "bg-[var(--color-cinnabar)] shadow-[var(--shadow-glow)]" : "bg-[var(--color-ink-600)]"
+                settings.showCamera ? "bg-[var(--color-jade)] shadow-[var(--shadow-glow)]" : "bg-[var(--color-ink-600)]"
               }`}
             >
               <span
@@ -229,7 +229,7 @@ export default function SettingsPage() {
 
         {/* Reset */}
         <div className="flex items-center gap-3 animate-fade-in-up stagger-2">
-          <button onClick={handleReset} className="text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors px-3 py-2 rounded-lg hover:bg-[var(--color-gold-dim)] cursor-pointer">
+          <button onClick={handleReset} className="text-sm text-[var(--color-muted)] hover:text-[var(--color-bamboo)] transition-colors px-3 py-2 rounded-lg hover:bg-[var(--color-bamboo-dim)] cursor-pointer">
             恢复默认设置
           </button>
         </div>

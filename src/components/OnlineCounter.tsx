@@ -84,7 +84,7 @@ export function OnlineCounter({ className = "" }: OnlineCounterProps) {
       {/* 主按钮：当前在线 */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex items-center gap-2 px-3 py-2 bg-[var(--color-surface)]/90 backdrop-blur-sm rounded-full border border-[var(--color-border)] shadow-[var(--shadow-md)] text-sm text-[var(--color-rice)] hover:border-[var(--color-gold)] hover:shadow-[var(--shadow-glow-gold)] transition-all cursor-pointer"
+        className="flex items-center gap-2 px-3 py-2 bg-[var(--color-surface)]/90 backdrop-blur-sm rounded-full border border-[var(--color-border)] shadow-[var(--shadow-md)] text-sm text-[var(--color-rice)] hover:border-[var(--color-bamboo)] hover:shadow-[var(--shadow-glow-bamboo)] transition-all cursor-pointer"
       >
         <span className="relative flex h-2.5 w-2.5">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-jade)] opacity-75"></span>

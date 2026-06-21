@@ -106,9 +106,9 @@ export function OptionCard({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "8px",
-    color: "var(--color-gold-bright)",
+    color: "var(--color-bamboo-bright)",
     fontFamily: "var(--font-brand)",
-    background: "var(--color-gold-dim)",
+    background: "var(--color-bamboo-dim)",
     border: "1px solid rgba(184, 164, 114, 0.2)",
     transition: "all 0.3s ease",
   };

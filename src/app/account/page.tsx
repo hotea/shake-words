@@ -96,7 +96,7 @@ function AccountContent() {
       <header className="h-14 flex items-center px-4">
         <Link
           href="/"
-          className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-gold-dim)] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
+          className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[var(--color-bamboo-dim)] text-[var(--color-muted)] hover:text-[var(--color-bamboo)] transition-colors cursor-pointer"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -129,7 +129,7 @@ function AccountContent() {
                       <button
                         onClick={handleSaveName}
                         disabled={nameSaving}
-                        className="cursor-pointer px-2.5 h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-xs font-medium hover:bg-[var(--color-cinnabar-deep)] transition-colors disabled:opacity-50 whitespace-nowrap"
+                        className="cursor-pointer px-2.5 h-10 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-xs font-medium hover:bg-[var(--color-jade-deep)] transition-colors disabled:opacity-50 whitespace-nowrap"
                       >
                         {nameSaving ? "..." : "保存"}
                       </button>
@@ -145,7 +145,7 @@ function AccountContent() {
                       <span className="text-sm text-[var(--color-rice)] truncate">{user.name || "未设置"}</span>
                       <button
                         onClick={() => { setEditingName(true); setNameValue(user.name ?? ""); }}
-                        className="cursor-pointer text-xs text-[var(--color-cinnabar)] hover:underline shrink-0"
+                        className="cursor-pointer text-xs text-[var(--color-jade)] hover:underline shrink-0"
                       >
                         修改
                       </button>
@@ -168,7 +168,7 @@ function AccountContent() {
                     已验证
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--color-gold-dim)] text-[var(--color-gold)] text-[11px] font-medium">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--color-bamboo-dim)] text-[var(--color-bamboo)] text-[11px] font-medium">
                     未验证
                   </span>
                 )}
@@ -181,7 +181,7 @@ function AccountContent() {
                     <button
                       onClick={handleSendVerifyLink}
                       disabled={sendingLink}
-                      className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-xs font-medium hover:bg-[var(--color-cinnabar-deep)] transition-colors disabled:opacity-50 shadow-[var(--shadow-glow)]"
+                      className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[var(--color-primary)] text-[var(--color-rice)] text-xs font-medium hover:bg-[var(--color-jade-deep)] transition-colors disabled:opacity-50 shadow-[var(--shadow-glow)]"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
@@ -203,7 +203,7 @@ function AccountContent() {
           <div className="mt-8">
             <button
               onClick={handleSignOut}
-              className="cursor-pointer w-full h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-cinnabar)] text-sm font-medium hover:bg-[var(--color-ink-700)] transition-colors"
+              className="cursor-pointer w-full h-10 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-jade)] text-sm font-medium hover:bg-[var(--color-ink-700)] transition-colors"
             >
               退出登录
             </button>

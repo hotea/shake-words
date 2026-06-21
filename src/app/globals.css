@@ -14,11 +14,11 @@
   --color-ink-600: #284034;
 
   /* === 主色：青玉绿 === */
-  --color-jade: #6aaa8a;
-  --color-jade-deep: #4a8a6a;
-  --color-jade-bright: #8acaaa;
-  --color-jade-dim: rgba(106, 170, 138, 0.12);
-  --color-jade-glow: rgba(106, 170, 138, 0.25);
+  --color-jade: #7cc4a0;
+  --color-jade-deep: #5a9a7a;
+  --color-jade-bright: #a0e0c0;
+  --color-jade-dim: rgba(124, 196, 160, 0.12);
+  --color-jade-glow: rgba(124, 196, 160, 0.25);
 
   /* === 辅色：竹黄 === */
   --color-bamboo: #b8a472;
@@ -34,17 +34,10 @@
   --color-cinnabar-dim: rgba(200, 57, 46, 0.12);
   --color-cinnabar-glow: rgba(200, 57, 46, 0.25);
 
-  /* === 兼容旧名 === */
-  --color-gold: var(--color-bamboo);
-  --color-gold-bright: var(--color-bamboo-bright);
-  --color-gold-deep: var(--color-bamboo-deep);
-  --color-gold-dim: var(--color-bamboo-dim);
-  --color-gold-glow: var(--color-bamboo-glow);
-
   /* === 文本色：宣纸 === */
   --color-rice: #e8e4d8;
   --color-rice-warm: #ddd8c8;
-  --color-rice-muted: #b8b2a2;
+  --color-rice-muted: #c8c2b2;
 
   /* === 语义色映射 === */
   --color-primary: var(--color-jade);
@@ -58,9 +51,9 @@
   --color-accent-dark: var(--color-bamboo-deep);
   --color-accent-dim: var(--color-bamboo-dim);
 
-  --color-success: #6aaa8a;
-  --color-success-light: #8acaaa;
-  --color-success-dim: rgba(106, 170, 138, 0.14);
+  --color-success: #7cc4a0;
+  --color-success-light: #a0e0c0;
+  --color-success-dim: rgba(124, 196, 160, 0.14);
 
   --color-error: #c8392e;
   --color-error-light: #e85346;
@@ -69,8 +62,8 @@
   --color-warning: #b8a472;
   --color-warning-dim: rgba(184, 164, 114, 0.14);
 
-  --color-info: #5a9ab5;
-  --color-info-dim: rgba(90, 154, 181, 0.14);
+  --color-info: #5ab5a5;
+  --color-info-dim: rgba(90, 181, 165, 0.14);
 
   /* === 背景与表面 === */
   --color-background: var(--color-ink-900);
@@ -82,12 +75,12 @@
   --color-foreground: var(--color-rice);
   --color-foreground-secondary: var(--color-rice-warm);
   --color-muted: var(--color-rice-muted);
-  --color-muted-light: #8a847a;
+  --color-muted-light: #9a948a;
   --color-muted-subtle: #4a4a40;
 
   /* === 边框 === */
-  --color-border: rgba(106, 170, 138, 0.18);
-  --color-border-light: rgba(106, 170, 138, 0.1);
+  --color-border: rgba(124, 196, 160, 0.18);
+  --color-border-light: rgba(124, 196, 160, 0.1);
   --color-border-hover: var(--color-jade);
 
   /* === 阴影 === */
@@ -96,18 +89,18 @@
   --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.55);
   --shadow-xl: 0 24px 48px -8px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 30px rgba(106, 170, 138, 0.2);
-  --shadow-glow-gold: 0 0 30px rgba(184, 164, 114, 0.25);
+  --shadow-glow: 0 0 30px rgba(124, 196, 160, 0.2);
+  --shadow-glow-bamboo: 0 0 30px rgba(184, 164, 114, 0.25);
 
   /* === 渐变 === */
   --gradient-primary: linear-gradient(135deg, var(--color-jade) 0%, var(--color-jade-deep) 100%);
   --gradient-primary-hover: linear-gradient(135deg, var(--color-jade-bright) 0%, var(--color-jade) 100%);
   --gradient-accent: linear-gradient(135deg, var(--color-bamboo) 0%, var(--color-bamboo-deep) 100%);
-  --gradient-hero: radial-gradient(ellipse at 20% 20%, rgba(106, 170, 138, 0.12), transparent 50%),
+  --gradient-hero: radial-gradient(ellipse at 20% 20%, rgba(124, 196, 160, 0.12), transparent 50%),
                    radial-gradient(ellipse at 80% 70%, rgba(184, 164, 114, 0.08), transparent 50%),
                    linear-gradient(180deg, var(--color-ink-950) 0%, var(--color-ink-900) 100%);
   --gradient-surface: linear-gradient(180deg, var(--color-ink-800) 0%, var(--color-ink-900) 100%);
-  --gradient-subtle: linear-gradient(135deg, rgba(106, 170, 138, 0.04) 0%, rgba(184, 164, 114, 0.03) 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(124, 196, 160, 0.04) 0%, rgba(184, 164, 114, 0.03) 100%);
   --gradient-card: linear-gradient(180deg, rgba(28, 46, 36, 0.8) 0%, rgba(18, 30, 24, 0.9) 100%);
 
   /* === 排版 === */
@@ -172,35 +165,23 @@
   --transition-slow: 500ms var(--ease-out-expo);
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
   color: var(--color-foreground);
   background: var(--color-background);
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.65;
   letter-spacing: 0.01em;
-  position: relative;
 }
 
 /* 背景装饰 — 竹影墨韵 */
@@ -210,7 +191,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 800px 600px at 90% 10%, rgba(106, 170, 138, 0.06), transparent 60%),
+    radial-gradient(ellipse 800px 600px at 90% 10%, rgba(124, 196, 160, 0.06), transparent 60%),
     radial-gradient(ellipse 600px 500px at 0% 100%, rgba(184, 164, 114, 0.04), transparent 60%),
     radial-gradient(ellipse 400px 400px at 50% 50%, rgba(28, 46, 36, 0.4), transparent 70%);
   z-index: 0;
@@ -279,7 +260,7 @@ a {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(106, 170, 138, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(124, 196, 160, 0.3), transparent);
   opacity: 0;
   transition: opacity var(--transition-base);
 }
@@ -463,7 +444,7 @@ a {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(106, 170, 138, 0.08), transparent 60%);
+  background: radial-gradient(circle at 50% 0%, rgba(124, 196, 160, 0.08), transparent 60%);
   opacity: 0;
   transition: opacity var(--transition-base);
   pointer-events: none;
@@ -551,16 +532,16 @@ a {
 .badge-primary {
   background: var(--color-jade-dim);
   color: var(--color-jade-bright);
-  border: 1px solid rgba(106, 170, 138, 0.3);
+  border: 1px solid rgba(124, 196, 160, 0.3);
 }
 
 .badge-success {
   background: var(--color-success-dim);
   color: var(--color-jade-bright);
-  border: 1px solid rgba(106, 170, 138, 0.3);
+  border: 1px solid rgba(124, 196, 160, 0.3);
 }
 
-.badge-gold {
+.badge-bamboo {
   background: var(--color-bamboo-dim);
   color: var(--color-bamboo-bright);
   border: 1px solid rgba(184, 164, 114, 0.3);

@@ -70,15 +70,15 @@ export function PoetryBoard({
   const containerRef = useRef<HTMLDivElement>(null);
   const [showHint, setShowHint] = useState(false);
 
-  // 目标变化时重置提示
-  useEffect(() => { setShowHint(false); }, [targetIndex]);
+  // 目标变化或切换新诗时重置提示
+  useEffect(() => { setShowHint(false); }, [targetIndex, poem?.id]);
 
   if (!poem || phase === "loading") {
     return (
       <div className="flex items-center justify-center min-h-screen" style={{ background: "var(--color-background)" }}>
         <div className="text-center animate-fade-in">
           <div className="w-12 h-12 border-[3px] rounded-full animate-spin mx-auto mb-4"
-            style={{ borderColor: "var(--color-cinnabar-dim)", borderTopColor: "var(--color-cinnabar)" }} />
+            style={{ borderColor: "var(--color-jade-dim)", borderTopColor: "var(--color-jade)" }} />
           <p className="text-sm" style={{ color: "var(--color-muted)", fontFamily: "var(--font-display)", letterSpacing: "0.1em" }}>
             载入诗词...
           </p>
@@ -143,7 +143,7 @@ export function PoetryBoard({
       <header className="flex items-center justify-between px-4 sm:px-6 py-3 z-20" style={{ borderBottom: "1px solid var(--color-border)" }}>
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center justify-center w-9 h-9 rounded-lg transition-all hover:scale-105"
-            style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", color: "var(--color-gold)" }}>
+            style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", color: "var(--color-bamboo)" }}>
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
@@ -164,8 +164,8 @@ export function PoetryBoard({
               onClick={() => onSwitchMode("char")}
               className="px-3 py-1.5 text-xs transition-all"
               style={{
-                background: mode === "char" ? "var(--color-cinnabar-dim)" : "var(--color-surface)",
-                color: mode === "char" ? "var(--color-cinnabar-light)" : "var(--color-muted)",
+                background: mode === "char" ? "var(--color-jade-dim)" : "var(--color-surface)",
+                color: mode === "char" ? "var(--color-jade-bright)" : "var(--color-muted)",
                 fontFamily: "var(--font-brand)",
                 letterSpacing: "0.1em",
               }}
@@ -176,8 +176,8 @@ export function PoetryBoard({
               onClick={() => onSwitchMode("line")}
               className="px-3 py-1.5 text-xs transition-all"
               style={{
-                background: mode === "line" ? "var(--color-cinnabar-dim)" : "var(--color-surface)",
-                color: mode === "line" ? "var(--color-cinnabar-light)" : "var(--color-muted)",
+                background: mode === "line" ? "var(--color-jade-dim)" : "var(--color-surface)",
+                color: mode === "line" ? "var(--color-jade-bright)" : "var(--color-muted)",
                 fontFamily: "var(--font-brand)",
                 letterSpacing: "0.1em",
               }}
@@ -195,7 +195,7 @@ export function PoetryBoard({
 
           {/* 输入模式 */}
           <button onClick={onToggleInput}
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-gold)] hover:text-[var(--color-gold)]"
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all hover:border-[var(--color-bamboo)] hover:text-[var(--color-bamboo)]"
             style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", color: "var(--color-muted)" }}>
             {inputMode === "gesture" ? (
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -216,7 +216,7 @@ export function PoetryBoard({
         <div className="w-full max-w-lg rounded-lg p-5 min-h-[120px]"
           style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-md)" }}>
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg" style={{ fontFamily: "var(--font-brand)", color: "var(--color-gold-bright)", letterSpacing: "0.15em" }}>{poem.title}</span>
+            <span className="text-lg" style={{ fontFamily: "var(--font-brand)", color: "var(--color-bamboo-bright)", letterSpacing: "0.15em" }}>{poem.title}</span>
             <span className="text-xs" style={{ color: "var(--color-muted)" }}>{poem.dynasty}·{poem.author}</span>
           </div>
 
@@ -318,7 +318,7 @@ export function PoetryBoard({
         {/* 四向选择区 — 圆环布局 */}
         <div className="relative w-full max-w-[480px] sm:max-w-[560px] md:max-w-[640px]" style={{ aspectRatio: "1/1" }}>
           {/* 装饰圆环 */}
-          <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle, var(--color-gold-dim) 0%, transparent 70%)" }} />
+          <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle, var(--color-bamboo-dim) 0%, transparent 70%)" }} />
           <div className="absolute rounded-full border border-dashed border-[var(--color-border)] opacity-40"
             style={{ inset: "12%" }} />
 
@@ -350,7 +350,7 @@ export function PoetryBoard({
               </div>
             ) : (
               <div className="w-12 h-12 rounded-full flex items-center justify-center"
-                style={{ background: "var(--color-ink-700)", border: "1px solid var(--color-border)", color: "var(--color-gold)", fontFamily: "var(--font-brand)", fontSize: "16px" }}>
+                style={{ background: "var(--color-ink-700)", border: "1px solid var(--color-border)", color: "var(--color-bamboo)", fontFamily: "var(--font-brand)", fontSize: "16px" }}>
                 {mode === "char" ? "字" : "句"}
               </div>
             )}
@@ -361,7 +361,7 @@ export function PoetryBoard({
                 style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}>
                 {["W", "A", "S", "D"].map((key) => (
                   <span key={key} className="px-2 py-1 rounded text-xs"
-                    style={{ background: "var(--color-ink-700)", color: "var(--color-gold-bright)", border: "1px solid var(--color-border)", fontFamily: "var(--font-mono)" }}>
+                    style={{ background: "var(--color-ink-700)", color: "var(--color-bamboo-bright)", border: "1px solid var(--color-border)", fontFamily: "var(--font-mono)" }}>
                     {key}
                   </span>
                 ))}
@@ -395,7 +395,7 @@ export function PoetryBoard({
                   transform: isFlying ? "scale(0.6) translateY(-40px)" : undefined,
                   pointerEvents: isFlying ? "none" : "auto",
                 }}>
-                <span className="text-xs" style={{ color: "var(--color-gold-bright)", fontFamily: "var(--font-brand)", letterSpacing: "0.1em" }}>
+                <span className="text-xs" style={{ color: "var(--color-bamboo-bright)", fontFamily: "var(--font-brand)", letterSpacing: "0.1em" }}>
                   ↑ 上
                 </span>
                 <span className={`text-center leading-relaxed ${isCharMode ? "text-3xl sm:text-4xl" : "text-sm sm:text-base"}`}
@@ -432,7 +432,7 @@ export function PoetryBoard({
                   transform: isFlying ? "scale(0.6) translateY(-40px)" : undefined,
                   pointerEvents: isFlying ? "none" : "auto",
                 }}>
-                <span className="text-xs" style={{ color: "var(--color-gold-bright)", fontFamily: "var(--font-brand)", letterSpacing: "0.1em" }}>
+                <span className="text-xs" style={{ color: "var(--color-bamboo-bright)", fontFamily: "var(--font-brand)", letterSpacing: "0.1em" }}>
                   ↓ 下
                 </span>
                 <span className={`text-center leading-relaxed ${isCharMode ? "text-3xl sm:text-4xl" : "text-sm sm:text-base"}`}
@@ -469,7 +469,7 @@ export function PoetryBoard({
                   transform: isFlying ? "scale(0.6) translateY(-40px)" : undefined,
                   pointerEvents: isFlying ? "none" : "auto",
                 }}>
-                <span className="text-xs" style={{ color: "var(--color-gold-bright)", fontFamily: "var(--font-brand)", letterSpacing: "0.1em" }}>
+                <span className="text-xs" style={{ color: "var(--color-bamboo-bright)", fontFamily: "var(--font-brand)", letterSpacing: "0.1em" }}>
                   ← 左
                 </span>
                 <span className={`text-center leading-relaxed ${isCharMode ? "text-3xl sm:text-4xl" : "text-sm sm:text-base"}`}
@@ -506,7 +506,7 @@ export function PoetryBoard({
                   transform: isFlying ? "scale(0.6) translateY(-40px)" : undefined,
                   pointerEvents: isFlying ? "none" : "auto",
                 }}>
-                <span className="text-xs" style={{ color: "var(--color-gold-bright)", fontFamily: "var(--font-brand)", letterSpacing: "0.1em" }}>
+                <span className="text-xs" style={{ color: "var(--color-bamboo-bright)", fontFamily: "var(--font-brand)", letterSpacing: "0.1em" }}>
                   → 右
                 </span>
                 <span className={`text-center leading-relaxed ${isCharMode ? "text-3xl sm:text-4xl" : "text-sm sm:text-base"}`}

@@ -87,7 +87,7 @@ export default function StatsPage() {
         <div className="mb-8 animate-fade-in">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors mb-5"
+            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-bamboo)] transition-colors mb-5"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -104,7 +104,7 @@ export default function StatsPage() {
           </div>
         ) : authEnabled && !user ? (
           <div className="card p-10 text-center animate-fade-in">
-            <div className="w-16 h-16 rounded-2xl bg-[var(--color-cinnabar-dim)] flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--color-jade-dim)] flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
               </svg>
@@ -117,8 +117,8 @@ export default function StatsPage() {
           </div>
         ) : authEnabled && user && !user.emailVerified ? (
           <div className="card p-10 text-center animate-fade-in">
-            <div className="w-16 h-16 rounded-2xl bg-[var(--color-gold-dim)] flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-[var(--color-gold)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--color-bamboo-dim)] flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-[var(--color-bamboo)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
               </svg>
             </div>
@@ -152,14 +152,14 @@ export default function StatsPage() {
               </div>
               <div className="card p-5 animate-fade-in-up" style={{ animationDelay: "0.15s", animationFillMode: "both" }}>
                 <div className="text-xs text-[var(--color-muted)] mb-1">今日答题</div>
-                <div className="text-3xl font-bold text-[var(--color-cinnabar)]" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-3xl font-bold text-[var(--color-jade)]" style={{ fontFamily: "var(--font-display)" }}>
                   {stats.todayReviewed}
                 </div>
                 <div className="text-xs text-[var(--color-muted)] mt-1">道题</div>
               </div>
               <div className="card p-5 animate-fade-in-up" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
                 <div className="text-xs text-[var(--color-muted)] mb-1">正确率</div>
-                <div className="text-3xl font-bold text-[var(--color-gold-deep)]" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-3xl font-bold text-[var(--color-bamboo-deep)]" style={{ fontFamily: "var(--font-display)" }}>
                   {Math.round(stats.todayCorrectRate * 100)}%
                 </div>
                 <div className="text-xs text-[var(--color-muted)] mt-1">今日</div>
@@ -168,8 +168,8 @@ export default function StatsPage() {
 
             {/* Streak */}
             <div className="card p-5 mb-8 animate-fade-in-up flex items-center gap-4" style={{ animationDelay: "0.25s", animationFillMode: "both" }}>
-              <div className="w-12 h-12 rounded-2xl bg-[var(--color-gold-dim)] flex items-center justify-center shrink-0">
-                <svg className="w-6 h-6 text-[var(--color-gold-deep)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--color-bamboo-dim)] flex items-center justify-center shrink-0">
+                <svg className="w-6 h-6 text-[var(--color-bamboo-deep)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
                 </svg>
@@ -188,8 +188,8 @@ export default function StatsPage() {
                   onClick={() => setTab(t)}
                   className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     tab === t
-                      ? "bg-[var(--color-ink-700)] text-[var(--color-rice)] shadow-[var(--shadow-glow-gold)]"
-                      : "text-[var(--color-muted)] hover:text-[var(--color-gold)]"
+                      ? "bg-[var(--color-ink-700)] text-[var(--color-rice)] shadow-[var(--shadow-glow-bamboo)]"
+                      : "text-[var(--color-muted)] hover:text-[var(--color-bamboo)]"
                   }`}
                 >
                   {t === "daily" ? "每日历史" : "最近活动"}
@@ -207,7 +207,7 @@ export default function StatsPage() {
                 ) : (
                   <div className="space-y-3">
                     {dailyHistory.map((day, i) => {
-                      const accColor = day.accuracy >= 0.8 ? "bg-[var(--color-jade)]" : day.accuracy >= 0.5 ? "bg-[var(--color-gold)]" : "bg-[var(--color-cinnabar)]";
+                      const accColor = day.accuracy >= 0.8 ? "bg-[var(--color-jade)]" : day.accuracy >= 0.5 ? "bg-[var(--color-bamboo)]" : "bg-[var(--color-bamboo-deep)]";
                       return (
                         <div
                           key={day.date}
