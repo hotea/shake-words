@@ -80,3 +80,7 @@ ehthumbs.db
 
 # Auto-generated version file
 src/lib/version.ts
+
+# Video generation
+/video/out/
+/video/src/audio/
