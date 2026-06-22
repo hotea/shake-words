@@ -523,7 +523,7 @@ export function QuizBoard({
       </div>
 
       {/* 主要内容区域 — 圆环布局 */}
-      <div className="flex-1 flex items-center justify-center relative px-3 sm:px-4 pb-2 overflow-hidden">
+      <div className="flex-1 flex items-center justify-center relative px-3 sm:px-4 pb-14 overflow-hidden">
         {/* 背景反馈 */}
         {showResult && (
           <div
@@ -596,7 +596,7 @@ export function QuizBoard({
 
           {/* 结果反馈 */}
           {showResult && (
-            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg animate-fade-in"
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg animate-fade-in z-20"
               style={{
                 background: isCorrect ? "var(--color-jade-dim)" : "var(--color-cinnabar-dim)",
                 border: `1px solid ${isCorrect ? "var(--color-jade)" : "var(--color-cinnabar)"}`,

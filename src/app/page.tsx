@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { AuthHeader } from "@/components/AuthHeader";
 
 export const metadata: Metadata = {
   title: "晃晃学 · ShakeWords | 摇头学词诵诗",
@@ -69,8 +70,14 @@ export default function Home() {
             </Link>
           </nav>
 
-          <div className="md:hidden">
-            <Link href="/quiz" className="btn-primary btn-sm">
+          <div className="flex items-center gap-3">
+            <div className="hidden md:block">
+              <AuthHeader />
+            </div>
+            <div className="md:hidden">
+              <AuthHeader />
+            </div>
+            <Link href="/quiz" className="btn-primary btn-sm md:hidden">
               开始体验
             </Link>
           </div>
