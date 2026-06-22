@@ -39,7 +39,7 @@ export function OnlineCounter({ className = "" }: OnlineCounterProps) {
           setTotalCount(data.totalCount);
         }
       } catch (error) {
-        // 静默失败，不影响主功能
+        console.error("[OnlineCounter] heartbeat failed:", error);
       }
     };
 
@@ -63,7 +63,18 @@ export function OnlineCounter({ className = "" }: OnlineCounterProps) {
     };
   }, []);
 
-  if (count <= 0) return null;
+  if (count <= 0) {
+    return (
+      <div className={`fixed bottom-4 right-4 z-50 ${className}`}>
+        <div className="flex items-center gap-2 px-3 py-2 bg-[var(--color-surface)]/90 backdrop-blur-sm rounded-full border border-[var(--color-border)] shadow-[var(--shadow-md)] text-sm text-[var(--color-muted)]">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--color-jade)] opacity-50" />
+          </span>
+          <span className="font-medium" style={{ fontFamily: "var(--font-display)", letterSpacing: "0.05em" }}>连接中...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
