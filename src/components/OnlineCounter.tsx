@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 interface OnlineCounterProps {
   className?: string;
 }
@@ -25,7 +27,7 @@ export function OnlineCounter({ className = "" }: OnlineCounterProps) {
     // 心跳上报函数
     const heartbeat = async () => {
       try {
-        const response = await fetch("/api/online", {
+        const response = await fetch(`${basePath}/api/online`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ visitorId: visitorId.current }),
