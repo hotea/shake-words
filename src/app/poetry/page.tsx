@@ -5,6 +5,7 @@ import { useGesture } from "@/hooks/useGesture";
 import { usePoetryQuiz } from "@/hooks/usePoetryQuiz";
 import { useAudio } from "@/hooks/useAudio";
 import { PoetryBoard } from "@/components/Poetry/PoetryBoard";
+import { OnlineCounter } from "@/components/OnlineCounter";
 import type { GestureDirection, GestureEvent } from "@/lib/types";
 import { loadSettings } from "@/lib/settings";
 
@@ -125,6 +126,7 @@ export default function PoetryPage() {
       }
     >
       <PoetryContent />
+      <OnlineCounter />
     </Suspense>
   );
 }
