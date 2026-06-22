@@ -138,7 +138,7 @@ export function PoetryBoard({
   const targetLine = mode === "line" ? poem.lines[targetIndex] : null;
 
   return (
-    <div ref={containerRef} className="relative w-full min-h-screen flex flex-col" style={{ background: "var(--color-background)" }}>
+    <div ref={containerRef} className="relative w-full h-screen flex flex-col overflow-hidden" style={{ background: "var(--color-background)" }}>
       {/* 顶部导航 */}
       <header className="flex items-center justify-between px-4 sm:px-6 py-3 z-20" style={{ borderBottom: "1px solid var(--color-border)" }}>
         <div className="flex items-center gap-3">
@@ -211,11 +211,11 @@ export function PoetryBoard({
       </header>
 
       {/* 主内容区 */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 gap-6">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 gap-2 overflow-hidden min-h-0">
         {/* 诗词展示区 */}
-        <div className="w-full max-w-lg rounded-lg p-5 min-h-[120px]"
+        <div className="w-full max-w-lg rounded-lg p-3 shrink-0"
           style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-md)" }}>
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-2">
             <span className="text-lg" style={{ fontFamily: "var(--font-brand)", color: "var(--color-bamboo-bright)", letterSpacing: "0.15em" }}>{poem.title}</span>
             <span className="text-xs" style={{ color: "var(--color-muted)" }}>{poem.dynasty}·{poem.author}</span>
           </div>
@@ -316,7 +316,7 @@ export function PoetryBoard({
         )}
 
         {/* 四向选择区 — 圆环布局 */}
-        <div className="relative w-full max-w-[480px] sm:max-w-[560px] md:max-w-[640px]" style={{ aspectRatio: "1/1" }}>
+        <div className="relative w-full max-w-[480px] sm:max-w-[560px] md:max-w-[640px] flex-1 min-h-0" style={{ aspectRatio: "1/1", maxHeight: "calc(100vh - 260px)" }}>
           {/* 装饰圆环 */}
           <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle, var(--color-bamboo-dim) 0%, transparent 70%)" }} />
           <div className="absolute rounded-full border border-dashed border-[var(--color-border)] opacity-40"
