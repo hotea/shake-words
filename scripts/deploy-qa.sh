@@ -69,4 +69,4 @@ EOF
 
 echo ""
 echo "=== QA Deployment completed! ==="
-echo "Health check: ssh ${REMOTE_HOST} 'curl -s http://localhost:3001/words'"
+echo "Health check: ssh ${REMOTE_HOST} 'curl -s http://localhost:3000/words'"
