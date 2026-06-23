@@ -5,7 +5,6 @@ import { useGesture } from "@/hooks/useGesture";
 import { usePoetryQuiz } from "@/hooks/usePoetryQuiz";
 import { useAudio } from "@/hooks/useAudio";
 import { PoetryBoard } from "@/components/Poetry/PoetryBoard";
-import { OnlineCounter } from "@/components/OnlineCounter";
 import type { GestureDirection, GestureEvent } from "@/lib/types";
 import { loadSettings } from "@/lib/settings";
 
@@ -118,17 +117,14 @@ function PoetryContent() {
 
 export default function PoetryPage() {
   return (
-    <>
-      <OnlineCounter />
-      <Suspense
-        fallback={
-          <div className="min-h-screen flex items-center justify-center">
-            <div className="w-10 h-10 border-[3px] border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
-          </div>
-        }
-      >
-        <PoetryContent />
-      </Suspense>
-    </>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-10 h-10 border-[3px] border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <PoetryContent />
+    </Suspense>
   );
 }

@@ -6,6 +6,7 @@ import type { GestureDirection, HeadPose } from "@/lib/types";
 import type { PoetrySlot, PlacedItem, PoetryPhase, PoetryMode } from "@/hooks/usePoetryQuiz";
 import type { Poem } from "@/data/poems";
 import { FaceMeshOverlay } from "@/components/FaceMesh/FaceMeshOverlay";
+import { OnlineCounter } from "@/components/OnlineCounter";
 
 interface PoetryBoardProps {
   poem: Poem | null;
@@ -518,6 +519,9 @@ export function PoetryBoard({
           })}
         </div>
       </div>
+
+      {/* 在线人数 */}
+      <OnlineCounter />
     </div>
   );
 }
