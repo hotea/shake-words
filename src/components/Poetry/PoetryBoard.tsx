@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { GestureDirection, HeadPose } from "@/lib/types";
 import type { PoetrySlot, PlacedItem, PoetryPhase, PoetryMode } from "@/hooks/usePoetryQuiz";
 import type { Poem } from "@/data/poems";
+import { flattenChars } from "@/data/poems";
 import { FaceMeshOverlay } from "@/components/FaceMesh/FaceMeshOverlay";
 import { OnlineCounter } from "@/components/OnlineCounter";
 
@@ -34,11 +35,6 @@ interface PoetryBoardProps {
   onSelect: (direction: GestureDirection) => void;
   onNextPoem: () => void;
   onSwitchMode: (mode: PoetryMode) => void;
-}
-
-/** 将诗展平为字符列表 */
-function flattenChars(poem: Poem): string[] {
-  return poem.lines.join("").split("");
 }
 
 export function PoetryBoard({

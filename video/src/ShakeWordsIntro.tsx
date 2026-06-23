@@ -38,7 +38,7 @@ export const ShakeWordsIntro: React.FC = () => {
 				<SceneFeatures />
 				<Audio src={scene4Audio} volume={0.9} />
 			</Sequence>
-			<Sequence from={540} durationInFrames={120}>
+			<Sequence from={540}>
 				<SceneEnding />
 				<Audio src={scene5Audio} volume={0.9} />
 			</Sequence>

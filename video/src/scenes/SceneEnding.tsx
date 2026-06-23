@@ -172,7 +172,7 @@ export const SceneEnding: React.FC = () => {
 					letterSpacing: '0.15em',
 					fontFamily: '"Cormorant Garamond", Georgia, serif',
 				}}>
-					shakewords.wyld.cc
+					https://shakewords.wyld.cc/
 				</div>
 			</div>
 

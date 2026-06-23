@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { getRandomPoem, type Poem } from "@/data/poems";
+import { getRandomPoem, flattenChars, type Poem } from "@/data/poems";
 import type { GestureDirection } from "@/lib/types";
 
 // ============================================================
@@ -55,38 +55,21 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-/** 将诗展平为字符列表 */
-function flattenChars(poem: Poem): string[] {
-  return poem.lines.join("").split("");
-}
-
-/** 逐字模式：从全诗字符中选取替补字符 */
+/** 逐字模式：从全诗字符中选取替补字符（排除与目标同字的项，避免用户困惑） */
 function pickCharReplacement(
   allChars: string[],
   targetIndex: number,
+  targetText: string,
   placedSet: Set<number>,
   currentSlotIndices: number[],
 ): number | null {
-  // 优先：未归位且不在当前槽位
   const unplaced = allChars
     .map((_, i) => i)
-    .filter((i) => i !== targetIndex && !placedSet.has(i) && !currentSlotIndices.includes(i));
-  if (unplaced.length > 0) return shuffle(unplaced)[0];
-
-  // 备选：已归位但不在槽位
-  const placedArr = allChars
-    .map((_, i) => i)
-    .filter((i) => placedSet.has(i) && !currentSlotIndices.includes(i));
-  if (placedArr.length > 0) return shuffle(placedArr)[0];
-
-  // 再备选：任何不在槽位的
-  const anyOther = allChars
-    .map((_, i) => i)
-    .filter((i) => !currentSlotIndices.includes(i));
-  return anyOther.length > 0 ? shuffle(anyOther)[0] : null;
+    .filter((i) => i !== targetIndex && !placedSet.has(i) && !currentSlotIndices.includes(i) && allChars[i] !== targetText);
+  return unplaced.length > 0 ? shuffle(unplaced)[0] : null;
 }
 
-/** 逐句模式：从行中选取替补行 */
+/** 逐句模式：从行中选取替补行（不从已归位中补位，避免重复出现） */
 function pickLineReplacement(
   poem: Poem,
   targetIndex: number,
@@ -96,20 +79,10 @@ function pickLineReplacement(
   const unplaced = poem.lines
     .map((_, i) => i)
     .filter((i) => i !== targetIndex && !placedSet.has(i) && !currentSlotIndices.includes(i));
-  if (unplaced.length > 0) return shuffle(unplaced)[0];
-
-  const placedArr = poem.lines
-    .map((_, i) => i)
-    .filter((i) => placedSet.has(i) && !currentSlotIndices.includes(i));
-  if (placedArr.length > 0) return shuffle(placedArr)[0];
-
-  const anyOther = poem.lines
-    .map((_, i) => i)
-    .filter((i) => !currentSlotIndices.includes(i));
-  return anyOther.length > 0 ? shuffle(anyOther)[0] : null;
+  return unplaced.length > 0 ? shuffle(unplaced)[0] : null;
 }
 
-/** 构建初始 4 个槽位 */
+/** 构建初始槽位（最多 4 个，可能少于 4 个） */
 function buildSlots(
   mode: PoetryMode,
   poem: Poem,
@@ -119,21 +92,16 @@ function buildSlots(
   if (mode === "char") {
     const allChars = flattenChars(poem);
     const mustInclude = targetIndex;
+    const targetText = allChars[targetIndex];
+    // 排除与目标同字的项，避免用户看到两个相同字却只有一个是正确的
     const others = shuffle(
-      allChars.map((_, i) => i).filter((i) => i !== mustInclude && !placedSet.has(i)),
+      allChars.map((_, i) => i).filter((i) => i !== mustInclude && !placedSet.has(i) && allChars[i] !== targetText),
     ).slice(0, 3);
-    // 如果不够 3 个，从已归位中补
-    if (others.length < 3) {
-      const more = shuffle(
-        allChars.map((_, i) => i).filter((i) => i !== mustInclude && !others.includes(i)),
-      );
-      while (others.length < 3 && more.length > 0) others.push(more.shift()!);
-    }
-    const indices = shuffle([mustInclude, ...others.slice(0, 3)]);
-    return DIRECTIONS.map((dir, i) => ({
-      direction: dir,
-      index: indices[i],
-      text: allChars[indices[i]],
+    const indices = shuffle([mustInclude, ...others]);
+    return indices.map((idx, i) => ({
+      direction: DIRECTIONS[i],
+      index: idx,
+      text: allChars[idx],
       flying: false,
     }));
   } else {
@@ -141,17 +109,12 @@ function buildSlots(
     const others = shuffle(
       poem.lines.map((_, i) => i).filter((i) => i !== mustInclude && !placedSet.has(i)),
     ).slice(0, 3);
-    if (others.length < 3) {
-      const more = shuffle(
-        poem.lines.map((_, i) => i).filter((i) => i !== mustInclude && !others.includes(i)),
-      );
-      while (others.length < 3 && more.length > 0) others.push(more.shift()!);
-    }
-    const indices = shuffle([mustInclude, ...others.slice(0, 3)]);
-    return DIRECTIONS.map((dir, i) => ({
-      direction: dir,
-      index: indices[i],
-      text: poem.lines[indices[i]],
+    // 不从已归位中补位，槽位数可能少于 4
+    const indices = shuffle([mustInclude, ...others]);
+    return indices.map((idx, i) => ({
+      direction: DIRECTIONS[i],
+      index: idx,
+      text: poem.lines[idx],
       flying: false,
     }));
   }
@@ -268,76 +231,75 @@ export function usePoetryQuiz(): UsePoetryQuizReturn {
           const remaining = total - nextPlaced.length; // 剩余未归位数（含新 target）
 
           // 收集保留的卡片（非飞出的）
-          const keptItems: { index: number; text: string }[] = [];
+          let keptItems: { index: number; text: string }[] = [];
           for (const s of flySlots) {
             if (!s.flying) {
               keptItems.push({ index: s.index, text: s.text });
             }
           }
 
-          // 判断是否需要补位：剩余未归位数 > 3 才补（否则卡片只会越来越少）
+          // 逐字模式：移除与新目标同字但不同 index 的保留项，避免出现两个相同字
+          if (m === "char") {
+            const allChars = flattenChars(p);
+            const targetText = allChars[nextTarget];
+            keptItems = keptItems.filter(item => allChars[item.index] !== targetText || item.index === nextTarget);
+          }
+
+          // 构建新的槽位列表
+          let items: { index: number; text: string }[];
+
           if (remaining <= 3) {
-            // 不补位，只保留未飞出的卡片
-            const shuffledDirs = shuffle(DIRECTIONS.slice(0, keptItems.length));
-            const newSlots: PoetrySlot[] = keptItems.map((item, i) => ({
-              direction: shuffledDirs[i],
-              index: item.index,
-              text: item.text,
-              flying: false,
-            }));
-
-            // 确保 target 在其中
-            if (!newSlots.some((s) => s.index === nextTarget)) {
-              const replaceIdx = newSlots.findIndex((s) => s.index !== nextTarget);
-              if (replaceIdx >= 0) {
-                const text = m === "char" ? flattenChars(p)[nextTarget] : p.lines[nextTarget];
-                newSlots[replaceIdx] = { ...newSlots[replaceIdx], index: nextTarget, text };
-              }
-            }
-
-            setSlots(newSlots);
-            slotsRef.current = newSlots;
+            // 剩余少，不补位，卡片自然减少
+            items = [...keptItems];
           } else {
-            // 需要补位
+            // 需要补位：检查目标是否已在保留项中
             const currentSlotIndices = keptItems.map((it) => it.index);
             const targetAlreadyInSlots = currentSlotIndices.includes(nextTarget);
 
-            let replacement: number | null;
-            if (m === "char") {
-              replacement = targetAlreadyInSlots
-                ? pickCharReplacement(flattenChars(p), nextTarget, placedSet, currentSlotIndices)
-                : nextTarget;
-            } else {
-              replacement = targetAlreadyInSlots
-                ? pickLineReplacement(p, nextTarget, placedSet, currentSlotIndices)
-                : nextTarget;
-            }
-
-            const repIdx = replacement !== null ? replacement : nextTarget;
-            const repText = m === "char" ? flattenChars(p)[repIdx] : p.lines[repIdx];
-            const items = [...keptItems, { index: repIdx, text: repText }];
-
-            // 双重保障：确保 target 在 items 中
-            if (!items.some((it) => it.index === nextTarget)) {
-              const replaceItemIdx = items.findIndex((it) => it.index !== nextTarget);
-              if (replaceItemIdx >= 0) {
-                const text = m === "char" ? flattenChars(p)[nextTarget] : p.lines[nextTarget];
-                items[replaceItemIdx] = { index: nextTarget, text };
+            if (targetAlreadyInSlots) {
+              // 目标已在槽位中，选一个干扰项补位
+              let replacement: number | null;
+              if (m === "char") {
+                const allChars = flattenChars(p);
+                replacement = pickCharReplacement(allChars, nextTarget, allChars[nextTarget], placedSet, currentSlotIndices);
+              } else {
+                replacement = pickLineReplacement(p, nextTarget, placedSet, currentSlotIndices);
               }
+              if (replacement !== null) {
+                const repText = m === "char" ? flattenChars(p)[replacement] : p.lines[replacement];
+                items = [...keptItems, { index: replacement, text: repText }];
+              } else {
+                items = [...keptItems];
+              }
+            } else {
+              // 目标不在槽位中，直接加入
+              const targetText = m === "char" ? flattenChars(p)[nextTarget] : p.lines[nextTarget];
+              items = [...keptItems, { index: nextTarget, text: targetText }];
             }
-
-            // 随机重排方向
-            const shuffledDirs = shuffle([...DIRECTIONS]);
-            const newSlots: PoetrySlot[] = items.map((item, i) => ({
-              direction: shuffledDirs[i],
-              index: item.index,
-              text: item.text,
-              flying: false,
-            }));
-
-            setSlots(newSlots);
-            slotsRef.current = newSlots;
           }
+
+          // 确保目标在 items 中
+          if (!items.some((it) => it.index === nextTarget)) {
+            const text = m === "char" ? flattenChars(p)[nextTarget] : p.lines[nextTarget];
+            const replaceIdx = items.findIndex((it) => it.index !== nextTarget);
+            if (replaceIdx >= 0) {
+              items[replaceIdx] = { index: nextTarget, text };
+            } else {
+              items.push({ index: nextTarget, text });
+            }
+          }
+
+          // 随机重排方向（支持可变槽位数）
+          const shuffledDirs = shuffle(DIRECTIONS.slice(0, items.length));
+          const newSlots: PoetrySlot[] = items.map((item, i) => ({
+            direction: shuffledDirs[i],
+            index: item.index,
+            text: item.text,
+            flying: false,
+          }));
+
+          setSlots(newSlots);
+          slotsRef.current = newSlots;
 
           setSelectedDirection(null);
           setLastCorrect(null);
